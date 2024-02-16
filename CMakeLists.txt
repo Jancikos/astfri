@@ -5,7 +5,7 @@ cmake_minimum_required(
 project(
     libast
     VERSION     0.0.1
-    DESCRIPTION "TODO"
+    DESCRIPTION "A abstract syntax tree library for C++."
     LANGUAGES   CXX
 )
 
