@@ -1,0 +1,17 @@
+{
+    "tasks": [
+        {
+            "label": "build",
+            "type": "cppbuild",
+            "command": "bash",
+            "args": [
+                "${workspaceFolder}/scripts/build.sh"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ],
+    "version": "2.0.0"
+}
