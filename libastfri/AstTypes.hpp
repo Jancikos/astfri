@@ -1,19 +1,14 @@
 
-
+#include <string>
+#include <variant>
+#include <vector>
 namespace libastfri
 {    
-    // "riadok" v kode
-    struct Statement
+    // typ
+    struct Type
     {
-
+        // T value;
     };
-    
-    struct AssigmentStatement 
-    {
-        Variable left;
-        expression right;
-    };
-
 
     // vyraz
     struct Expression
@@ -21,48 +16,115 @@ namespace libastfri
 
     };
 
-    // typ
-    struct Type<T>
-    {
-        T value;
-    };
-    struct PrimitiveType<T> : Type<T>
+    // premenna
+    struct Variable
     {
         std::string name;
+        Type* type;
+        Expression* defaultValue;
+
+        Variable (std::string name, Type* type) : name(name), type(type), defaultValue(nullptr) {}
+        Variable (std::string name, Type* type , Expression* defaultValue) : name(name), type(type), defaultValue(defaultValue) {}
     };
-    struct UserType<T> : Type<T>
+
+    //// konstaty (literals) pouzivane v vyrazoch
+    struct IntLiteral
+    {
+        int value;
+    };
+
+    //// operatory pouzivane v vyrazoch
+    enum class BinaryOperators
+    {
+        Add, Subtract, Multiply, Divide, Modulo
+    };
+    enum class UnaryOperators
+    {
+        Not, Negative,
+        GetValue
+    };
+
+    //// vyrazy
+    struct BinaryExpression : Expression 
+    {
+        Expression* left;
+        BinaryOperators op;
+        Expression* right;
+
+        BinaryExpression (Expression* left, BinaryOperators op, Expression* right) : left(left), op(op), right(right) {} 
+    };
+    struct UnaryExpression : Expression
+    {
+        using ArgVariant = std::variant<Expression*, Variable*>;
+      
+        UnaryOperators op;
+        ArgVariant arg;
+
+        UnaryExpression (UnaryOperators op, Expression* arg) : op(op), arg(arg) {}
+        UnaryExpression (UnaryOperators op, Variable* arg) : op(op), arg(arg) {}
+    };
+
+
+    // "riadok" v kode
+    struct Statement
+    {
+
+    };
+    
+    struct AssigmentStatement : Statement
+    {
+        Variable* left;
+        Expression* right;
+
+        AssigmentStatement (Variable* left, Expression* right) : left(left), right(right) {}
+    };
+
+
+    // typy
+    struct PrimitiveType : Type
     {
         std::string name;
+
+        PrimitiveType (std::string name) : name(name) {}
+    };
+    struct UserType : Type
+    {
+        std::string name;
+
+        UserType (std::string name) : name(name) {}
     };
 
     //// primitivne typy
-    struct IntPrimitiveType : PrimitiveType<int>
-    {
-        int value;
-    }
-    
+
     //// navratovy typ
-    struct ReturnType<T>
+    struct ReturnType
     {
-        T type;
-        Expression exp;
-    }
+        Type* type;
+    };
+    struct ExpressionReturnType : ReturnType
+    {
+        Expression* expression;
+
+        ExpressionReturnType (Type* type, Expression* expression) : expression(expression) {}
+    };
+
 
     // parameter
     struct ParameterDefinition
     {
-        std::string name;
-        Type type;
-        std::string defaultValue;
-        bool nullable;
+        Variable* variable;
+        
+        ParameterDefinition (std::string name, Type* type) : variable(new Variable(name, type)) {}
+        ParameterDefinition (std::string name, Type* type, Expression* defaultValue) : variable(new Variable(name, type, defaultValue)) {}
     };
 
-    
     struct FunctionDefinition
     {
         std::string name;
-        std::vector<ParameterDefinition> parameters;
-        std::vector<Statement> body;
-        Type returnType;
+        std::vector<ParameterDefinition*> parameters;
+        std::vector<Statement*> body;
+        ReturnType* returnType;
+
+        FunctionDefinition (std::string name, std::vector<ParameterDefinition*> parameters, std::vector<Statement*> body, ReturnType* returnType) : name(name), parameters(parameters), body(body), returnType(returnType) {}
     };
 }

@@ -1,4 +1,4 @@
 
 add_executable(
-    ast main.cpp
+    ast main.cpp AstTypes.hpp
 )
