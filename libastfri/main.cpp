@@ -1,5 +1,4 @@
-// #include <libastfri/AstTypes.hpp> // - nejde m to takto includnut 
-#include "AstTypes.hpp"
+#include <libastfri/AstTypes.hpp>
 
 using namespace libastfri;
 
@@ -24,9 +23,9 @@ int main ()
         )
     );
 
-    auto retType = new ReturnType(new IntType(), new UnaryExpression(UnaryOperators::GetValue, variableC));
+    // auto retType = new ReturnType(new IntType(), new UnaryExpression(UnaryOperators::GetValue, variableC));
 
-    auto function = new FunctionDefinition("addition", params, body, retType);
+    // auto function = new FunctionDefinition("addition", params, body, retType);
 
     return 0;
 }
@@ -34,6 +33,12 @@ int main ()
 int addition(int a, int b)
 {
     int c = a + b;
+
+    // pirdat if
+
+    // pridat while
+
+    // volanie funkcie
 
     return c;
 }
