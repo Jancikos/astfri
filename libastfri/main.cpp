@@ -35,7 +35,5 @@ int addition(int a, int b)
 {
     int c = a + b;
 
-    int d = 4;
-
     return c;
 }

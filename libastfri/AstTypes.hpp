@@ -28,10 +28,29 @@ namespace libastfri
         Variable (std::string name, Type* type , Expression* value) : name(name), type(type), value(value) {}
     };
 
-    //// konstaty (literals) pouzivane v vyrazoch
-    struct IntLiteral
+    //// konstaty (literals) pouzivane v vyrazoch su vlastne tiez vyrazy
+    struct Literal : Expression
+    {
+    };
+    struct IntLiteral : Literal
     {
         int value;
+    };
+    struct FloatLiteral : Literal
+    {
+        float value;
+    };
+    struct CharLiteral : Literal
+    {
+        char value;
+    };
+    struct StringLiteral : Literal
+    {
+        std::string value;
+    };
+    struct BoolLiteral : Literal
+    {
+        bool value;
     };
 
     //// operatory pouzivane v vyrazoch
@@ -64,6 +83,21 @@ namespace libastfri
         UnaryExpression (UnaryOperators op, Expression* arg) : op(op), arg(arg) {}
         UnaryExpression (UnaryOperators op, Variable* arg) : op(op), arg(arg) {}
     };
+    struct RefExpression : Expression
+    {
+    };
+    struct VarRefExpression : RefExpression
+    {
+        Variable* variable;
+
+        VarRefExpression (Variable* variable) : variable(variable) {}
+    };
+    // struct ParamRefExpression : RefExpression
+    // {
+    //     Parameter* variable;
+
+    //     ParamRefExpression (Parameter* variable) : variable(variable) {}
+    // };
 
 
     // "riadok" v kode
