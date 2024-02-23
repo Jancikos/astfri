@@ -2,12 +2,13 @@
 #include <string>
 #include <variant>
 #include <vector>
+
 namespace libastfri
 {    
     // typ
     struct Type
     {
-        // T value;
+        // TODO - vytiahnut sem name
     };
 
     // vyraz
@@ -79,6 +80,8 @@ namespace libastfri
         AssigmentStatement (Variable* left, Expression* right) : left(left), right(right) {}
     };
 
+    // FucntionCall statement
+
 
     // typy
     struct PrimitiveType : Type
@@ -95,6 +98,23 @@ namespace libastfri
     };
 
     //// primitivne typy
+    // vymenovat ich rucne ??
+    struct IntType : PrimitiveType
+    {
+        IntType () : PrimitiveType("int") {}
+    };
+    struct FloatType : PrimitiveType
+    {
+        FloatType () : PrimitiveType("float") {}
+    };
+    struct CharType : PrimitiveType
+    {
+        CharType () : PrimitiveType("char") {}
+    };
+    struct BoolType : PrimitiveType
+    {
+        BoolType () : PrimitiveType("bool") {}
+    };
 
     //// navratovy typ
     struct ReturnType

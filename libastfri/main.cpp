@@ -7,10 +7,10 @@ int main ()
 {
     
     std::vector<ParameterDefinition*> params;
-    params.push_back(new ParameterDefinition("a", new PrimitiveType("int")));
-    params.push_back(new ParameterDefinition("b", new PrimitiveType("int")));
+    params.push_back(new ParameterDefinition("a", new IntType()));
+    params.push_back(new ParameterDefinition("b", new IntType()));
 
-    auto variableC = new Variable("c", new PrimitiveType("int"));
+    auto variableC = new Variable("c", new IntType());
 
     std::vector<Statement*> body;
     body.push_back(
@@ -24,7 +24,7 @@ int main ()
         )
     );
 
-    auto retType = new ReturnType(new PrimitiveType("int"), new UnaryExpression(UnaryOperators::GetValue, variableC));
+    auto retType = new ReturnType(new IntType(), new UnaryExpression(UnaryOperators::GetValue, variableC));
 
     auto function = new FunctionDefinition("addition", params, body, retType);
 
@@ -34,6 +34,8 @@ int main ()
 int addition(int a, int b)
 {
     int c = a + b;
+
+    int d = 4;
 
     return c;
 }
