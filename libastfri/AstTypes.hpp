@@ -22,10 +22,10 @@ namespace libastfri
     {
         std::string name;
         Type* type;
-        Expression* defaultValue;
+        Expression* value;
 
-        Variable (std::string name, Type* type) : name(name), type(type), defaultValue(nullptr) {}
-        Variable (std::string name, Type* type , Expression* defaultValue) : name(name), type(type), defaultValue(defaultValue) {}
+        Variable (std::string name, Type* type) : name(name), type(type), value(nullptr) {}
+        Variable (std::string name, Type* type , Expression* value) : name(name), type(type), value(value) {}
     };
 
     //// konstaty (literals) pouzivane v vyrazoch
@@ -71,6 +71,13 @@ namespace libastfri
     {
 
     };
+
+    struct CompoundStatement : Statement
+    {
+        std::vector<Statement*> statements;
+
+        CompoundStatement (std::vector<Statement*> statements) : statements(std::move(statements)) {}
+    };
     
     struct AssigmentStatement : Statement
     {
@@ -79,6 +86,14 @@ namespace libastfri
 
         AssigmentStatement (Variable* left, Expression* right) : left(left), right(right) {}
     };
+
+    struct ReturnStatement : Statement
+    {
+        Expression* value;
+
+        ReturnStatement (Expression* value) : value(value) {}
+    };
+
 
     // FucntionCall statement
 
@@ -115,14 +130,9 @@ namespace libastfri
     {
         BoolType () : PrimitiveType("bool") {}
     };
-
-    //// navratovy typ
-    struct ReturnType
+    struct VoidType : PrimitiveType
     {
-        Type* type;
-        Expression* expression;
-
-        ReturnType (Type* type, Expression* expression) : type(type), expression(expression) {}
+        VoidType () : PrimitiveType("void") {}
     };
 
     // parameter
@@ -139,8 +149,8 @@ namespace libastfri
         std::string name;
         std::vector<ParameterDefinition*> parameters;
         std::vector<Statement*> body;
-        ReturnType* returnType;
+        Type* returnType;
 
-        FunctionDefinition (std::string name, std::vector<ParameterDefinition*> parameters, std::vector<Statement*> body, ReturnType* returnType) : name(name), parameters(parameters), body(body), returnType(returnType) {}
+        FunctionDefinition (std::string name, std::vector<ParameterDefinition*> parameters, std::vector<Statement*> body, Type* returnType) : name(name), parameters(parameters), body(body), returnType(returnType) {}
     };
 }
