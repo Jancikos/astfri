@@ -10,7 +10,6 @@ int main ()
     params.push_back(new ParameterDefinition("a", new PrimitiveType("int")));
     params.push_back(new ParameterDefinition("b", new PrimitiveType("int")));
 
-
     auto variableC = new Variable("c", new PrimitiveType("int"));
 
     std::vector<Statement*> body;
@@ -25,7 +24,7 @@ int main ()
         )
     );
 
-    auto retType = new ExpressionReturnType(new PrimitiveType("int"), new UnaryExpression(UnaryOperators::GetValue, variableC));
+    auto retType = new ReturnType(new PrimitiveType("int"), new UnaryExpression(UnaryOperators::GetValue, variableC));
 
     auto function = new FunctionDefinition("addition", params, body, retType);
 

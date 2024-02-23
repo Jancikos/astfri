@@ -100,14 +100,10 @@ namespace libastfri
     struct ReturnType
     {
         Type* type;
-    };
-    struct ExpressionReturnType : ReturnType
-    {
         Expression* expression;
 
-        ExpressionReturnType (Type* type, Expression* expression) : expression(expression) {}
+        ReturnType (Type* type, Expression* expression) : type(type), expression(expression) {}
     };
-
 
     // parameter
     struct ParameterDefinition
