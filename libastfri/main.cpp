@@ -11,21 +11,26 @@ int main ()
 
     auto variableC = new Variable("c", new IntType());
 
-    std::vector<Statement*> body;
-    body.push_back(
+    auto body = new CompoundStatement();
+    body->statements.push_back(
         new AssigmentStatement(
             variableC, 
             new BinaryExpression(
-                new UnaryExpression(UnaryOperators::GetValue, params[0]->variable), 
+                new VarRefExpression(params[0]->variable), 
                 BinaryOperators::Add, 
-                new UnaryExpression(UnaryOperators::GetValue, params[1]->variable)
+                new VarRefExpression(params[1]->variable)
             )
         )
     );
+    body->statements.push_back(
+        new ReturnStatement(
+            new VarRefExpression(variableC)
+        )
+    );
 
-    // auto retType = new ReturnType(new IntType(), new UnaryExpression(UnaryOperators::GetValue, variableC));
+    auto retType = new IntType();
 
-    // auto function = new FunctionDefinition("addition", params, body, retType);
+    auto function = new FunctionDefinition("addition", params, body, retType);
 
     return 0;
 }

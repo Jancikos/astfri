@@ -113,6 +113,7 @@ namespace libastfri
         std::vector<Statement*> statements;
 
         CompoundStatement (std::vector<Statement*> statements) : statements(std::move(statements)) {}
+        CompoundStatement () {}
     };
     
     struct AssigmentStatement : Statement
@@ -180,9 +181,9 @@ namespace libastfri
     {
         std::string name;
         std::vector<ParameterDefinition*> parameters;
-        std::vector<Statement*> body;
+        CompoundStatement* body;
         Type* returnType;
 
-        FunctionDefinition (std::string name, std::vector<ParameterDefinition*> parameters, std::vector<Statement*> body, Type* returnType) : name(name), parameters(parameters), body(body), returnType(returnType) {}
+        FunctionDefinition (std::string name, std::vector<ParameterDefinition*> parameters, CompoundStatement* body, Type* returnType) : name(name), parameters(parameters), body(body), returnType(returnType) {}
     };
 }
