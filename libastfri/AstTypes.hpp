@@ -8,7 +8,9 @@ namespace libastfri
     // typ
     struct Type
     {
-        // TODO - vytiahnut sem name
+        std::string name;
+
+        Type (std::string name) : name(name) {}
     };
 
     // vyraz
@@ -135,15 +137,11 @@ namespace libastfri
     // typy
     struct PrimitiveType : Type
     {
-        std::string name;
-
-        PrimitiveType (std::string name) : name(name) {}
+        PrimitiveType (std::string name) : Type(name) {}
     };
     struct UserType : Type
     {
-        std::string name;
-
-        UserType (std::string name) : name(name) {}
+        UserType (std::string name) : Type(name) {}
     };
 
     //// primitivne typy
