@@ -21,12 +21,24 @@ namespace libastfri::structures
         CompoundStatement () {}
     };
     
+    struct DeclarationStatement : Statement
+    {
+        Variable* variable;
+
+        DeclarationStatement (Variable* variable) : variable(variable) {}
+    };
     struct AssigmentStatement : Statement
     {
         Variable* left;
         Expression* right;
 
         AssigmentStatement (Variable* left, Expression* right) : left(left), right(right) {}
+    };
+
+    // todo - prehodnotit ci to je dobre riesenie
+    struct DeclarationAndAssigmentStatement : AssigmentStatement
+    {
+        DeclarationAndAssigmentStatement (Variable* left, Expression* right) : AssigmentStatement(left, right) {}
     };
 
     struct ReturnStatement : Statement
@@ -53,6 +65,7 @@ namespace libastfri::structures
         FunctionCallExpression (FunctionCallStatement* call) : call(call) {}
     };
 
+    // Conditional statement
     struct ConditionalStatement : Statement
     {
         Expression* condition;
@@ -68,4 +81,27 @@ namespace libastfri::structures
         IfStatement (Expression* condition, CompoundStatement* thenBody, CompoundStatement* elseBody = nullptr) : ConditionalStatement(condition), thenBody(thenBody), elseBody(elseBody) {}
     };
 
+    // Loop statement
+    struct LoopStatement : Statement
+    {
+        Expression* condition;
+        CompoundStatement* body;
+
+        LoopStatement (Expression* condition, CompoundStatement* body) : condition(condition), body(body) {}
+    };
+    struct WhileLoopStatement : LoopStatement
+    {
+        WhileLoopStatement (Expression* condition, CompoundStatement* body) : LoopStatement(condition, body) {}
+    };
+    struct DoWhileLoopStatement : LoopStatement
+    {
+        DoWhileLoopStatement (Expression* condition, CompoundStatement* body) : LoopStatement(condition, body) {}
+    };
+    struct ForLoopStatement : LoopStatement
+    {
+        AssigmentStatement* init;
+        AssigmentStatement* step;
+
+        ForLoopStatement (AssigmentStatement* init, Expression* condition, AssigmentStatement* step, CompoundStatement* body) : LoopStatement(condition, body), init(init), step(step) {}
+    };
 }
