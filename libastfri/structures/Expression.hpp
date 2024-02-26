@@ -17,28 +17,39 @@ namespace libastfri::structures
     struct IntLiteral : Literal
     {
         int value;
+
+        IntLiteral (int value) : value(value) {}
     };
     struct FloatLiteral : Literal
     {
         float value;
+
+        FloatLiteral (float value) : value(value) {}
     };
     struct CharLiteral : Literal
     {
         char value;
+
+        CharLiteral (char value) : value(value) {}
     };
     struct StringLiteral : Literal
     {
         std::string value;
+
+        StringLiteral (std::string value) : value(value) {}
     };
     struct BoolLiteral : Literal
     {
         bool value;
+
+        BoolLiteral (bool value) : value(value) {}
     };
 
     //// operatory pouzivane v vyrazoch
     enum class BinaryOperators
     {
-        Add, Subtract, Multiply, Divide, Modulo
+        Add, Subtract, Multiply, Divide, Modulo,
+        Equal, NotEqual, Less, LessEqual, Greater, GreaterEqual
     };
     enum class UnaryOperators
     {

@@ -36,6 +36,20 @@ namespace libastfri::structures
         ReturnStatement (Expression* value) : value(value) {}
     };
 
+    struct ConditionalStatement : Statement
+    {
+        Expression* condition;
+        
+        ConditionalStatement (Expression* condition) : condition(condition) {}
+    };
+
+    struct IfStatement : ConditionalStatement
+    {
+        CompoundStatement* thenBody;
+        CompoundStatement* elseBody;
+
+        IfStatement (Expression* condition, CompoundStatement* thenBody, CompoundStatement* elseBody = nullptr) : ConditionalStatement(condition), thenBody(thenBody), elseBody(elseBody) {}
+    };
 
     // FucntionCall statement
 }

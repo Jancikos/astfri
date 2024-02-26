@@ -1,3 +1,4 @@
+#include "libastfri/structures/Expression.hpp"
 #include <libastfri/structures/Function.hpp>
 
 using namespace libastfri::structures;
@@ -27,6 +28,23 @@ int main ()
             new VarRefExpression(variableC)
         )
     );
+    body->statements.push_back(
+        new IfStatement(
+            new BinaryExpression(
+                new VarRefExpression(variableC),
+                BinaryOperators::Less,
+                new IntLiteral(0)
+            ),
+            new CompoundStatement(
+                {
+                    new AssigmentStatement(
+                        variableC,
+                        new IntLiteral(0)
+                    )
+                }
+            )
+        )
+    );
 
     auto retType = new IntType();
 
@@ -40,6 +58,10 @@ int addition(int a, int b)
     int c = a + b;
 
     // pirdat if
+    if (c < 0)
+    {
+        c = 0;
+    }
 
     // pridat while
 
