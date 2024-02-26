@@ -1,4 +1,5 @@
 #include "libastfri/structures/Expression.hpp"
+#include <iostream>
 #include <libastfri/structures/Function.hpp>
 
 using namespace libastfri::structures;
@@ -37,6 +38,13 @@ int main ()
             ),
             new CompoundStatement(
                 {
+                    new FunctionCallStatement(
+                        "std::cout",
+                        {
+                            new StringLiteral("c is less than 0"),
+                            new ConstLiteral("std::endl")
+                        }
+                    ),
                     new AssigmentStatement(
                         variableC,
                         new IntLiteral(0)
@@ -57,15 +65,13 @@ int addition(int a, int b)
 {
     int c = a + b;
 
-    // pirdat if
     if (c < 0)
     {
+        std::cout << "c is less than 0" << std::endl;
         c = 0;
     }
 
     // pridat while
-
-    // volanie funkcie
 
     return c;
 }

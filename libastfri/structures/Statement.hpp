@@ -36,6 +36,23 @@ namespace libastfri::structures
         ReturnStatement (Expression* value) : value(value) {}
     };
 
+    // FucntionCall statement
+    struct FunctionCallStatement : Statement
+    {
+        std::string functionName;
+        std::vector<Expression*> arguments;
+
+        FunctionCallStatement (std::string functionName, std::vector<Expression*> arguments) : functionName(functionName), arguments(std::move(arguments)) {}
+    };
+
+    // TODO - presunute z Expression.hpp kvoli cyklickej zavislosti
+    struct FunctionCallExpression : Expression
+    {
+        FunctionCallStatement* call;
+
+        FunctionCallExpression (FunctionCallStatement* call) : call(call) {}
+    };
+
     struct ConditionalStatement : Statement
     {
         Expression* condition;
@@ -51,5 +68,4 @@ namespace libastfri::structures
         IfStatement (Expression* condition, CompoundStatement* thenBody, CompoundStatement* elseBody = nullptr) : ConditionalStatement(condition), thenBody(thenBody), elseBody(elseBody) {}
     };
 
-    // FucntionCall statement
 }

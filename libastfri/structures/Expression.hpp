@@ -44,6 +44,13 @@ namespace libastfri::structures
 
         BoolLiteral (bool value) : value(value) {}
     };
+    // TODO - prehodnotit
+    struct ConstLiteral : Literal
+    {
+        std::string name;
+
+        ConstLiteral (std::string value) : name(value) {}
+    };
 
     //// operatory pouzivane v vyrazoch
     enum class BinaryOperators
