@@ -1,6 +1,6 @@
-#include <libastfri/AstTypes.hpp>
+#include <libastfri/structures/Function.hpp>
 
-using namespace libastfri;
+using namespace libastfri::structures;
 
 int main ()
 {
