@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 
 #include <libastfri/structures/Expression.hpp>
@@ -14,15 +12,15 @@ using namespace libastfri::factories;
 
 int main ()
 {
-    auto typeFac = TypeFactory::getInstance();
+    auto& typeFac = TypeFactory::getInstance();
     
     std::vector<ParameterDefinition*> params;
-    params.push_back(new ParameterDefinition("a", typeFac->getIntType()));
-    params.push_back(new ParameterDefinition("b", typeFac->getIntType()));
+    params.push_back(new ParameterDefinition("a", typeFac.getIntType()));
+    params.push_back(new ParameterDefinition("b", typeFac.getIntType()));
 
-    auto variableC = new Variable("c", typeFac->getIntType());
-    auto variableRepMultiplier = new Variable("repMultiplier", typeFac->getIntType());
-    auto variableRepCount = new Variable("repCount", typeFac->getIntType());
+    auto variableC = new Variable("c", typeFac.getIntType());
+    auto variableRepMultiplier = new Variable("repMultiplier", typeFac.getIntType());
+    auto variableRepCount = new Variable("repCount", typeFac.getIntType());
 
     auto body = new CompoundStatement({
         new DeclarationAndAssigmentStatement(variableC, new BinaryExpression(new VarRefExpression(params[0]->variable), BinaryOperators::Add, new VarRefExpression(params[1]->variable))),
@@ -51,7 +49,7 @@ int main ()
         new ReturnStatement(new VarRefExpression(variableC))
     });
     
-    auto retType = typeFac->getIntType();
+    auto retType = typeFac.getIntType();
 
     auto function = new FunctionDefinition("brutalAddition", params, body, retType);
 

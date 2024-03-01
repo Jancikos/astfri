@@ -8,14 +8,12 @@
 using namespace libastfri::structures;
 
 namespace libastfri::factories {
-
-    // TODO - refaktornut to cele na staticke metody ???
-
     class TypeFactory
     {
-        private:
-            static TypeFactory* instance;
+        public:
+            static TypeFactory& getInstance();
 
+        private:
             IntType intType;
             FloatType floatType;
             CharType charType;
@@ -25,10 +23,7 @@ namespace libastfri::factories {
             std::map<std::string, UserType> userTypes;
 
             TypeFactory ();
-
         public:
-            static TypeFactory* getInstance();
-
             IntType* getIntType () { return &intType; }
             FloatType* getFloatType () { return &floatType; }
             CharType* getCharType () { return &charType; }
@@ -36,19 +31,20 @@ namespace libastfri::factories {
             VoidType* getVoidType () { return &voidType; }
 
             UserType* getUserType (std::string name);
+
+            TypeFactory(TypeFactory const&) = delete;
+            void operator=(TypeFactory const&) = delete;
     };
 
     inline TypeFactory::TypeFactory ()
     {
+        // TODO - sem mozem davat len bezparametricke konstruktory? (do user type som musel priadat defaultny parameter, aby som to vedel skompilovat...)
         userTypes = std::map<std::string, UserType>();
     }
 
-    inline TypeFactory* TypeFactory::getInstance()
+    inline TypeFactory& TypeFactory::getInstance()
     {
-        if (instance == nullptr)
-        {
-            instance = new TypeFactory();
-        }
+        static TypeFactory instance;
 
         return instance;
     }
