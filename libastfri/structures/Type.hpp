@@ -42,6 +42,6 @@ namespace libastfri::structures
     //// uzivatelske typy
     struct UserType : Type
     {
-        UserType (std::string name="") : Type(name) {}
+        UserType (std::string name) : Type(name) {}
     };
 }
