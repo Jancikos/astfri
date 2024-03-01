@@ -4,8 +4,10 @@
 #include <string>
 
 #include <libastfri/structures/Type.hpp>
+#include <libastfri/utils/Helper.hpp>
 
 using namespace libastfri::structures;
+using namespace libastfri::utils;
 
 namespace libastfri::factories {
     class TypeFactory
@@ -51,12 +53,7 @@ namespace libastfri::factories {
 
     inline UserType* TypeFactory::getUserType (std::string name)
     {
-        if (userTypes.find(name) == userTypes.end())
-        {
-            userTypes[name] = UserType(name);
-        }
-
-        return &userTypes[name];
+        return &Helper::getValueFromMap(name, this->userTypes);
     }
 }
 
