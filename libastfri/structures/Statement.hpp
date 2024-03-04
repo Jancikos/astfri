@@ -35,7 +35,6 @@ namespace libastfri::structures
         AssigmentStatement (Variable* left, Expression* right) : left(left), right(right) {}
     };
 
-    // todo - prehodnotit ci to je dobre riesenie
     struct DeclarationAndAssigmentStatement : AssigmentStatement
     {
         DeclarationAndAssigmentStatement (Variable* left, Expression* right) : AssigmentStatement(left, right) {}

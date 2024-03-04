@@ -1,21 +1,11 @@
 #include <libastfri/factories/ExpressionFactory.hpp>
 
-#include "libastfri/utils/Helper.hpp"
+#include <libastfri/utils/Helper.hpp>
 using namespace libastfri::utils;
 
 namespace libastfri::factories {
 
     //// LiteralFactory
-    LiteralFactory::LiteralFactory ()
-    {
-        // TODO - sem mozem davat len bezparametricke konstruktory? (do user type som musel priadat defaultny parameter, aby som to vedel skompilovat...)
-        intLiterals = UsedMap<int, IntLiteral>();
-        floatLiterals = UsedMap<float, FloatLiteral>();
-        charLiterals = UsedMap<char, CharLiteral>();
-        stringLiterals = UsedMap<std::string, StringLiteral>();
-        boolLiterals = UsedMap<bool, BoolLiteral>();
-    }
-
     LiteralFactory& LiteralFactory::getInstance()
     {
         static LiteralFactory instance;

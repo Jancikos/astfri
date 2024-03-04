@@ -15,6 +15,7 @@ namespace libastfri::structures
     //// primitivne typy
     struct PrimitiveType : Type
     {
+        // TODO - prehodnotit std::move - zopakovat si na co sluzi
         PrimitiveType (std::string name) : Type(name) {}
     };
 

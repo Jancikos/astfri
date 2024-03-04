@@ -8,14 +8,13 @@
 using namespace libastfri::structures;
 
 namespace libastfri::factories {
+    template <typename T>
+    using UsedList = std::vector<T>;
+
+    template<typename K, typename T>
+    using UsedMap = std::map<K, T>;
     class BaseExpressionFactory
     {
-        public:
-            template <typename T>
-            using UsedList = std::vector<T>;
-
-            template<typename K, typename T>
-            using UsedMap = std::map<K, T>;
     };
 
     class LiteralFactory : BaseExpressionFactory
@@ -30,7 +29,7 @@ namespace libastfri::factories {
             UsedMap<std::string, StringLiteral> stringLiterals;
             UsedMap<bool, BoolLiteral> boolLiterals;
 
-            LiteralFactory();
+            LiteralFactory() {};
         public:
             
             IntLiteral* getIntLiteral (int literal);
