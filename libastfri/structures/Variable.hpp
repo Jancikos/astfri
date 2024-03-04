@@ -18,13 +18,6 @@ namespace libastfri::structures
         Variable (std::string name, Type* type , Expression* value) : name(name), type(type), value(value) {}
     };
 
-    // reference na premennu - nemohlo byt definovana v Expression.hpp, lebo by to sposobilo cyklicku zavislost  - TODO - prehodnotit
-    struct VarRefExpression : RefExpression
-    {
-        Variable* variable;
-
-        VarRefExpression (Variable* variable) : variable(variable) {}
-    };
 
     // parameter
     struct ParameterDefinition

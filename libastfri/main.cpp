@@ -77,7 +77,7 @@ int main() {
   auto function =
       new FunctionDefinition("brutalAddition", params, body, retType);
 
-  return 0;
+      return 0;
 }
 
 int brutalAddition(int a, int b) {

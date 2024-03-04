@@ -4,6 +4,8 @@
 
 namespace libastfri::structures
 {
+    struct Variable;
+
     // vyraz
     struct Expression
     {
@@ -90,4 +92,12 @@ namespace libastfri::structures
 
     //     ParamRefExpression (Parameter* variable) : variable(variable) {}
     // };
+
+    // refencia na premennu
+    struct VarRefExpression : RefExpression
+    {
+        Variable* variable;
+
+        VarRefExpression (Variable* variable) : variable(variable) {}
+    };
 }
