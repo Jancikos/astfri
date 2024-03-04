@@ -2,7 +2,7 @@
 #include <libastfri/factories/StatementFactory.hpp>
 
 namespace libastfri::factories {
-    
+
     StatementFactory& StatementFactory::getInstance()
     {
         static StatementFactory instance;
@@ -52,7 +52,7 @@ namespace libastfri::factories {
         return &functionCallStatements.back();
     }
 
-    IfStatement* StatementFactory::createConditionalStatement (Expression* condition, CompoundStatement* thenBody, CompoundStatement* elseBody)
+    IfStatement* StatementFactory::createIfConditionalStatement (Expression* condition, CompoundStatement* thenBody, CompoundStatement* elseBody)
     {
         ifStatements.emplace_back(IfStatement(condition, thenBody, elseBody));
         

@@ -42,9 +42,9 @@ namespace libastfri::factories {
             DeclarationAndAssigmentStatement* createDeclarationAndAssigmentStatement (Variable* left, Expression* right);
             ReturnStatement* createReturnStatement (Expression* value);
 
-            FunctionCallStatement* createFunctionCallStatement (std::string functionName, std::vector<Expression*> arguments);
+            FunctionCallStatement* createFunctionCallStatement (std::string functionName,  std::vector<Expression*> arguments);
 
-            IfStatement* createConditionalStatement (Expression* condition, CompoundStatement* ifTrue, CompoundStatement* ifFalse);
+            IfStatement* createIfConditionalStatement (Expression* condition, CompoundStatement* ifTrue, CompoundStatement* ifFalse=nullptr);
             
             WhileLoopStatement* createWhileLoopStatement (Expression* condition, CompoundStatement* body);
             DoWhileLoopStatement* createDoWhileLoopStatement (Expression* condition, CompoundStatement* body);

@@ -3,6 +3,7 @@
 #include <map>
 
 #include <libastfri/structures/Expression.hpp>
+#include <string>
 #include <vector>
 
 using namespace libastfri::structures;
@@ -28,6 +29,7 @@ namespace libastfri::factories {
             UsedMap<char, CharLiteral> charLiterals;
             UsedMap<std::string, StringLiteral> stringLiterals;
             UsedMap<bool, BoolLiteral> boolLiterals;
+            UsedMap<std::string, ConstLiteral> constLiterals;
 
             LiteralFactory() {};
         public:
@@ -37,6 +39,7 @@ namespace libastfri::factories {
             CharLiteral* getCharLiteral (char literal);
             StringLiteral* getStringLiteral (std::string literal);
             BoolLiteral* getBoolLiteral (bool literal);
+            ConstLiteral* getConstLiteral (std::string literal);
 
             LiteralFactory(LiteralFactory const&) = delete;
             void operator=(LiteralFactory const&) = delete;

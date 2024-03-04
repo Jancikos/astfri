@@ -38,6 +38,11 @@ namespace libastfri::factories {
         return &Helper::getValueFromMap(literal, this->boolLiterals);
     }
 
+    ConstLiteral* LiteralFactory::getConstLiteral (std::string literal)
+    {
+        return &Helper::getValueFromMap(literal, this->constLiterals);
+    }
+
     //// ExpressionFactory
     ExpressionFactory::ExpressionFactory ()
     {

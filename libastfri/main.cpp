@@ -4,6 +4,7 @@
 #include <libastfri/structures/Statement.hpp>
 
 #include <libastfri/factories/ExpressionFactory.hpp>
+#include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 #include <libastfri/structures/Function.hpp>
 
@@ -13,6 +14,8 @@ using namespace libastfri::factories;
 int main() {
   auto &typeFac = TypeFactory::getInstance();
   auto &literalFac = LiteralFactory::getInstance();
+  auto &statementFac = StatementFactory::getInstance();
+  auto &expressionFac = ExpressionFactory::getInstance();
 
   std::vector<ParameterDefinition *> params;
   params.push_back(new ParameterDefinition("a", typeFac.getIntType()));
@@ -23,41 +26,51 @@ int main() {
       new Variable("repMultiplier", typeFac.getIntType());
   auto variableRepCount = new Variable("repCount", typeFac.getIntType());
 
-  auto body = new CompoundStatement(
-      {new DeclarationAndAssigmentStatement(
+  auto body = statementFac.createCompoundStatement(
+      {
+        statementFac.createDeclarationAndAssigmentStatement(
            variableC,
-           new BinaryExpression(new VarRefExpression(params[0]->variable),
+           expressionFac.createBinaryExpression(
                                 BinaryOperators::Add,
+                                new VarRefExpression(params[0]->variable),
                                 new VarRefExpression(params[1]->variable))),
-       new DeclarationAndAssigmentStatement(variableRepMultiplier,
-                                            literalFac.getIntLiteral(1)),
-       new IfStatement(
-           new BinaryExpression(new VarRefExpression(variableC),
-                                BinaryOperators::Less,
-                                literalFac.getIntLiteral(0)),
-           new CompoundStatement({new AssigmentStatement(
-               variableRepMultiplier, literalFac.getIntLiteral(-1))})),
-       new DeclarationAndAssigmentStatement(variableRepCount,
-                                            literalFac.getIntLiteral(0)),
-       new WhileLoopStatement(
-           new BinaryExpression(
-               new BinaryExpression(new VarRefExpression(variableC),
+       statementFac.createDeclarationAndAssigmentStatement(
+            variableRepMultiplier,
+            literalFac.getIntLiteral(1)),
+       statementFac.createIfConditionalStatement(
+            expressionFac.createBinaryExpression(
+                BinaryOperators::Less,
+                new VarRefExpression(variableC),
+                literalFac.getIntLiteral(0)),
+            statementFac.createCompoundStatement({
+                statementFac.createAssigmentStatement(variableRepMultiplier, literalFac.getIntLiteral(-1))})
+            ),
+       statementFac.createDeclarationAndAssigmentStatement(
+            variableRepCount,
+            literalFac.getIntLiteral(0)
+        ),
+       statementFac.createWhileLoopStatement(
+           expressionFac.createBinaryExpression(
+               BinaryOperators::Less, 
+               expressionFac.createBinaryExpression(
                                     BinaryOperators::Add,
+                                    new VarRefExpression(variableC),
                                     new VarRefExpression(variableRepCount)),
-               BinaryOperators::Less, literalFac.getIntLiteral(0)),
-           new CompoundStatement({new AssigmentStatement(
+               literalFac.getIntLiteral(0)),
+           statementFac.createCompoundStatement({statementFac.createAssigmentStatement(
                variableRepCount,
-               new BinaryExpression(
-                   new VarRefExpression(variableRepCount), BinaryOperators::Add,
+               expressionFac.createBinaryExpression(
+                   BinaryOperators::Add,
+                   new VarRefExpression(variableRepCount),
                    new VarRefExpression(variableRepMultiplier)))})),
-       new FunctionCallStatement("std::cout",
-                                 {new StringLiteral("c is "),
-                                  new VarRefExpression(variableC),
-                                  new StringLiteral(" and it was update "),
-                                  new VarRefExpression(variableRepCount),
-                                  new StringLiteral(" times to have value 0"),
-                                  new ConstLiteral("std::endl")}),
-       new ReturnStatement(new VarRefExpression(variableC))});
+       statementFac.createFunctionCallStatement("std::cout", {
+            literalFac.getStringLiteral("c is "),
+            new VarRefExpression(variableC),
+            literalFac.getStringLiteral(" and it was update "),
+            new VarRefExpression(variableRepCount),
+            literalFac.getStringLiteral(" times to have value 0"),
+            literalFac.getConstLiteral("std::endl")}),
+       statementFac.createReturnStatement(new VarRefExpression(variableC))});
 
   auto retType = typeFac.getIntType();
 
