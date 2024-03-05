@@ -3,7 +3,6 @@
 #include <vector>
 
 #include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Variable.hpp>
 
 namespace libastfri::structures
 {    
@@ -19,11 +18,11 @@ namespace libastfri::structures
     
     struct DeclarationStatement : Statement
     {
-        Variable* variable;
+        VariableDefintion* variable;
     };
     struct AssigmentStatement : Statement
     {
-        Variable* left;
+        VariableDefintion* left;
         Expression* right;
     };
 
@@ -41,12 +40,6 @@ namespace libastfri::structures
     {
         std::string functionName;
         std::vector<Expression*> arguments;
-    };
-
-    // TODO - presunute z Expression.hpp kvoli cyklickej zavislosti
-    struct FunctionCallExpression : Expression
-    {
-        FunctionCallStatement* call;
     };
 
     // Conditional statement

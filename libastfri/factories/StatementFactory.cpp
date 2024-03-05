@@ -32,7 +32,7 @@ namespace libastfri::factories {
         return compoundStatement;
     }
 
-    DeclarationStatement* StatementFactory::createDeclarationStatement (Variable* variable)
+    DeclarationStatement* StatementFactory::createDeclarationStatement (VariableDefintion* variable)
     {
         auto* declarationStatement = new DeclarationStatement{{}, variable};
         statements.emplace_back(declarationStatement);
@@ -40,7 +40,7 @@ namespace libastfri::factories {
         return declarationStatement;
     }
 
-    AssigmentStatement* StatementFactory::createAssigmentStatement (Variable* left, Expression* right)
+    AssigmentStatement* StatementFactory::createAssigmentStatement (VariableDefintion* left, Expression* right)
     {
         auto* assigmentStatement = new AssigmentStatement{{}, left, right};
         statements.emplace_back(assigmentStatement);
@@ -48,7 +48,7 @@ namespace libastfri::factories {
         return assigmentStatement;
     }
 
-    DeclarationAndAssigmentStatement* StatementFactory::createDeclarationAndAssigmentStatement (Variable* left, Expression* right)
+    DeclarationAndAssigmentStatement* StatementFactory::createDeclarationAndAssigmentStatement (VariableDefintion* left, Expression* right)
     {
         auto* declarationAndAssigmentStatement = new DeclarationAndAssigmentStatement({{{}, left, right}});
         statements.emplace_back(declarationAndAssigmentStatement);

@@ -21,10 +21,10 @@ int main() {
   params.push_back(new ParameterDefinition("a", typeFac.getIntType()));
   params.push_back(new ParameterDefinition("b", typeFac.getIntType()));
 
-  auto variableC = new Variable("c", typeFac.getIntType());
+  auto variableC = new VariableDefintion("c", typeFac.getIntType());
   auto variableRepMultiplier =
-      new Variable("repMultiplier", typeFac.getIntType());
-  auto variableRepCount = new Variable("repCount", typeFac.getIntType());
+      new VariableDefintion("repMultiplier", typeFac.getIntType());
+  auto variableRepCount = new VariableDefintion("repCount", typeFac.getIntType());
 
   auto body = statementFac.createCompoundStatement(
       {

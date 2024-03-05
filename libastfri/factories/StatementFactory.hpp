@@ -26,9 +26,9 @@ namespace libastfri::factories {
             void operator=(StatementFactory const&) = delete;
 
             CompoundStatement* createCompoundStatement (std::vector<Statement*> statements);
-            DeclarationStatement* createDeclarationStatement (Variable* variable);
-            AssigmentStatement* createAssigmentStatement (Variable* left, Expression* right);
-            DeclarationAndAssigmentStatement* createDeclarationAndAssigmentStatement (Variable* left, Expression* right);
+            DeclarationStatement* createDeclarationStatement (VariableDefintion* variable);
+            AssigmentStatement* createAssigmentStatement (VariableDefintion* left, Expression* right);
+            DeclarationAndAssigmentStatement* createDeclarationAndAssigmentStatement (VariableDefintion* left, Expression* right);
             ReturnStatement* createReturnStatement (Expression* value);
 
             FunctionCallStatement* createFunctionCallStatement (std::string functionName,  std::vector<Expression*> arguments);

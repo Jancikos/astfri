@@ -1,10 +1,12 @@
 #pragma once
 
+#include "libastfri/structures/Function.hpp"
 #include <string>
 
 namespace libastfri::structures
 {
-    struct Variable;
+    struct VariableDefintion;
+    struct ParameterDefinition;
 
     // vyraz
     struct Expression
@@ -66,19 +68,23 @@ namespace libastfri::structures
         UnaryOperators op;
         Expression* arg;
     };
+
+    //// referencie na premenne
     struct RefExpression : Expression
     {
     };
-    // struct ParamRefExpression : RefExpression
-    // {
-    //     Parameter* variable;
-
-    //     ParamRefExpression (Parameter* variable) : variable(variable) {}
-    // };
-
-    // refencia na premennu
+    struct ParamRefExpression : RefExpression
+    {
+        ParameterDefinition* variable;
+    };
     struct VarRefExpression : RefExpression
     {
-        Variable* variable;
+        VariableDefintion* variable;
+    };
+
+    //// volanie funkcie
+    struct FunctionCallExpression : Expression
+    {
+        FunctionDefinition* function;
     };
 }
