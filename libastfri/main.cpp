@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Statement.hpp>
 
@@ -19,18 +17,38 @@ int main() {
   auto &referenceFac = ReferenceFactory::getInstance();
   auto &functionFac = FunctionFactory::getInstance();
 
+  // int simpleAddition(int a, int b)
+    std::vector<ParameterDefinition *> paramsSimpleAddition;
+    paramsSimpleAddition.push_back(functionFac.createParameter("a", typeFac.getIntType()));
+    paramsSimpleAddition.push_back(functionFac.createParameter("b", typeFac.getIntType()));
+
+    auto bodySimpleAddition = statementFac.createCompoundStatement(
+        {statementFac.createReturnStatement(
+            expressionFac.createBinaryExpression(
+                BinaryOperators::Add,
+                referenceFac.createParamRefExpression(paramsSimpleAddition[0]),
+                referenceFac.createParamRefExpression(paramsSimpleAddition[1])
+                )
+            )
+        }
+    );
+    auto retTypeSimpleAddition = typeFac.getIntType();
+
+    auto functionSimpleAddition =
+        functionFac.createFunction("simpleAddition", paramsSimpleAddition, bodySimpleAddition, retTypeSimpleAddition);
+
+  // int brutalAddition(int a, int b)
   std::vector<ParameterDefinition *> params;
   params.push_back(functionFac.createParameter("a", typeFac.getIntType()));
   params.push_back(functionFac.createParameter("b", typeFac.getIntType()));
-
   auto variableC = functionFac.createVariable("c", typeFac.getIntType());
   auto variableRepMultiplier =
       functionFac.createVariable("repMultiplier", typeFac.getIntType());
   auto variableRepCount =
       functionFac.createVariable("repCount", typeFac.getIntType());
 
-  auto body = statementFac.createCompoundStatement(
-      {statementFac.createDeclarationAndAssigmentStatement(
+  auto body = statementFac.createCompoundStatement({
+       statementFac.createDeclarationAndAssigmentStatement(
            variableC, expressionFac.createBinaryExpression(
                           BinaryOperators::Add,
                           referenceFac.createParamRefExpression(params[0]),
@@ -62,23 +80,34 @@ int main() {
                        BinaryOperators::Add,
                        referenceFac.createVarRefExpression(variableRepCount),
                        referenceFac.createVarRefExpression(
-                           variableRepMultiplier)))})),
-       statementFac.createFunctionCallStatement(
-           "std::cout", {literalFac.getStringLiteral("c is "),
-                         referenceFac.createVarRefExpression(variableC),
-                         literalFac.getStringLiteral(" and it was update "),
-                         referenceFac.createVarRefExpression(variableRepCount),
-                         literalFac.getStringLiteral(" times to have value 0"),
-                         literalFac.getConstLiteral("std::endl")}),
-       statementFac.createReturnStatement(
-           referenceFac.createVarRefExpression(variableC))});
+                           variableRepMultiplier)))})
+        ),
+        statementFac.createFunctionCallStatement(
+            functionSimpleAddition, {
+                referenceFac.createParamRefExpression(params[0]),
+                referenceFac.createParamRefExpression(params[1])
+            }),
+        statementFac.createReturnStatement(
+           referenceFac.createFunctionCallExpression(
+            functionSimpleAddition, {
+                referenceFac.createParamRefExpression(params[0]),
+                referenceFac.createParamRefExpression(params[1])
+            })
+        )
+    }
+  );
 
   auto retType = typeFac.getIntType();
 
-  auto function =
+  auto functionBrutalAddition =
       functionFac.createFunction("brutalAddition", params, body, retType);
 
   return 0;
+}
+
+int simpleAddition(int a, int b)
+{
+    return a + b;
 }
 
 int brutalAddition(int a, int b) {
@@ -94,8 +123,5 @@ int brutalAddition(int a, int b) {
     repCount += repMultiplier;
   }
 
-  std::cout << "c is " << c << " and it was update " << repCount
-            << " times to have value 0" << std::endl;
-
-  return c;
+  return simpleAddition(a, b);
 }

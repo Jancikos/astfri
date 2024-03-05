@@ -1,4 +1,5 @@
 
+#include "libastfri/structures/Function.hpp"
 #include "libastfri/structures/Statement.hpp"
 #include <libastfri/factories/StatementFactory.hpp>
 
@@ -64,9 +65,9 @@ namespace libastfri::factories {
         return returnStatement;
     }
 
-    FunctionCallStatement* StatementFactory::createFunctionCallStatement (std::string functionName, std::vector<Expression*> arguments)
+    FunctionCallStatement* StatementFactory::createFunctionCallStatement (FunctionDefinition* function, std::vector<Expression*> arguments)
     {
-        auto* functionCallStatement = new FunctionCallStatement{{}, functionName, std::move(arguments)};
+        auto* functionCallStatement = new FunctionCallStatement{{}, function, std::move(arguments)};
         statements.emplace_back(functionCallStatement);
         
         return functionCallStatement;

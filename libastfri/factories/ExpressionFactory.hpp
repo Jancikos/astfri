@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <libastfri/structures/Expression.hpp>
+#include <libastfri/structures/Function.hpp>
 
 using namespace libastfri::structures;
 
@@ -74,7 +75,7 @@ namespace libastfri::factories {
             static ReferenceFactory& getInstance();
 
         private:
-        // TODO - prekontrolovat recyklaciu
+        // TODO - prekonzultovat recyklaciu
             UsedList<RefExpression*> refExpressions;
 
             ReferenceFactory();
@@ -82,6 +83,7 @@ namespace libastfri::factories {
         public:
             VarRefExpression* createVarRefExpression (VariableDefintion* variable);
             ParamRefExpression* createParamRefExpression (ParameterDefinition* variable);
+            FunctionCallExpression* createFunctionCallExpression (FunctionDefinition* function, std::vector<Expression*> arguments);
 
             ReferenceFactory(ReferenceFactory const&) = delete;
             void operator=(ReferenceFactory const&) = delete;

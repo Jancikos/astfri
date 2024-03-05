@@ -1,5 +1,6 @@
 #pragma once
 
+#include "libastfri/structures/Function.hpp"
 #include <string>
 
 #include <libastfri/factories/ExpressionFactory.hpp>
@@ -31,7 +32,7 @@ namespace libastfri::factories {
             DeclarationAndAssigmentStatement* createDeclarationAndAssigmentStatement (VariableDefintion* left, Expression* right);
             ReturnStatement* createReturnStatement (Expression* value);
 
-            FunctionCallStatement* createFunctionCallStatement (std::string functionName,  std::vector<Expression*> arguments);
+            FunctionCallStatement* createFunctionCallStatement (FunctionDefinition* function,  std::vector<Expression*> arguments);
 
             IfStatement* createIfConditionalStatement (Expression* condition, CompoundStatement* ifTrue, CompoundStatement* ifFalse=nullptr);
             

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <libastfri/structures/Expression.hpp>
+#include <libastfri/structures/Function.hpp>
 
 namespace libastfri::structures
 {    
@@ -38,7 +39,7 @@ namespace libastfri::structures
     // FucntionCall statement
     struct FunctionCallStatement : Statement
     {
-        std::string functionName;
+        FunctionDefinition* functionName;
         std::vector<Expression*> arguments;
     };
 

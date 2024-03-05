@@ -82,9 +82,10 @@ namespace libastfri::structures
         VariableDefintion* variable;
     };
 
-    //// volanie funkcie
-    struct FunctionCallExpression : Expression
+    // volanie funkcie
+    struct FunctionCallExpression : RefExpression
     {
         FunctionDefinition* function;
+        std::vector<Expression*> arguments;
     };
 }

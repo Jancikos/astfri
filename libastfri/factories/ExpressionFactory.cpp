@@ -124,5 +124,14 @@ namespace libastfri::factories {
 
         return expr;
     }
+
+    FunctionCallExpression* ReferenceFactory::createFunctionCallExpression (FunctionDefinition* function, std::vector<Expression*> arguments)
+    {
+        FunctionCallExpression* expr = new FunctionCallExpression {{}, function, std::move(arguments)};
+        this->refExpressions.push_back(expr);
+
+        return expr;
+    }
+    
 }
 
