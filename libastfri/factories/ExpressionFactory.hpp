@@ -1,10 +1,10 @@
 #pragma once
 
 #include <map>
-
-#include <libastfri/structures/Expression.hpp>
 #include <string>
 #include <vector>
+
+#include <libastfri/structures/Expression.hpp>
 
 using namespace libastfri::structures;
 
@@ -14,6 +14,7 @@ namespace libastfri::factories {
 
     template<typename K, typename T>
     using UsedMap = std::map<K, T>;
+
     class BaseExpressionFactory
     {
     };

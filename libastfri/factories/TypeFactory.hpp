@@ -4,10 +4,8 @@
 #include <string>
 
 #include <libastfri/structures/Type.hpp>
-#include <libastfri/utils/Helper.hpp>
 
 using namespace libastfri::structures;
-using namespace libastfri::utils;
 
 namespace libastfri::factories {
     class TypeFactory
@@ -23,37 +21,18 @@ namespace libastfri::factories {
             VoidType voidType;
 
             std::map<std::string, UserType> userTypes;
-
             TypeFactory ();
         public:
-            IntType* getIntType () { return &intType; }
-            FloatType* getFloatType () { return &floatType; }
-            CharType* getCharType () { return &charType; }
-            BoolType* getBoolType () { return &boolType; }
-            VoidType* getVoidType () { return &voidType; }
+            IntType* getIntType ();
+            FloatType* getFloatType ();
+            CharType* getCharType ();
+            BoolType* getBoolType ();
+            VoidType* getVoidType ();
 
             UserType* getUserType (std::string name);
 
             TypeFactory(TypeFactory const&) = delete;
             void operator=(TypeFactory const&) = delete;
     };
-
-    inline TypeFactory::TypeFactory ()
-    {
-        // TODO - sem mozem davat len bezparametricke konstruktory? (do user type som musel priadat defaultny parameter, aby som to vedel skompilovat...)
-        userTypes = std::map<std::string, UserType>();
-    }
-
-    inline TypeFactory& TypeFactory::getInstance()
-    {
-        static TypeFactory instance;
-
-        return instance;
-    }
-
-    inline UserType* TypeFactory::getUserType (std::string name)
-    {
-        return &Helper::getValueFromMap(name, this->userTypes);
-    }
 }
 

@@ -1,4 +1,5 @@
 
+#include "libastfri/structures/Statement.hpp"
 #include <libastfri/factories/StatementFactory.hpp>
 
 namespace libastfri::factories {
@@ -10,74 +11,97 @@ namespace libastfri::factories {
         return instance;
     }
 
+    StatementFactory::StatementFactory ()
+    {
+    }
+
+    StatementFactory::~StatementFactory ()
+    {
+        for (auto* statement : statements)
+        {
+            delete statement;
+        }
+        statements.clear();
+    }
+
     CompoundStatement* StatementFactory::createCompoundStatement (std::vector<Statement*> statements)
     {
-        compoundStatements.emplace_back(CompoundStatement(std::move(statements)));
+        auto* compoundStatement = new CompoundStatement{{}, std::move(statements)};
+        statements.emplace_back(compoundStatement);
         
-        return &compoundStatements.back();
+        return compoundStatement;
     }
 
     DeclarationStatement* StatementFactory::createDeclarationStatement (Variable* variable)
     {
-        declarationStatements.emplace_back(DeclarationStatement(variable));
-        
-        return &declarationStatements.back();
+        auto* declarationStatement = new DeclarationStatement{{}, variable};
+        statements.emplace_back(declarationStatement);
+
+        return declarationStatement;
     }
 
     AssigmentStatement* StatementFactory::createAssigmentStatement (Variable* left, Expression* right)
     {
-        assigmentStatements.emplace_back(AssigmentStatement(left, right));
-        
-        return &assigmentStatements.back();
+        auto* assigmentStatement = new AssigmentStatement{{}, left, right};
+        statements.emplace_back(assigmentStatement);
+
+        return assigmentStatement;
     }
 
     DeclarationAndAssigmentStatement* StatementFactory::createDeclarationAndAssigmentStatement (Variable* left, Expression* right)
     {
-        declarationAndAssigmentStatements.emplace_back(DeclarationAndAssigmentStatement(left, right));
+        auto* declarationAndAssigmentStatement = new DeclarationAndAssigmentStatement({{{}, left, right}});
+        statements.emplace_back(declarationAndAssigmentStatement);
         
-        return &declarationAndAssigmentStatements.back();
+        return declarationAndAssigmentStatement;
     }
 
     ReturnStatement* StatementFactory::createReturnStatement (Expression* value)
     {
-        returnStatements.emplace_back(ReturnStatement(value));
+        auto* returnStatement = new ReturnStatement{{}, value};
+        statements.emplace_back(returnStatement);
         
-        return &returnStatements.back();
+        return returnStatement;
     }
 
     FunctionCallStatement* StatementFactory::createFunctionCallStatement (std::string functionName, std::vector<Expression*> arguments)
     {
-        functionCallStatements.emplace_back(FunctionCallStatement(functionName, std::move(arguments)));
+        auto* functionCallStatement = new FunctionCallStatement{{}, functionName, std::move(arguments)};
+        statements.emplace_back(functionCallStatement);
         
-        return &functionCallStatements.back();
+        return functionCallStatement;
     }
 
     IfStatement* StatementFactory::createIfConditionalStatement (Expression* condition, CompoundStatement* thenBody, CompoundStatement* elseBody)
     {
-        ifStatements.emplace_back(IfStatement(condition, thenBody, elseBody));
+        auto* ifStatement = new IfStatement{{{}, condition}, thenBody, elseBody};
+        statements.emplace_back(ifStatement);
         
-        return &ifStatements.back();
+        return ifStatement;
     }
 
     WhileLoopStatement* StatementFactory::createWhileLoopStatement (Expression* condition, CompoundStatement* body)
     {
-        whileLoopStatements.emplace_back(WhileLoopStatement(condition, body));
+        auto* whileLoopStatement = new WhileLoopStatement{{{}, condition, body}};
+        statements.emplace_back(whileLoopStatement);
         
-        return &whileLoopStatements.back();
+        return whileLoopStatement;
     }
 
     DoWhileLoopStatement* StatementFactory::createDoWhileLoopStatement (Expression* condition, CompoundStatement* body)
     {
-        doWhileLoopStatements.emplace_back(DoWhileLoopStatement(condition, body));
+        auto* doWhileLoopStatement = new DoWhileLoopStatement{{{}, condition, body}};
+        statements.emplace_back(doWhileLoopStatement);
         
-        return &doWhileLoopStatements.back();
+        return doWhileLoopStatement;
     }
 
     ForLoopStatement* StatementFactory::createForLoopStatement(AssigmentStatement* init, Expression* condition, AssigmentStatement* step, CompoundStatement* body)
     {
-        forLoopStatements.emplace_back(ForLoopStatement(init, condition, step, body));
+        ForLoopStatement* forLoopStatement = new ForLoopStatement{{{}, condition, body}, init, step};
+        statements.emplace_back(forLoopStatement);
         
-        return &forLoopStatements.back();
+        return forLoopStatement;
     }
 }
 

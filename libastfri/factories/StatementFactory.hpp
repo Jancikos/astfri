@@ -17,21 +17,10 @@ namespace libastfri::factories {
             static StatementFactory& getInstance();
 
         private:
-            UsedList<CompoundStatement> compoundStatements;
-            UsedList<DeclarationStatement> declarationStatements;
-            UsedList<AssigmentStatement> assigmentStatements;
-            UsedList<DeclarationAndAssigmentStatement> declarationAndAssigmentStatements;
+            UsedList<Statement*>  statements;
 
-            UsedList<ReturnStatement> returnStatements;
-            UsedList<FunctionCallStatement> functionCallStatements;
-
-            UsedList<IfStatement> ifStatements;
-
-            UsedList<WhileLoopStatement> whileLoopStatements;
-            UsedList<DoWhileLoopStatement> doWhileLoopStatements;
-            UsedList<ForLoopStatement> forLoopStatements;
-
-            StatementFactory () {};
+            StatementFactory ();
+            ~StatementFactory ();
         public:
             StatementFactory(StatementFactory const&) = delete;
             void operator=(StatementFactory const&) = delete;

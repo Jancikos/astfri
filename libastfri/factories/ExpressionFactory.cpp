@@ -59,7 +59,7 @@ namespace libastfri::factories {
 
     UnaryExpression* ExpressionFactory::createUnaryExpression (UnaryOperators op, Expression *operand)
     {
-        UnaryExpression expr = UnaryExpression(op, operand);
+        UnaryExpression expr{{}, op, operand};
         this->unaryExpressions.push_back(expr);
 
         return &this->unaryExpressions.back();
@@ -67,7 +67,7 @@ namespace libastfri::factories {
 
     BinaryExpression* ExpressionFactory::createBinaryExpression (BinaryOperators op, Expression *left, Expression *right)
     {
-        BinaryExpression expr = BinaryExpression(left, op, right);
+        BinaryExpression expr {{}, left, op, right};
         this->binaryExpressions.push_back(expr);
 
         return &this->binaryExpressions.back();

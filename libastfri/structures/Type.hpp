@@ -8,19 +8,17 @@ namespace libastfri::structures
     struct Type
     {
         std::string name;
-
-        Type (std::string name) : name(name) {}
     };
 
     //// primitivne typy
     struct PrimitiveType : Type
     {
-        // TODO - prehodnotit std::move - zopakovat si na co sluzi
-        PrimitiveType (std::string name) : Type(name) {}
+        PrimitiveType (std::string name) : Type {std::move(name)} {}
     };
 
     struct IntType : PrimitiveType
     {
+        // TODO - je toto mozne spravit tiez cez syntax {} ?
         IntType () : PrimitiveType("int") {}
     };
     struct FloatType : PrimitiveType
@@ -43,6 +41,6 @@ namespace libastfri::structures
     //// uzivatelske typy
     struct UserType : Type
     {
-        UserType (std::string name) : Type(name) {}
+        UserType (std::string name) : Type{name} {}
     };
 }

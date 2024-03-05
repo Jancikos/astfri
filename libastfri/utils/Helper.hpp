@@ -30,7 +30,7 @@ namespace libastfri::utils {
             return it->second;
         }
 
-        auto [newIt, success] = map.emplace(std::move(key), T(key));
+        auto [newIt, success] = map.emplace(std::move(key), T{key});
 
         return newIt->second;
     }
