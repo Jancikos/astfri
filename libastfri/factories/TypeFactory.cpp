@@ -42,7 +42,14 @@ namespace libastfri::factories {
 
     UserType* TypeFactory::getUserType (std::string name)
     {
-        return &Helper::getValueFromMap(name, this->userTypes);
+        // return &Helper::getValueFromMap(name, this->userTypes);
+        
+        return Helper::getValueFromMap(
+            name,
+             this->userTypes, 
+            [](std::map<std::string, UserType>& p_map, std::string p_key) {
+                return p_map.emplace(p_key, UserType{{}, p_key});
+            });
     }
 }
 

@@ -1,6 +1,7 @@
 #include <libastfri/factories/ExpressionFactory.hpp>
 
 #include <libastfri/utils/Helper.hpp>
+
 using namespace libastfri::utils;
 
 namespace libastfri::factories {
@@ -13,34 +14,48 @@ namespace libastfri::factories {
         return instance;
     }
 
+    template<typename K, typename T>
+    T* LiteralFactory::getLiteralFromMap (K key, UsedMap<K, T> &map)
+    {
+        // return nullptr;
+        return Helper::getValueFromMap(
+            key,
+             map, 
+             
+            [map, key]() {
+                return map.emplace(key, Literal{{{}}, p_key});
+            }
+        );
+    }
+
     IntLiteral* LiteralFactory::getIntLiteral (int literal)
     {
-        return &Helper::getValueFromMap(literal, this->intLiterals);
+        return getLiteralFromMap(literal, this->intLiterals);
     }
 
     FloatLiteral* LiteralFactory::getFloatLiteral (float literal)
     {
-        return &Helper::getValueFromMap(literal, this->floatLiterals);
+        return getLiteralFromMap(literal, this->floatLiterals);
     }
 
     CharLiteral* LiteralFactory::getCharLiteral (char literal)
     {
-        return &Helper::getValueFromMap(literal, this->charLiterals);
+        return getLiteralFromMap(literal, this->charLiterals);
     }
 
     StringLiteral* LiteralFactory::getStringLiteral (std::string literal)
     {
-        return &Helper::getValueFromMap(literal, this->stringLiterals);
+        return getLiteralFromMap(literal, this->stringLiterals);
     }
 
     BoolLiteral* LiteralFactory::getBoolLiteral (bool literal)
     {
-        return &Helper::getValueFromMap(literal, this->boolLiterals);
+        return getLiteralFromMap(literal, this->boolLiterals);
     }
 
     ConstLiteral* LiteralFactory::getConstLiteral (std::string literal)
     {
-        return &Helper::getValueFromMap(literal, this->constLiterals);
+        return getLiteralFromMap(literal, this->constLiterals);
     }
 
     //// ExpressionFactory
@@ -79,11 +94,35 @@ namespace libastfri::factories {
 
     }
 
+    ReferenceFactory::~ReferenceFactory ()
+    {
+        for (auto expr : this->refExpressions)
+        {
+            delete expr;
+        }
+    }
+
     ReferenceFactory& ReferenceFactory::getInstance()
     {
         static ReferenceFactory instance;
 
         return instance;
+    }
+
+    VarRefExpression* ReferenceFactory::createVarRefExpression (VariableDefintion* variable)
+    {
+        VarRefExpression* expr = new VarRefExpression {{}, variable};
+        this->refExpressions.push_back(expr);
+
+        return expr;
+    }
+
+    ParamRefExpression* ReferenceFactory::createParamRefExpression (ParameterDefinition* parameter)
+    {
+        ParamRefExpression* expr = new ParamRefExpression {{}, parameter};
+        this->refExpressions.push_back(expr);
+
+        return expr;
     }
 }
 

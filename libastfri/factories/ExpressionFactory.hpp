@@ -25,6 +25,9 @@ namespace libastfri::factories {
             static LiteralFactory& getInstance();
 
         private:
+            template<typename K, typename T>
+            T* getLiteralFromMap (K literal, UsedMap<K, T> &map);
+
             UsedMap<int, IntLiteral> intLiterals;
             UsedMap<float, FloatLiteral> floatLiterals;
             UsedMap<char, CharLiteral> charLiterals;
@@ -71,8 +74,15 @@ namespace libastfri::factories {
             static ReferenceFactory& getInstance();
 
         private:
+        // TODO - prekontrolovat recyklaciu
+            UsedList<RefExpression*> refExpressions;
+
             ReferenceFactory();
+            ~ReferenceFactory();
         public:
+            VarRefExpression* createVarRefExpression (VariableDefintion* variable);
+            ParamRefExpression* createParamRefExpression (ParameterDefinition* variable);
+
             ReferenceFactory(ReferenceFactory const&) = delete;
             void operator=(ReferenceFactory const&) = delete;
     };

@@ -75,7 +75,7 @@ namespace libastfri::structures
     };
     struct ParamRefExpression : RefExpression
     {
-        ParameterDefinition* variable;
+        ParameterDefinition* parameter;
     };
     struct VarRefExpression : RefExpression
     {
