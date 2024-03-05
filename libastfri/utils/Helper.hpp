@@ -11,12 +11,12 @@ namespace libastfri::utils {
     class Helper
     {
         public:
-            template <typename K, typename T>
-            static T& getValueFromMap(K key, std::map<K, T>& map, std::function<std::pair<typename std::map<K, T>::iterator, bool>(std::map<K, T>&, K)> customEmplace);
+            template <typename K, typename T, typename Emplacer>
+            static T& getValueFromMap(K key, std::map<K, T>& map, Emplacer customEmplace);
     };   
 
-    template <typename K, typename T>
-    inline T& Helper::getValueFromMap(K key, std::map<K, T>& map, std::function<std::pair<typename std::map<K, T>::iterator, bool>(std::map<K, T>&, K)> customEmplace)
+    template <typename K, typename T, typename Emplacer>
+    inline T& Helper::getValueFromMap(K key, std::map<K, T>& map, Emplacer customEmplace)
     {
         auto it = map.find(key);
         if (it != map.end())

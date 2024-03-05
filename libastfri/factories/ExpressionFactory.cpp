@@ -17,13 +17,11 @@ namespace libastfri::factories {
     template<typename K, typename T>
     T* LiteralFactory::getLiteralFromMap (K key, UsedMap<K, T> &map)
     {
-        // return nullptr;
-        return Helper::getValueFromMap(
+        return &Helper::getValueFromMap(
             key,
              map, 
-             
-            [](auto p_map, auto p_key) {
-                return p_map.emplace_back(p_key, Literal{{{}}, p_key});
+            [] (auto p_map, K p_key) {
+                return p_map.emplace(p_key, T{{{}}, p_key});
             }
         );
     }

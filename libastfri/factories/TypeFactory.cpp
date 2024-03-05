@@ -1,5 +1,3 @@
-#pragma once
-
 #include <libastfri/factories/TypeFactory.hpp>
 #include <libastfri/utils/Helper.hpp>
 
@@ -42,14 +40,13 @@ namespace libastfri::factories {
 
     UserType* TypeFactory::getUserType (std::string name)
     {
-        // return &Helper::getValueFromMap(name, this->userTypes);
-        
-        return Helper::getValueFromMap (
-                name,
-                    this->userTypes, 
-                [](std::map<std::string, UserType>& p_map, std::string p_key) {
-                    return p_map.emplace(p_key, UserType(p_key));
-                });
+        return &Helper::getValueFromMap(
+            name,
+             userTypes, 
+            [] (auto p_map, auto p_key) {
+                return p_map.emplace(p_key, UserType{{p_key}});
+            }
+        );
     }
 }
 
