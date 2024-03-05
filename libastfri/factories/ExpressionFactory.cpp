@@ -22,8 +22,8 @@ namespace libastfri::factories {
             key,
              map, 
              
-            [map, key]() {
-                return map.emplace(key, Literal{{{}}, p_key});
+            [](auto p_map, auto p_key) {
+                return p_map.emplace_back(p_key, Literal{{{}}, p_key});
             }
         );
     }
