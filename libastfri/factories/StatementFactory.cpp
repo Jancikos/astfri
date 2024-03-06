@@ -1,4 +1,3 @@
-
 #include "libastfri/structures/Function.hpp"
 #include "libastfri/structures/Statement.hpp"
 #include <libastfri/factories/StatementFactory.hpp>

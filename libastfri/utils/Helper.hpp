@@ -12,10 +12,10 @@ namespace libastfri::utils {
         public:
             template <typename K, typename T, typename Emplacer>
             static T& getValueFromMap(K key, std::map<K, T>& map, Emplacer customEmplace);
-    };   
-
+    };
+    
     template <typename K, typename T, typename Emplacer>
-    inline T& Helper::getValueFromMap(K key, std::map<K, T>& map, Emplacer customEmplace)
+    T& Helper::getValueFromMap(K key, std::map<K, T>& map, Emplacer customEmplace)
     {
         auto it = map.find(key);
         if (it != map.end())
