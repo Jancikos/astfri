@@ -43,7 +43,7 @@ namespace libastfri::factories {
         return &Helper::getValueFromMap(
             name,
              userTypes, 
-            [] (auto p_map, auto p_key) {
+            [] (auto& p_map, auto p_key) {
                 return p_map.emplace(p_key, UserType{{p_key}});
             }
         );

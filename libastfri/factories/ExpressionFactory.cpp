@@ -20,7 +20,7 @@ namespace libastfri::factories {
         return &Helper::getValueFromMap(
             key,
              map, 
-            [] (auto p_map, K p_key) {
+            [] (auto& p_map, K p_key) {
                 return p_map.emplace(p_key, T{{{}}, p_key});
             }
         );

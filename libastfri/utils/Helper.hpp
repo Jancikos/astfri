@@ -1,6 +1,5 @@
 #pragma once
 
-#include <functional>
 #include <map>
 
 namespace libastfri::utils {
