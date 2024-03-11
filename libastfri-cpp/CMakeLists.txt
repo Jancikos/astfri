@@ -1,31 +1,39 @@
-file(GLOB SOURCES test.cpp)
-
-set(CMAKE_MODULE_PATH
-  ${CMAKE_MODULE_PATH}
-  "${PROJECT_SOURCE_DIR}/cmake/modules"
+file(
+    GLOB SOURCES test.cpp
 )
- 
-find_package(LibClangTooling REQUIRED)
 
-add_definitions(${LibClangTooling_DEFINITIONS})
- 
-include_directories(
-  ${LibClangTooling_INCLUDE_DIRS}
+# https://github.com/firolino/clang-tool/tree/master
+
+set(
+    CMAKE_MODULE_PATH
+    ${CMAKE_MODULE_PATH}
+    "${PROJECT_SOURCE_DIR}/cmake/modules"
+)
+
+find_package(
+    LLVM REQUIRED
+)
+
+find_package(
+    Clang REQUIRED
 )
 
 add_library(
     astfri-cpp STATIC ${SOURCES}
 )
 
-message("!!!!!! ${LibClangTooling_LIBRARIES}")
-
-target_link_options(
-    astfri-cpp
-    PUBLIC ${LibClangTooling_LIBRARIES}
+target_compile_options(
+    astfri-cpp PUBLIC "-fno-rtti"
 )
 
-target_link_libraries(astfri-cpp PUBLIC ${LibClangTooling_LIBRARIES})
+target_link_libraries(
+    astfri-cpp PUBLIC ${CLANG_LIBS} ${LLVM_LIBS_CORE} ${LLVM_LDFLAGS}
+)
 
-target_link_libraries(astfri-cpp PUBLIC astfri-core)
+target_link_libraries(
+    astfri-cpp PUBLIC astfri-core
+)
 
-target_include_directories(astfri-cpp PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(
+    astfri-cpp PUBLIC ${PROJECT_SOURCE_DIR}
+)
