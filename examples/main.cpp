@@ -1,3 +1,8 @@
+#include <memory>
+#include <libastfri-cpp/test.hpp>
+#include <fstream>
+#include <sstream>
+
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Statement.hpp>
 
@@ -10,6 +15,16 @@ using namespace libastfri::structures;
 using namespace libastfri::factories;
 
 int main() {
+    auto ifst = std::ifstream("examples/input/addition.cpp");
+    auto ist = std::stringstream();
+    ist << ifst.rdbuf();
+    std::string code = ist.str();
+
+    clang::tooling::runToolOnCodeWithArgs(std::make_unique<FindClassAction>(), code, {""});
+
+    return 0;
+
+
   auto &typeFac = TypeFactory::getInstance();
   auto &literalFac = LiteralFactory::getInstance();
   auto &statementFac = StatementFactory::getInstance();
