@@ -15,7 +15,7 @@ using namespace libastfri::structures;
 using namespace libastfri::factories;
 
 int main() {
-    auto ifst = std::ifstream("examples/input/addition.cpp");
+    auto ifst = std::ifstream("/home/jnc/projects/astfri/examples/input/addtion.cpp");
     auto ist = std::stringstream();
     ist << ifst.rdbuf();
     std::string code = ist.str();
