@@ -17,13 +17,14 @@ class AstfriClangVisitor
     : public clang::RecursiveASTVisitor<AstfriClangVisitor> {
 public:
   bool VisitFunctionDecl(clang::FunctionDecl *Declaration);
-  bool VisitCompoundStmt(clang::CompoundStmt *Declaration);
 
   bool VisitStmt(clang::Stmt *Declaration);
+  bool VisitCompoundStmt(clang::CompoundStmt *Declaration);
+  bool VisitDeclStmt(clang::DeclStmt *Declaration);
+  bool VisitReturnStmt(clang::ReturnStmt *Declaration);
 
   bool VisitExpr(clang::Expr *Declaration);
   bool VisitIntegerLiteral(clang::IntegerLiteral *Declaration);
-
   bool VisitParmVarDecl(clang::ParmVarDecl *Declaration);
   bool VisitDeclRefExpr(clang::DeclRefExpr *Declaration);
 

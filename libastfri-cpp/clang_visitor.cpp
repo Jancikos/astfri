@@ -48,75 +48,11 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
   return false;
 }
 
-bool AstfriClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Declaration) {
-  auto &funFac = libastfri::factories::FunctionFactory::getInstance();
-
-  libastfri::structures::Expression *defValue = nullptr;
-  if (Declaration->hasDefaultArg()) {
-    // TODO - doimplementovat ked budem vediet spracovat expressions
-    // defValue = literalFac.createLiteral(Declaration->getDefaultArg());
-    // std::cout << "has default arg" << std::endl;
-  }
-
-  visitedVariable =
-      funFac.createParameter(Declaration->getNameAsString(),
-                             convertType(Declaration->getType()), defValue);
-
-  return false;
-}
-
-// TODO - preriesit nejakym spossobm ako dostat navraty typ z funkcie (atribut
-// visitoru, ?? out parameter)
-bool AstfriClangVisitor::VisitCompoundStmt(clang::CompoundStmt *Declaration) {
-  // For debugging, dumping the AST nodes will show which nodes are already
-  // being visited.
-  // Declaration->dump();
-
-  auto &statementFac = libastfri::factories::StatementFactory::getInstance();
-  auto *compoundStatement = statementFac.createCompoundStatement({});
-
-  for (auto stmt : Declaration->body()) {
-    VisitStmt(stmt);
-    compoundStatement->statements.push_back(visitedStatement);
-  }
-
-  visitedStatement = compoundStatement;
-
-  return false;
-}
-
 bool AstfriClangVisitor::VisitStmt(clang::Stmt *Declaration) {
 
-  // visitedStatement => libastfri::structures::CompoundStatement
-  if (auto *compoundStmt = llvm::dyn_cast<clang::CompoundStmt>(Declaration)) {
-    VisitCompoundStmt(compoundStmt);
-    return false;
-  }
-
-  // visitedStatement => libastfri::structures::DeclarationStatement
-  if (auto *declStmt = llvm::dyn_cast<clang::DeclStmt>(Declaration)) {
-    auto &funFac = libastfri::factories::FunctionFactory::getInstance();
-    auto &statementFac = libastfri::factories::StatementFactory::getInstance();
-
-    auto *decl = static_cast<clang::VarDecl *>(declStmt->getSingleDecl());
-
-    auto *var = funFac.createVariable(decl->getNameAsString(),
-                                      convertType(decl->getType()), nullptr);
-
-    if (decl->hasInit()) {
-      VisitExpr(decl->getInit());
-      auto *init =
-          static_cast<libastfri::structures::Expression *>(visitedExpression);
-      visitedStatement =
-          statementFac.createDeclarationAndAssigmentStatement(var, init);
-      return false;
-    }
-
-    visitedStatement = statementFac.createDeclarationStatement(var);
-    return false;
-  }
-
   // visitedStatement => libastfri::structures::AssigmentStatement
+  // TODO - zistit kedy ma byt BinaryOperator pouzity ako expression a kedy ako
+  // statement
   if (auto *assigmentStmt =
           llvm::dyn_cast<clang::BinaryOperator>(Declaration)) {
     auto &funFac = libastfri::factories::FunctionFactory::getInstance();
@@ -141,14 +77,69 @@ bool AstfriClangVisitor::VisitStmt(clang::Stmt *Declaration) {
     return false;
   }
 
-  // visitedStatement => libastfri::structures::ReturnStatement
-  if (auto *returnStmt = llvm::dyn_cast<clang::ReturnStmt>(Declaration)) {
-    auto &statementFac = libastfri::factories::StatementFactory::getInstance();
+  return true;
+}
 
-    VisitExpr(returnStmt->getRetValue());
-    visitedStatement = statementFac.createReturnStatement(visitedExpression);
+bool AstfriClangVisitor::VisitCompoundStmt(clang::CompoundStmt *Declaration) {
+  // For debugging, dumping the AST nodes will show which nodes are already
+  // being visited.
+  // Declaration->dump();
+
+  auto &statementFac = libastfri::factories::StatementFactory::getInstance();
+  auto *compoundStatement = statementFac.createCompoundStatement({});
+
+  for (auto stmt : Declaration->body()) {
+    VisitStmt(stmt);
+    compoundStatement->statements.push_back(visitedStatement);
+  }
+
+  visitedStatement = compoundStatement;
+
+  return false;
+}
+
+bool AstfriClangVisitor::VisitDeclStmt(clang::DeclStmt *Declaration) {
+  auto &funFac = libastfri::factories::FunctionFactory::getInstance();
+  auto &statementFac = libastfri::factories::StatementFactory::getInstance();
+
+  auto *decl = static_cast<clang::VarDecl *>(Declaration->getSingleDecl());
+
+  auto *var = funFac.createVariable(decl->getNameAsString(),
+                                    convertType(decl->getType()), nullptr);
+
+  if (decl->hasInit()) {
+    VisitExpr(decl->getInit());
+    auto *init =
+        static_cast<libastfri::structures::Expression *>(visitedExpression);
+    visitedStatement =
+        statementFac.createDeclarationAndAssigmentStatement(var, init);
     return false;
   }
+
+  visitedStatement = statementFac.createDeclarationStatement(var);
+  return false;
+}
+
+bool AstfriClangVisitor::VisitReturnStmt(clang::ReturnStmt *Declaration) {
+  auto &statementFac = libastfri::factories::StatementFactory::getInstance();
+
+  VisitExpr(Declaration->getRetValue());
+  visitedStatement = statementFac.createReturnStatement(visitedExpression);
+  return false;
+}
+
+bool AstfriClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Declaration) {
+  auto &funFac = libastfri::factories::FunctionFactory::getInstance();
+
+  libastfri::structures::Expression *defValue = nullptr;
+  if (Declaration->hasDefaultArg()) {
+    VisitExpr(Declaration->getDefaultArg());
+    defValue = visitedExpression;
+  }
+
+  visitedVariable =
+      funFac.createParameter(Declaration->getNameAsString(),
+                             convertType(Declaration->getType()), defValue);
 
   return false;
 }
@@ -201,6 +192,8 @@ bool AstfriClangVisitor::VisitDeclRefExpr(clang::DeclRefExpr *Declaration) {
   return false;
 }
 
+
+// TOOD - premysliet kam toto vytiahnut
 Type *AstfriClangVisitor::convertType(clang::QualType qt) {
   auto &typeFac = libastfri::factories::TypeFactory::getInstance();
 
