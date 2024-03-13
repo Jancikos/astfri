@@ -1,5 +1,5 @@
 file(
-    GLOB SOURCES test.cpp
+    GLOB SOURCES ./*.cpp
 )
 
 # https://github.com/firolino/clang-tool/tree/master

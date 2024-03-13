@@ -1,18 +1,9 @@
 #include <memory>
-#include <libastfri-cpp/test.hpp>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 
-#include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Statement.hpp>
-
-#include <libastfri/factories/ExpressionFactory.hpp>
-#include <libastfri/factories/FunctionFactory.hpp>
-#include <libastfri/factories/StatementFactory.hpp>
-#include <libastfri/factories/TypeFactory.hpp>
-
-using namespace libastfri::structures;
-using namespace libastfri::factories;
+#include <libastfri-cpp/clang_management.hpp>
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -25,7 +16,7 @@ int main(int argc, char **argv) {
     ist << ifst.rdbuf();
     std::string code = ist.str();
 
-    clang::tooling::runToolOnCodeWithArgs(std::make_unique<FindClassAction>(), code, {""});
+    clang::tooling::runToolOnCodeWithArgs(std::make_unique<AstfriClangTraverseAction>(), code, {""});
 
     return 0;
 }
