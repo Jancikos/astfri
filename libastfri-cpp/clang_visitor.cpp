@@ -4,6 +4,7 @@
 #include "iostream"
 #include "libastfri/factories/FunctionFactory.hpp"
 #include "libastfri/structures/Expression.hpp"
+#include "libastfri/structures/Function.hpp"
 #include "libastfri/structures/Statement.hpp"
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
@@ -23,85 +24,184 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
 
   // return type
   libastfri::structures::Type *returnType =
-      qualTypeToType(Declaration->getReturnType());
+      convertType(Declaration->getReturnType());
 
   // params
   std::vector<libastfri::structures::ParameterDefinition *> params;
   for (auto param : Declaration->parameters()) {
-    param->dump();
+    // param->dump();
 
-    libastfri::structures::Expression *defValue = nullptr;
-    if (param->hasDefaultArg()) {
-      // TODO - doimplementovat ked budem vediet spracovat expressions
-      // defValue = literalFac.createLiteral(param->getDefaultArg());
-      std::cout << "has default arg" << std::endl;
-    }
-
-    params.push_back(funFac.createParameter(
-        param->getNameAsString(), qualTypeToType(param->getType()), defValue));
+    VisitParmVarDecl(param);
+    params.push_back(static_cast<libastfri::structures::ParameterDefinition *>(
+        visitedVariable));
   }
 
   // body
-  libastfri::structures::CompoundStatement *body =
-      statementFac.createCompoundStatement({});
-  VisitCompoundStmt(static_cast<clang::CompoundStmt *>(Declaration->getBody()),
-                    body);
+  VisitCompoundStmt(static_cast<clang::CompoundStmt *>(Declaration->getBody()));
+  auto *body =
+      static_cast<libastfri::structures::CompoundStatement *>(visitedStatement);
 
-  // Declaration->getParamDecl
-  // Declaration->getBody()
-
-  // myFunc.body = this->VisitrCompoundStmt(Declaration->getBody());
+  visitedFunction = funFac.createFunction(title, params, body, returnType);
 
   // The return value indicates whether we want the visitation to proceed.
   // Return false to stop the traversal of the AST.
   return false;
 }
 
-// TODO - preriesit nejakym spossobm ako dostat navraty typ z funkcie (atribut
-// visitoru, ?? out parameter)
-bool AstfriClangVisitor::VisitCompoundStmt(
-    clang::CompoundStmt *Declaration,
-    libastfri::structures::CompoundStatement *outCompoundStatement) {
-  if (outCompoundStatement == nullptr) {
-    return false;
+bool AstfriClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Declaration) {
+  auto &funFac = libastfri::factories::FunctionFactory::getInstance();
+
+  libastfri::structures::Expression *defValue = nullptr;
+  if (Declaration->hasDefaultArg()) {
+    // TODO - doimplementovat ked budem vediet spracovat expressions
+    // defValue = literalFac.createLiteral(Declaration->getDefaultArg());
+    // std::cout << "has default arg" << std::endl;
   }
 
+  visitedVariable =
+      funFac.createParameter(Declaration->getNameAsString(),
+                             convertType(Declaration->getType()), defValue);
+
+  return false;
+}
+
+// TODO - preriesit nejakym spossobm ako dostat navraty typ z funkcie (atribut
+// visitoru, ?? out parameter)
+bool AstfriClangVisitor::VisitCompoundStmt(clang::CompoundStmt *Declaration) {
   // For debugging, dumping the AST nodes will show which nodes are already
   // being visited.
   // Declaration->dump();
 
   auto &statementFac = libastfri::factories::StatementFactory::getInstance();
+  auto *compoundStatement = statementFac.createCompoundStatement({});
 
   for (auto stmt : Declaration->body()) {
-    std::cout << std::endl << "stmt" << std::endl;
-    stmt->dump();
-    // TODO - pridat podporu pre vsetky statementy
+    VisitStmt(stmt);
+    compoundStatement->statements.push_back(visitedStatement);
+  }
 
+  visitedStatement = compoundStatement;
 
-    if (auto expr = clang::dyn_cast<clang::Expr>(stmt)) {
-      libastfri::structures::Statement *outStatement = nullptr;
-      VisitS(expr, outStatement);
-      outCompoundStatement->statements.push_back(outStatement);
+  return false;
+}
+
+bool AstfriClangVisitor::VisitStmt(clang::Stmt *Declaration) {
+
+  // visitedStatement => libastfri::structures::CompoundStatement
+  if (auto *compoundStmt = llvm::dyn_cast<clang::CompoundStmt>(Declaration)) {
+    VisitCompoundStmt(compoundStmt);
+    return false;
+  }
+
+  // visitedStatement => libastfri::structures::DeclarationStatement
+  if (auto *declStmt = llvm::dyn_cast<clang::DeclStmt>(Declaration)) {
+    auto &funFac = libastfri::factories::FunctionFactory::getInstance();
+    auto &statementFac = libastfri::factories::StatementFactory::getInstance();
+
+    auto *decl = static_cast<clang::VarDecl *>(declStmt->getSingleDecl());
+
+    auto *var = funFac.createVariable(decl->getNameAsString(),
+                                      convertType(decl->getType()), nullptr);
+
+    if (decl->hasInit()) {
+      VisitExpr(decl->getInit());
+      auto *init =
+          static_cast<libastfri::structures::Expression *>(visitedExpression);
+      visitedStatement =
+          statementFac.createDeclarationAndAssigmentStatement(var, init);
+      return false;
     }
+
+    visitedStatement = statementFac.createDeclarationStatement(var);
+    return false;
+  }
+
+  // visitedStatement => libastfri::structures::AssigmentStatement
+  if (auto *assigmentStmt =
+          llvm::dyn_cast<clang::BinaryOperator>(Declaration)) {
+    auto &funFac = libastfri::factories::FunctionFactory::getInstance();
+    auto &statementFac = libastfri::factories::StatementFactory::getInstance();
+
+    if (assigmentStmt->getOpcode() != clang::BinaryOperatorKind::BO_Assign) {
+      return false; // imeplementovat ine operatory
+    }
+
+    auto *lhs = static_cast<clang::DeclRefExpr *>(assigmentStmt->getLHS());
+    auto *rhs = static_cast<clang::Expr *>(assigmentStmt->getRHS());
+
+    VisitExpr(rhs);
+    auto *right =
+        static_cast<libastfri::structures::Expression *>(visitedExpression);
+
+    auto *left = funFac.createVariable(
+        lhs->getNameInfo().getAsString(), convertType(lhs->getType()),
+        nullptr); // todo - extrahovat do VisitDeclRefExpr
+
+    visitedStatement = statementFac.createAssigmentStatement(left, right);
+    return false;
+  }
+
+  // visitedStatement => libastfri::structures::ReturnStatement
+  if (auto *returnStmt = llvm::dyn_cast<clang::ReturnStmt>(Declaration)) {
+    auto &statementFac = libastfri::factories::StatementFactory::getInstance();
+
+    VisitExpr(returnStmt->getRetValue());
+    visitedStatement = statementFac.createReturnStatement(visitedExpression);
+    return false;
   }
 
   return false;
 }
 
-bool AstfriClangVisitor::VisitStmt(
-    clang::Stmt *Declaration,
-    libastfri::structures::Statement *outCompoundStatement) {
+bool AstfriClangVisitor::VisitExpr(clang::Expr *Declaration) {
+  if (Declaration == nullptr) {
+    visitedExpression = nullptr;
+    return false;
+  }
+
+  auto &exprFac = libastfri::factories::ExpressionFactory::getInstance();
+  auto &literalFac = libastfri::factories::LiteralFactory::getInstance();
+  auto &typeFac = libastfri::factories::TypeFactory::getInstance();
+
+  // visitedExpression => libastfri::structures::BinaryExpression
+  if (auto *binaryExpr = llvm::dyn_cast<clang::BinaryOperator>(Declaration)) {
+    VisitExpr(binaryExpr->getLHS());
+    auto *left =
+        static_cast<libastfri::structures::Expression *>(visitedExpression);
+
+    VisitExpr(binaryExpr->getRHS());
+    auto *right =
+        static_cast<libastfri::structures::Expression *>(visitedExpression);
+
+    visitedExpression = exprFac.createBinaryExpression(
+        convertBinaryOperator(binaryExpr->getOpcode()), left, right);
+    return false;
+  }
+
+  return true;
+}
+
+bool AstfriClangVisitor::VisitIntegerLiteral(
+    clang::IntegerLiteral *Declaration) {
+  auto &literalFac = libastfri::factories::LiteralFactory::getInstance();
+
+  visitedExpression =
+      literalFac.getIntLiteral(Declaration->getValue().getSExtValue());
   return false;
 }
 
+bool AstfriClangVisitor::VisitDeclRefExpr(clang::DeclRefExpr *Declaration) {
+  auto &funFac = libastfri::factories::FunctionFactory::getInstance();
+  auto &refFac = libastfri::factories::ReferenceFactory::getInstance();
 
-bool AstfriClangVisitor::VisitExpr(
-    clang::Expr *Declaration,
-    libastfri::structures::Statement *outCompoundStatement) {
+  auto *var =
+      funFac.createVariable(Declaration->getNameInfo().getAsString(),
+                            convertType(Declaration->getType()), nullptr);
+  visitedExpression = refFac.createVarRefExpression(var);
   return false;
 }
 
-Type *AstfriClangVisitor::qualTypeToType(clang::QualType qt) {
+Type *AstfriClangVisitor::convertType(clang::QualType qt) {
   auto &typeFac = libastfri::factories::TypeFactory::getInstance();
 
   if (qt->isIntegerType()) {
@@ -125,4 +225,50 @@ Type *AstfriClangVisitor::qualTypeToType(clang::QualType qt) {
   }
 
   return typeFac.getUserType(qt.getAsString());
+}
+
+libastfri::structures::BinaryOperators
+AstfriClangVisitor::convertBinaryOperator(clang::BinaryOperator::Opcode op) {
+  switch (op) {
+  case clang::BinaryOperator::Opcode::BO_Add:
+    return libastfri::structures::BinaryOperators::Add;
+  case clang::BinaryOperator::Opcode::BO_Sub:
+    return libastfri::structures::BinaryOperators::Subtract;
+  case clang::BinaryOperator::Opcode::BO_Mul:
+    return libastfri::structures::BinaryOperators::Multiply;
+  case clang::BinaryOperator::Opcode::BO_Div:
+    return libastfri::structures::BinaryOperators::Divide;
+  case clang::BinaryOperator::Opcode::BO_Rem:
+    return libastfri::structures::BinaryOperators::Modulo;
+  case clang::BinaryOperator::Opcode::BO_LT:
+    return libastfri::structures::BinaryOperators::Less;
+  case clang::BinaryOperator::Opcode::BO_GT:
+    return libastfri::structures::BinaryOperators::Greater;
+  case clang::BinaryOperator::Opcode::BO_LE:
+    return libastfri::structures::BinaryOperators::LessEqual;
+  case clang::BinaryOperator::Opcode::BO_GE:
+    return libastfri::structures::BinaryOperators::GreaterEqual;
+  case clang::BinaryOperator::Opcode::BO_EQ:
+    return libastfri::structures::BinaryOperators::Equal;
+  case clang::BinaryOperator::Opcode::BO_NE:
+    return libastfri::structures::BinaryOperators::NotEqual;
+    //   case clang::BinaryOperator::Opcode::BO_And:
+    //     return libastfri::structures::BinaryOperators::AND;
+    //   case clang::BinaryOperator::Opcode::BO_Or:
+    //     return libastfri::structures::BinaryOperators::OR;
+  }
+
+  throw std::runtime_error("Unknown binary operator");
+}
+
+libastfri::structures::UnaryOperators
+AstfriClangVisitor::convertUnaryOperator(clang::UnaryOperator::Opcode op) {
+  switch (op) {
+  case clang::UnaryOperator::Opcode::UO_Minus:
+    return libastfri::structures::UnaryOperators::Negative;
+  case clang::UnaryOperator::Opcode::UO_Not:
+    return libastfri::structures::UnaryOperators::Not;
+  }
+
+  throw std::runtime_error("Unknown unary operator");
 }

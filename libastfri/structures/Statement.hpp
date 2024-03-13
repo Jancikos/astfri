@@ -21,14 +21,15 @@ namespace libastfri::structures
     {
         VariableDefintion* variable;
     };
+    struct DeclarationAndAssigmentStatement : DeclarationStatement
+    {
+        Expression* exp;
+    };
+
     struct AssigmentStatement : Statement
     {
         VariableDefintion* left;
         Expression* right;
-    };
-
-    struct DeclarationAndAssigmentStatement : AssigmentStatement
-    {
     };
 
     struct ReturnStatement : Statement

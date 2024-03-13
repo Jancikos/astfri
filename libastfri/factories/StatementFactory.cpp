@@ -48,9 +48,9 @@ namespace libastfri::factories {
         return assigmentStatement;
     }
 
-    DeclarationAndAssigmentStatement* StatementFactory::createDeclarationAndAssigmentStatement (VariableDefintion* left, Expression* right)
+    DeclarationAndAssigmentStatement* StatementFactory::createDeclarationAndAssigmentStatement (VariableDefintion* var, Expression* exp)
     {
-        auto* declarationAndAssigmentStatement = new DeclarationAndAssigmentStatement({{{}, left, right}});
+        auto* declarationAndAssigmentStatement = new DeclarationAndAssigmentStatement({{{}, var}, exp});
         statements.emplace_back(declarationAndAssigmentStatement);
         
         return declarationAndAssigmentStatement;

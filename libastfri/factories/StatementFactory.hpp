@@ -28,7 +28,7 @@ namespace libastfri::factories {
             CompoundStatement* createCompoundStatement (std::vector<Statement*> statements);
             DeclarationStatement* createDeclarationStatement (VariableDefintion* variable);
             AssigmentStatement* createAssigmentStatement (VariableDefintion* left, Expression* right);
-            DeclarationAndAssigmentStatement* createDeclarationAndAssigmentStatement (VariableDefintion* left, Expression* right);
+            DeclarationAndAssigmentStatement* createDeclarationAndAssigmentStatement (VariableDefintion* var, Expression* exp);
             ReturnStatement* createReturnStatement (Expression* value);
 
             FunctionCallStatement* createFunctionCallStatement (FunctionDefinition* function,  std::vector<Expression*> arguments);
