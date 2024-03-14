@@ -24,6 +24,14 @@ namespace libastfri::factories {
         statements.clear();
     }
 
+    TranslationUnitStatement* StatementFactory::createTranslationUnitStatement (std::vector<FunctionDefinition*> functions)
+    {
+        auto* translationUnitStatement = new TranslationUnitStatement{{}, std::move(functions)};
+        statements.emplace_back(translationUnitStatement);
+        
+        return translationUnitStatement;
+    }
+
     CompoundStatement* StatementFactory::createCompoundStatement (std::vector<Statement*> statements)
     {
         auto* compoundStatement = new CompoundStatement{{}, std::move(statements)};

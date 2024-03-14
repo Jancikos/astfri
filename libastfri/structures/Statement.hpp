@@ -12,6 +12,15 @@ namespace libastfri::structures
     {
     };
 
+    /**
+    * @brief pre reprazentaciu celeho suboru
+    *
+    */
+    struct TranslationUnitStatement : Statement
+    {
+        std::vector<FunctionDefinition*> functions;
+    };
+
     struct CompoundStatement : Statement
     {
         std::vector<Statement*> statements;

@@ -9,10 +9,12 @@
 #include <clang/Tooling/Tooling.h>
 
 #include <libastfri-cpp/clang_visitor.hpp>
+#include <memory>
 
 class AstfriClangConsumer : public clang::ASTConsumer {
 public:
   clang::ASTContext *context;
+  libastfri::structures::TranslationUnitStatement *visitedTranslationUnit;
 
   AstfriClangConsumer(clang::ASTContext &context);
   void HandleTranslationUnit(clang::ASTContext &p_context);
@@ -23,4 +25,3 @@ public:
   std::unique_ptr<clang::ASTConsumer>
   CreateASTConsumer(clang::CompilerInstance &compiler, llvm::StringRef);
 };
-

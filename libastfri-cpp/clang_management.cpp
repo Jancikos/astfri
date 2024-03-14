@@ -9,10 +9,12 @@ void AstfriClangConsumer::HandleTranslationUnit(clang::ASTContext &p_context) {
   AstfriClangVisitor visitor;
 
   visitor.TraverseDecl(p_context.getTranslationUnitDecl());
+
+  visitedTranslationUnit = visitor.visitedTranslationUnit;
 }
 
 std::unique_ptr<clang::ASTConsumer>
 AstfriClangTraverseAction::CreateASTConsumer(clang::CompilerInstance &compiler,
-                                   llvm::StringRef) {
+                                             llvm::StringRef) {
   return std::make_unique<AstfriClangConsumer>(compiler.getASTContext());
 }

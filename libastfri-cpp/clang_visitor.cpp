@@ -1,7 +1,6 @@
 #include <clang/AST/Stmt.h>
 #include <libastfri-cpp/clang_visitor.hpp>
 
-#include "iostream"
 #include "libastfri/factories/FunctionFactory.hpp"
 #include "libastfri/structures/Expression.hpp"
 #include "libastfri/structures/Function.hpp"
@@ -9,6 +8,21 @@
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
+
+bool AstfriClangVisitor::VisitTranslationUnitDecl(
+    clang::TranslationUnitDecl *Declaration) {
+  visitedTranslationUnit = libastfri::factories::StatementFactory::getInstance()
+                               .createTranslationUnitStatement({});
+
+  for (auto *decl : Declaration->decls()) {
+    if (auto *funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl)) {
+      VisitFunctionDecl(funDecl);
+      visitedTranslationUnit->functions.push_back(visitedFunction);
+    }
+  }
+
+  return false;
+}
 
 bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
   // For debugging, dumping the AST nodes will show which nodes are already
@@ -191,7 +205,6 @@ bool AstfriClangVisitor::VisitDeclRefExpr(clang::DeclRefExpr *Declaration) {
   visitedExpression = refFac.createVarRefExpression(var);
   return false;
 }
-
 
 // TOOD - premysliet kam toto vytiahnut
 Type *AstfriClangVisitor::convertType(clang::QualType qt) {

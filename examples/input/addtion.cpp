@@ -10,3 +10,8 @@ int simpleAddition(int a, int b=0)
 
     return a + b;
 }
+
+int simpliestAddition(int a, int b=0)
+{
+    return a + b;
+}
