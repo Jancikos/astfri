@@ -15,7 +15,7 @@ namespace libastfri::factories {
 
         private:
             UsedList<BaseVariableDefintion*> variables;
-            UsedList<FunctionDefinition> functions;
+            UsedList<FunctionDefinition*> functions;
 
             FunctionFactory ();
             ~FunctionFactory ();

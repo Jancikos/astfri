@@ -3,8 +3,8 @@
 #include <memory>
 #include <sstream>
 
-#include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri-cpp/clang_management.hpp>
+#include <libastfri/factories/StatementFactory.hpp>
 
 int main(int argc, char **argv) {
   if (argc < 2) {
@@ -17,24 +17,26 @@ int main(int argc, char **argv) {
   ist << ifst.rdbuf();
   std::string code = ist.str();
 
-
-  auto *visitedTranslationUnit = libastfri::factories::StatementFactory::getInstance()
-                                   .createTranslationUnitStatement({});
+  auto *visitedTranslationUnit =
+      libastfri::factories::StatementFactory::getInstance()
+          .createTranslationUnitStatement({});
 
   // todo - premysliet ci v maine uplne neabstrahovat od pouzutia clangu
   clang::tooling::runToolOnCodeWithArgs(
-      std::make_unique<libastfri::cpp::AstfriClangTraverseAction>(*visitedTranslationUnit), code, {""});
+      std::make_unique<libastfri::cpp::AstfriClangTraverseAction>(
+          *visitedTranslationUnit),
+      code, {""});
 
-
-// vypis translation unit
-    std::cout << "Translation unit: " << std::endl;
-    int i = 0;
-    for (auto *fun : visitedTranslationUnit->functions) {
-        std::cout << "  Function: " << fun->name << std::endl;
-        for (auto *param : fun->parameters) {
-            std::cout << "    Param: " << param->name << " (" << param->type->name << ")" << std::endl;
-        }
+  // vypis translation unit
+  std::cout << "Translation unit: " << std::endl;
+  int i = 0;
+  for (auto *fun : visitedTranslationUnit->functions) {
+    std::cout << "  Function: " << fun->name << std::endl;
+    for (auto *param : fun->parameters) {
+      std::cout << "    Param: " << param->name << " (" << param->type->name
+                << ")" << std::endl;
     }
+  }
 
   return 0;
 }

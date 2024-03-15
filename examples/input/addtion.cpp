@@ -17,7 +17,7 @@ int simpleAddition(int a, int b=0)
     return simpliestAddition2(a, b);
 }
 
-int simpliestAddition(int a, int b)
+int simpliestAddition(int o)
 {
-    return a + b;
+    return o + o;
 }

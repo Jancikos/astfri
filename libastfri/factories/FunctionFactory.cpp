@@ -1,4 +1,5 @@
 #include "FunctionFactory.hpp"
+#include "libastfri/structures/Function.hpp"
 
 namespace libastfri::factories {
     FunctionFactory& FunctionFactory::getInstance() 
@@ -36,8 +37,9 @@ namespace libastfri::factories {
     }
 
     FunctionDefinition* FunctionFactory::createFunction(std::string name, std::vector<ParameterDefinition*> parameters, CompoundStatement* body, Type* returnType) {
-        functions.emplace_back(FunctionDefinition{name, parameters, body, returnType});
+        auto* function = new FunctionDefinition{name, parameters, body, returnType};
+        functions.emplace_back(function);
 
-        return &functions.back();
+        return function;
     }
 }

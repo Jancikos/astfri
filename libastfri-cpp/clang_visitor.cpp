@@ -17,14 +17,14 @@ AstfriClangVisitor::AstfriClangVisitor(
 bool AstfriClangVisitor::VisitTranslationUnitDecl(
     clang::TranslationUnitDecl *Declaration) {
 
-    for (auto *decl : Declaration->decls()) {
-      if (auto *funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl)) {
-        VisitFunctionDecl(funDecl);
-        // visitedTranslationUnit->functions.push_back(visitedFunction);
-      }
+  for (auto *decl : Declaration->decls()) {
+    if (auto *funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl)) {
+      VisitFunctionDecl(funDecl);
+      // visitedTranslationUnit->functions.push_back(visitedFunction);
     }
+  }
 
-  return true;
+  return false;
 }
 
 bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
@@ -49,8 +49,9 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
     // param->dump();
 
     VisitParmVarDecl(param);
-    params.emplace_back(static_cast<libastfri::structures::ParameterDefinition *>(
-        visitedVariable));
+    params.emplace_back(
+        static_cast<libastfri::structures::ParameterDefinition *>(
+            visitedVariable));
   }
 
   // body
@@ -58,9 +59,8 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
   auto *body =
       static_cast<libastfri::structures::CompoundStatement *>(visitedStatement);
 
-  visitedTranslationUnit->functions.emplace_back(
-      funFac.createFunction(title, params, body, returnType));
-//   visitedFunction = visitedTranslationUnit->functions.back();
+  visitedTranslationUnit->functions.push_back(funFac.createFunction(title, params, body, returnType));
+  //   visitedFunction = visitedTranslationUnit->functions.back();
 
   // The return value indicates whether we want the visitation to proceed.
   // Return false to stop the traversal of the AST.
