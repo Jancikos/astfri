@@ -3,6 +3,7 @@
 #include <memory>
 #include <sstream>
 
+#include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri-cpp/clang_management.hpp>
 
 int main(int argc, char **argv) {
@@ -16,14 +17,24 @@ int main(int argc, char **argv) {
   ist << ifst.rdbuf();
   std::string code = ist.str();
 
-  auto action = std::make_unique<AstfriClangTraverseAction>();
+
+  auto *visitedTranslationUnit = libastfri::factories::StatementFactory::getInstance()
+                                   .createTranslationUnitStatement({});
 
   // todo - premysliet ci v maine uplne neabstrahovat od pouzutia clangu
   clang::tooling::runToolOnCodeWithArgs(
-      std::make_unique<AstfriClangTraverseAction>(), code, {""});
+      std::make_unique<AstfriClangTraverseAction>(*visitedTranslationUnit), code, {""});
 
 
-  // auto translationUnit = action->getVisitedTranslationUnit();
+// vypis translation unit
+    std::cout << "Translation unit: " << std::endl;
+    int i = 0;
+    for (auto *fun : visitedTranslationUnit->functions) {
+        std::cout << "  Function: " << fun->name << std::endl;
+        for (auto *param : fun->parameters) {
+            std::cout << "    Param: " << param->name << " (" << param->type->name << ")" << std::endl;
+        }
+    }
 
   return 0;
 }

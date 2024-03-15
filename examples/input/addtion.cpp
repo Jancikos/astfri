@@ -1,3 +1,9 @@
+
+int simpliestAddition2(int a, int b)
+{
+    return a + b;
+}
+
 int simpleAddition(int a, int b=0)
 {
     int c;
@@ -8,10 +14,10 @@ int simpleAddition(int a, int b=0)
 
     d = 5;
 
-    return a + b;
+    return simpliestAddition2(a, b);
 }
 
-int simpliestAddition(int a, int b=0)
+int simpliestAddition(int a, int b)
 {
     return a + b;
 }
