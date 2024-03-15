@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 
   auto *visitedTranslationUnit =
       libastfri::factories::StatementFactory::getInstance()
-          .createTranslationUnitStatement({});
+          .createTranslationUnit({});
 
   // todo - premysliet ci v maine uplne neabstrahovat od pouzutia clangu
   clang::tooling::runToolOnCodeWithArgs(

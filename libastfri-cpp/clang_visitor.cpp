@@ -11,7 +11,7 @@
 
 namespace libastfri::cpp {
 AstfriClangVisitor::AstfriClangVisitor(
-    libastfri::structures::TranslationUnitStatement &visitedTranslationUnit)
+    libastfri::structures::TranslationUnit &visitedTranslationUnit)
     : visitedTranslationUnit(&visitedTranslationUnit) {}
 
 bool AstfriClangVisitor::VisitTranslationUnitDecl(

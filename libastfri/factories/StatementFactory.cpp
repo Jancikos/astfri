@@ -1,5 +1,5 @@
-#include "libastfri/structures/Function.hpp"
-#include "libastfri/structures/Statement.hpp"
+#include <libastfri/structures/Function.hpp>
+#include <libastfri/structures/Statement.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 
 namespace libastfri::factories {
@@ -22,12 +22,18 @@ namespace libastfri::factories {
             delete statement;
         }
         statements.clear();
+
+        for (auto* translationUnit : translationUnits)
+        {
+            delete translationUnit;
+        }
+        translationUnits.clear();
     }
 
-    TranslationUnitStatement* StatementFactory::createTranslationUnitStatement (std::vector<FunctionDefinition*> functions)
+    TranslationUnit* StatementFactory::createTranslationUnit (std::vector<FunctionDefinition*> functions)
     {
-        auto* translationUnitStatement = new TranslationUnitStatement{{}, std::move(functions)};
-        statements.emplace_back(translationUnitStatement);
+        auto* translationUnitStatement = new TranslationUnit{std::move(functions)};
+        translationUnits.emplace_back(translationUnitStatement);
         
         return translationUnitStatement;
     }

@@ -16,16 +16,16 @@ namespace libastfri::cpp {
 class AstfriClangConsumer : public clang::ASTConsumer {
 public:
   clang::ASTContext *context;
-  libastfri::structures::TranslationUnitStatement *visitedTranslationUnit;
+  libastfri::structures::TranslationUnit *visitedTranslationUnit;
 
   AstfriClangConsumer(
       clang::ASTContext &context,
-      libastfri::structures::TranslationUnitStatement &visitedTranslationUnit);
+      libastfri::structures::TranslationUnit &visitedTranslationUnit);
   void HandleTranslationUnit(clang::ASTContext &p_context);
 };
 
 class AstfriClangTraverseAction : public clang::ASTFrontendAction {
-  using TUnit = libastfri::structures::TranslationUnitStatement;
+  using TUnit = libastfri::structures::TranslationUnit;
   TUnit *visitedTranslationUnit;
 
 public:

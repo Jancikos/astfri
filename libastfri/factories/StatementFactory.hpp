@@ -17,6 +17,7 @@ namespace libastfri::factories {
             static StatementFactory& getInstance();
 
         private:
+            UsedList<TranslationUnit*> translationUnits;
             UsedList<Statement*>  statements;
 
             StatementFactory ();
@@ -25,7 +26,7 @@ namespace libastfri::factories {
             StatementFactory(StatementFactory const&) = delete;
             void operator=(StatementFactory const&) = delete;
 
-            TranslationUnitStatement* createTranslationUnitStatement (std::vector<FunctionDefinition*> functions);
+            TranslationUnit* createTranslationUnit (std::vector<FunctionDefinition*> functions);
             CompoundStatement* createCompoundStatement (std::vector<Statement*> statements);
             DeclarationStatement* createDeclarationStatement (VariableDefintion* variable);
             AssigmentStatement* createAssigmentStatement (VariableDefintion* left, Expression* right);

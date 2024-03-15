@@ -20,7 +20,7 @@ class AstfriClangVisitor
   using Tools = AstfriClangTools;
 
 public:
-    AstfriClangVisitor(libastfri::structures::TranslationUnitStatement &visitedTranslationUnit);
+    AstfriClangVisitor(libastfri::structures::TranslationUnit &visitedTranslationUnit);
   bool VisitTranslationUnitDecl(clang::TranslationUnitDecl *Declaration);
 
   bool VisitFunctionDecl(clang::FunctionDecl *Declaration);
@@ -35,7 +35,7 @@ public:
   bool VisitParmVarDecl(clang::ParmVarDecl *Declaration);
   bool VisitDeclRefExpr(clang::DeclRefExpr *Declaration);
 
-  libastfri::structures::TranslationUnitStatement *visitedTranslationUnit;
+  libastfri::structures::TranslationUnit *visitedTranslationUnit;
 
 private:
   libastfri::structures::Statement *visitedStatement;

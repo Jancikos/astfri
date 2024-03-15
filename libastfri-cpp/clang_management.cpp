@@ -5,7 +5,7 @@
 namespace libastfri::cpp {
 AstfriClangConsumer::AstfriClangConsumer(
     clang::ASTContext &context,
-    libastfri::structures::TranslationUnitStatement &visitedTranslationUnit)
+    libastfri::structures::TranslationUnit &visitedTranslationUnit)
     : context(&context), visitedTranslationUnit(&visitedTranslationUnit) {}
 
 void AstfriClangConsumer::HandleTranslationUnit(clang::ASTContext &p_context) {
@@ -21,7 +21,7 @@ void AstfriClangConsumer::HandleTranslationUnit(clang::ASTContext &p_context) {
 }
 
 AstfriClangTraverseAction::AstfriClangTraverseAction(
-    libastfri::structures::TranslationUnitStatement &visitedTranslationUnit)
+    libastfri::structures::TranslationUnit &visitedTranslationUnit)
     : visitedTranslationUnit(&visitedTranslationUnit) {}
 
 std::unique_ptr<clang::ASTConsumer>

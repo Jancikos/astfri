@@ -7,18 +7,19 @@
 
 namespace libastfri::structures
 {    
+    /**
+    * @brief pre reprazentaciu celeho vstupneho bloku kodu
+    *
+    */
+    struct TranslationUnit
+    {
+        std::vector<FunctionDefinition*> functions;
+    };
+
+
     // "riadok" v kode
     struct Statement
     {
-    };
-
-    /**
-    * @brief pre reprazentaciu celeho suboru
-    *
-    */
-    struct TranslationUnitStatement : Statement
-    {
-        std::vector<FunctionDefinition*> functions;
     };
 
     struct CompoundStatement : Statement
