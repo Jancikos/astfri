@@ -12,6 +12,7 @@
 #include <libastfri/structures/Statement.hpp>
 #include <memory>
 
+namespace libastfri::cpp {
 class AstfriClangConsumer : public clang::ASTConsumer {
 public:
   clang::ASTContext *context;
@@ -32,3 +33,4 @@ public:
   std::unique_ptr<clang::ASTConsumer>
   CreateASTConsumer(clang::CompilerInstance &compiler, llvm::StringRef);
 };
+} // namespace libastfri::cpp

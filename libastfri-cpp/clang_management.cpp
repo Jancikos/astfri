@@ -2,6 +2,7 @@
 
 #include <libastfri/factories/ExpressionFactory.hpp>
 
+namespace libastfri::cpp {
 AstfriClangConsumer::AstfriClangConsumer(
     clang::ASTContext &context,
     libastfri::structures::TranslationUnitStatement &visitedTranslationUnit)
@@ -12,7 +13,7 @@ void AstfriClangConsumer::HandleTranslationUnit(clang::ASTContext &p_context) {
 
   visitor.TraverseDecl(p_context.getTranslationUnitDecl());
 
-  // todo - ako to spravit nejako takto 
+  // todo - ako to spravit nejako takto
   //   visitedTranslationUnit = &*visitor.visitedTranslationUnit;
 
   visitedTranslationUnit->functions =
@@ -29,3 +30,4 @@ AstfriClangTraverseAction::CreateASTConsumer(clang::CompilerInstance &compiler,
   return std::make_unique<AstfriClangConsumer>(compiler.getASTContext(),
                                                *visitedTranslationUnit);
 }
+} // namespace libastfri::cpp

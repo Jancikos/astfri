@@ -9,6 +9,7 @@
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 
+namespace libastfri::cpp {
 bool AstfriClangVisitor::VisitTranslationUnitDecl(
     clang::TranslationUnitDecl *Declaration) {
   visitedTranslationUnit = libastfri::factories::StatementFactory::getInstance()
@@ -118,8 +119,8 @@ bool AstfriClangVisitor::VisitDeclStmt(clang::DeclStmt *Declaration) {
 
   auto *decl = static_cast<clang::VarDecl *>(Declaration->getSingleDecl());
 
-  auto *var = funFac.createVariable(decl->getNameAsString(),
-                                    Tools::convertType(decl->getType()), nullptr);
+  auto *var = funFac.createVariable(
+      decl->getNameAsString(), Tools::convertType(decl->getType()), nullptr);
 
   if (decl->hasInit()) {
     VisitExpr(decl->getInit());
@@ -151,9 +152,9 @@ bool AstfriClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Declaration) {
     defValue = visitedExpression;
   }
 
-  visitedVariable =
-      funFac.createParameter(Declaration->getNameAsString(),
-                             Tools::convertType(Declaration->getType()), defValue);
+  visitedVariable = funFac.createParameter(
+      Declaration->getNameAsString(),
+      Tools::convertType(Declaration->getType()), defValue);
 
   return false;
 }
@@ -199,9 +200,10 @@ bool AstfriClangVisitor::VisitDeclRefExpr(clang::DeclRefExpr *Declaration) {
   auto &funFac = libastfri::factories::FunctionFactory::getInstance();
   auto &refFac = libastfri::factories::ReferenceFactory::getInstance();
 
-  auto *var =
-      funFac.createVariable(Declaration->getNameInfo().getAsString(),
-                            Tools::convertType(Declaration->getType()), nullptr);
+  auto *var = funFac.createVariable(Declaration->getNameInfo().getAsString(),
+                                    Tools::convertType(Declaration->getType()),
+                                    nullptr);
   visitedExpression = refFac.createVarRefExpression(var);
   return false;
 }
+} // namespace libastfri::cpp

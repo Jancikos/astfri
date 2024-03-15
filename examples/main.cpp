@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
 
   // todo - premysliet ci v maine uplne neabstrahovat od pouzutia clangu
   clang::tooling::runToolOnCodeWithArgs(
-      std::make_unique<AstfriClangTraverseAction>(*visitedTranslationUnit), code, {""});
+      std::make_unique<libastfri::cpp::AstfriClangTraverseAction>(*visitedTranslationUnit), code, {""});
 
 
 // vypis translation unit

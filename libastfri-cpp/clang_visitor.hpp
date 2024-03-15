@@ -14,10 +14,11 @@
 #include <libastfri/structures/Statement.hpp>
 #include <libastfri/structures/Type.hpp>
 
-
+namespace libastfri::cpp {
 class AstfriClangVisitor
     : public clang::RecursiveASTVisitor<AstfriClangVisitor> {
-        using Tools = AstfriClangTools;	
+  using Tools = AstfriClangTools;
+
 public:
   bool VisitTranslationUnitDecl(clang::TranslationUnitDecl *Declaration);
 
@@ -41,3 +42,4 @@ private:
   libastfri::structures::BaseVariableDefintion *visitedVariable;
   libastfri::structures::FunctionDefinition *visitedFunction;
 };
+} // namespace libastfri::cpp

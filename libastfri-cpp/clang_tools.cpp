@@ -7,6 +7,7 @@
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 
+namespace libastfri::cpp {
 Type *AstfriClangTools::convertType(clang::QualType qt) {
   auto &typeFac = libastfri::factories::TypeFactory::getInstance();
 
@@ -78,3 +79,4 @@ AstfriClangTools::convertUnaryOperator(clang::UnaryOperator::Opcode op) {
 
   throw std::runtime_error("Unknown unary operator");
 }
+} // namespace libastfri::cpp

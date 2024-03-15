@@ -13,6 +13,7 @@
 #include <libastfri/structures/Statement.hpp>
 #include <libastfri/structures/Type.hpp>
 
+namespace libastfri::cpp {
 class AstfriClangTools {
 public:
   static libastfri::structures::Type *convertType(clang::QualType qt);
@@ -21,3 +22,4 @@ public:
   static libastfri::structures::UnaryOperators
   convertUnaryOperator(clang::UnaryOperator::Opcode op);
 };
+} // namespace libastfri::cpp
