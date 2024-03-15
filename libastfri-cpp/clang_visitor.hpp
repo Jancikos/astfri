@@ -20,6 +20,7 @@ class AstfriClangVisitor
   using Tools = AstfriClangTools;
 
 public:
+    AstfriClangVisitor(libastfri::structures::TranslationUnitStatement &visitedTranslationUnit);
   bool VisitTranslationUnitDecl(clang::TranslationUnitDecl *Declaration);
 
   bool VisitFunctionDecl(clang::FunctionDecl *Declaration);

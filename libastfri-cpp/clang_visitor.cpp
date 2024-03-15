@@ -10,19 +10,21 @@
 #include <libastfri/factories/TypeFactory.hpp>
 
 namespace libastfri::cpp {
+AstfriClangVisitor::AstfriClangVisitor(
+    libastfri::structures::TranslationUnitStatement &visitedTranslationUnit)
+    : visitedTranslationUnit(&visitedTranslationUnit) {}
+
 bool AstfriClangVisitor::VisitTranslationUnitDecl(
     clang::TranslationUnitDecl *Declaration) {
-  visitedTranslationUnit = libastfri::factories::StatementFactory::getInstance()
-                               .createTranslationUnitStatement({});
 
-  for (auto *decl : Declaration->decls()) {
-    if (auto *funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl)) {
-      VisitFunctionDecl(funDecl);
-      visitedTranslationUnit->functions.push_back(visitedFunction);
+    for (auto *decl : Declaration->decls()) {
+      if (auto *funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl)) {
+        VisitFunctionDecl(funDecl);
+        // visitedTranslationUnit->functions.push_back(visitedFunction);
+      }
     }
-  }
 
-  return false;
+  return true;
 }
 
 bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
@@ -47,7 +49,7 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
     // param->dump();
 
     VisitParmVarDecl(param);
-    params.push_back(static_cast<libastfri::structures::ParameterDefinition *>(
+    params.emplace_back(static_cast<libastfri::structures::ParameterDefinition *>(
         visitedVariable));
   }
 
@@ -56,7 +58,9 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
   auto *body =
       static_cast<libastfri::structures::CompoundStatement *>(visitedStatement);
 
-  visitedFunction = funFac.createFunction(title, params, body, returnType);
+  visitedTranslationUnit->functions.emplace_back(
+      funFac.createFunction(title, params, body, returnType));
+//   visitedFunction = visitedTranslationUnit->functions.back();
 
   // The return value indicates whether we want the visitation to proceed.
   // Return false to stop the traversal of the AST.
