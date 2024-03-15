@@ -29,6 +29,7 @@ public:
   bool VisitCompoundStmt(clang::CompoundStmt *Declaration);
   bool VisitDeclStmt(clang::DeclStmt *Declaration);
   bool VisitReturnStmt(clang::ReturnStmt *Declaration);
+  bool VisitIfStmt(clang::IfStmt *Declaration);
 
   bool VisitExpr(clang::Expr *Declaration);
   bool VisitIntegerLiteral(clang::IntegerLiteral *Declaration);

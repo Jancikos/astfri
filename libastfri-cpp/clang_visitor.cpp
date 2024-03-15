@@ -163,6 +163,25 @@ bool AstfriClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Declaration) {
   return false;
 }
 
+// todo - overit preco sa zrejme nevolag
+bool AstfriClangVisitor::VisitIfStmt(clang::IfStmt *Declaration) {
+  auto &statementFac = libastfri::factories::StatementFactory::getInstance();
+  auto &funFac = libastfri::factories::FunctionFactory::getInstance();
+
+  VisitStmt(Declaration->getThen());
+  Declaration->getThen()->dump();
+  auto *thenStmt = visitedStatement;
+
+  VisitStmt(Declaration->getElse());
+  auto *elseStmt = visitedStatement;
+
+  VisitExpr(Declaration->getCond());
+  auto *condition = visitedExpression;
+
+  visitedStatement = statementFac.createIfConditionalStatement(condition, thenStmt, elseStmt);
+  return false;
+}
+
 bool AstfriClangVisitor::VisitExpr(clang::Expr *Declaration) {
   if (Declaration == nullptr) {
     visitedExpression = nullptr;

@@ -94,6 +94,14 @@ namespace libastfri::factories {
         return ifStatement;
     }
 
+    IfStatement* StatementFactory::createIfConditionalStatement (Expression* condition, Statement* thenStatement, Statement* elseStatement)
+    {
+        auto* thenBody = createCompoundStatement({thenStatement});
+        auto* elseBody = createCompoundStatement({elseStatement});
+
+        return createIfConditionalStatement(condition, thenBody, elseBody);
+    }
+
     WhileLoopStatement* StatementFactory::createWhileLoopStatement (Expression* condition, CompoundStatement* body)
     {
         auto* whileLoopStatement = new WhileLoopStatement{{{}, condition, body}};

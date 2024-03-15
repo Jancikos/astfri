@@ -1,6 +1,12 @@
 
 int simpliestAddition2(int a, int b)
 {
+    int repMultiplier = 1;
+
+    if (a < 0) {
+        repMultiplier = -1;
+    }
+
     return a + b;
 }
 

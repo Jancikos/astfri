@@ -36,6 +36,7 @@ namespace libastfri::factories {
             FunctionCallStatement* createFunctionCallStatement (FunctionDefinition* function,  std::vector<Expression*> arguments);
 
             IfStatement* createIfConditionalStatement (Expression* condition, CompoundStatement* ifTrue, CompoundStatement* ifFalse=nullptr);
+            IfStatement* createIfConditionalStatement (Expression* condition, Statement* ifTrue, Statement* ifFalse=nullptr);
             
             WhileLoopStatement* createWhileLoopStatement (Expression* condition, CompoundStatement* body);
             DoWhileLoopStatement* createDoWhileLoopStatement (Expression* condition, CompoundStatement* body);
