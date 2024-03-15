@@ -39,6 +39,8 @@ namespace libastfri::factories {
             IfStatement* createIfConditionalStatement (Expression* condition, Statement* ifTrue, Statement* ifFalse=nullptr);
             
             WhileLoopStatement* createWhileLoopStatement (Expression* condition, CompoundStatement* body);
+            WhileLoopStatement* createWhileLoopStatement (Expression* condition, Statement* statement);
+
             DoWhileLoopStatement* createDoWhileLoopStatement (Expression* condition, CompoundStatement* body);
             ForLoopStatement* createForLoopStatement (AssigmentStatement* init, Expression* condition, AssigmentStatement* step, CompoundStatement* body);
     };

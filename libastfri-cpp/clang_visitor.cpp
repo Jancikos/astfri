@@ -182,6 +182,20 @@ bool AstfriClangVisitor::VisitIfStmt(clang::IfStmt *Declaration) {
   return false;
 }
 
+bool AstfriClangVisitor::VisitWhileStmt(clang::WhileStmt *Declaration) {
+  auto &statementFac = libastfri::factories::StatementFactory::getInstance();
+  auto &funFac = libastfri::factories::FunctionFactory::getInstance();
+
+  VisitStmt(Declaration->getBody());
+  auto *body = visitedStatement;
+
+  VisitExpr(Declaration->getCond());
+  auto *condition = visitedExpression;
+
+  visitedStatement = statementFac.createWhileLoopStatement(condition, body);
+  return false;
+}
+
 bool AstfriClangVisitor::VisitExpr(clang::Expr *Declaration) {
   if (Declaration == nullptr) {
     visitedExpression = nullptr;

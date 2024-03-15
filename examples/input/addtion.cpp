@@ -7,6 +7,11 @@ int simpliestAddition2(int a, int b)
         repMultiplier = -1;
     }
 
+    int repCount = 0;
+    while (a + repCount < 0) {
+        repCount += repMultiplier;
+    }
+
     return a + b;
 }
 

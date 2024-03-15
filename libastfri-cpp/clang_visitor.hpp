@@ -30,6 +30,7 @@ public:
   bool VisitDeclStmt(clang::DeclStmt *Declaration);
   bool VisitReturnStmt(clang::ReturnStmt *Declaration);
   bool VisitIfStmt(clang::IfStmt *Declaration);
+  bool VisitWhileStmt(clang::WhileStmt *Declaration);
 
   bool VisitExpr(clang::Expr *Declaration);
   bool VisitIntegerLiteral(clang::IntegerLiteral *Declaration);

@@ -110,6 +110,13 @@ namespace libastfri::factories {
         return whileLoopStatement;
     }
 
+    WhileLoopStatement* StatementFactory::createWhileLoopStatement (Expression* condition, Statement* statement)
+    {
+        auto* body = createCompoundStatement({statement});
+
+        return createWhileLoopStatement(condition, body);
+    }
+
     DoWhileLoopStatement* StatementFactory::createDoWhileLoopStatement (Expression* condition, CompoundStatement* body)
     {
         auto* doWhileLoopStatement = new DoWhileLoopStatement{{{}, condition, body}};
