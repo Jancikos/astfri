@@ -1,7 +1,5 @@
-#include <fstream>
+#include "libastfri-cpp/clang_tools.hpp"
 #include <iostream>
-#include <memory>
-#include <sstream>
 
 #include <libastfri-cpp/clang_management.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
@@ -12,20 +10,12 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  auto ifst = std::ifstream(argv[1]);
-  auto ist = std::stringstream();
-  ist << ifst.rdbuf();
-  std::string code = ist.str();
-
   auto *visitedTranslationUnit =
       libastfri::factories::StatementFactory::getInstance()
           .createTranslationUnit({});
 
-  // todo - premysliet ci v maine uplne neabstrahovat od pouzutia clangu
-  clang::tooling::runToolOnCodeWithArgs(
-      std::make_unique<libastfri::cpp::AstfriClangTraverseAction>(
-          *visitedTranslationUnit),
-      code, {""});
+  libastfri::cpp::AstfriClangTools::BeginClangTreeVisit(argv[1],
+                                                 *visitedTranslationUnit);
 
   // vypis translation unit
   std::cout << "Translation unit: " << std::endl;

@@ -21,5 +21,7 @@ public:
   convertBinaryOperator(clang::BinaryOperator::Opcode op);
   static libastfri::structures::UnaryOperators
   convertUnaryOperator(clang::UnaryOperator::Opcode op);
+
+  static void BeginClangTreeVisit(std::string pathToCode, libastfri::structures::TranslationUnit &visitedTranslationUnit);
 };
 } // namespace libastfri::cpp

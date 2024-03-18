@@ -1,8 +1,12 @@
 #include <clang/AST/Stmt.h>
-#include <libastfri-cpp/clang_tools.hpp>
+#include <fstream>
+#include <memory>
+#include <sstream>
 
-#include "libastfri/structures/Expression.hpp"
-#include "libastfri/structures/Function.hpp"
+#include <libastfri/structures/Expression.hpp>
+#include <libastfri/structures/Function.hpp>
+#include <libastfri-cpp/clang_management.hpp>
+#include <libastfri-cpp/clang_tools.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
@@ -79,4 +83,20 @@ AstfriClangTools::convertUnaryOperator(clang::UnaryOperator::Opcode op) {
 
   throw std::runtime_error("Unknown unary operator");
 }
+
+void AstfriClangTools::BeginClangTreeVisit(
+    std::string pathToCode,
+    libastfri::structures::TranslationUnit &visitedTranslationUnit) {
+  auto ifst = std::ifstream(pathToCode);
+  auto ist = std::stringstream();
+  ist << ifst.rdbuf();
+  std::string code = ist.str();
+
+  // spusti clang prehliadku
+  clang::tooling::runToolOnCodeWithArgs(
+      std::make_unique<libastfri::cpp::AstfriClangTraverseAction>(
+          visitedTranslationUnit),
+      code, {""});
+}
+
 } // namespace libastfri::cpp
