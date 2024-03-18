@@ -59,7 +59,8 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
   auto *body =
       static_cast<libastfri::structures::CompoundStatement *>(visitedStatement);
 
-  visitedTranslationUnit->functions.push_back(funFac.createFunction(title, params, body, returnType));
+  visitedTranslationUnit->functions.push_back(
+      funFac.createFunction(title, params, body, returnType));
   //   visitedFunction = visitedTranslationUnit->functions.back();
 
   // The return value indicates whether we want the visitation to proceed.
@@ -178,7 +179,8 @@ bool AstfriClangVisitor::VisitIfStmt(clang::IfStmt *Declaration) {
   VisitExpr(Declaration->getCond());
   auto *condition = visitedExpression;
 
-  visitedStatement = statementFac.createIfConditionalStatement(condition, thenStmt, elseStmt);
+  visitedStatement =
+      statementFac.createIfConditionalStatement(condition, thenStmt, elseStmt);
   return false;
 }
 
@@ -243,4 +245,25 @@ bool AstfriClangVisitor::VisitDeclRefExpr(clang::DeclRefExpr *Declaration) {
   visitedExpression = refFac.createVarRefExpression(var);
   return false;
 }
+
+bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
+  auto &funFac = libastfri::factories::FunctionFactory::getInstance();
+  auto &refFac = libastfri::factories::ReferenceFactory::getInstance();
+  auto &exprFac = libastfri::factories::ExpressionFactory::getInstance();
+
+  std::vector<libastfri::structures::Expression *> args;
+  for (auto arg : Declaration->arguments()) {
+    VisitExpr(arg);
+    args.push_back(visitedExpression);
+  }
+
+  auto *functionDecl =
+      static_cast<clang::FunctionDecl *>(Declaration->getCalleeDecl());
+
+  visitedExpression = refFac.createFunctionCallExpression(
+      functionDecl->getNameInfo().getAsString(), args);
+
+  return false;
+}
+
 } // namespace libastfri::cpp

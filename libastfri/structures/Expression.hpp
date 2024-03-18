@@ -85,7 +85,8 @@ namespace libastfri::structures
     // volanie funkcie
     struct FunctionCallExpression : RefExpression
     {
-        FunctionDefinition* function;
+        // FunctionDefinition* function;
+        std::string functionName;
         std::vector<Expression*> arguments;
     };
 }

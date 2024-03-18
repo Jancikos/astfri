@@ -33,7 +33,7 @@ namespace libastfri::factories {
             DeclarationAndAssigmentStatement* createDeclarationAndAssigmentStatement (VariableDefintion* var, Expression* exp);
             ReturnStatement* createReturnStatement (Expression* value);
 
-            FunctionCallStatement* createFunctionCallStatement (FunctionDefinition* function,  std::vector<Expression*> arguments);
+            ExpressionStatement* createExpressionStatement (Expression* expression);
 
             IfStatement* createIfConditionalStatement (Expression* condition, CompoundStatement* ifTrue, CompoundStatement* ifFalse=nullptr);
             IfStatement* createIfConditionalStatement (Expression* condition, Statement* ifTrue, Statement* ifFalse=nullptr);

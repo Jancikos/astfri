@@ -78,12 +78,12 @@ namespace libastfri::factories {
         return returnStatement;
     }
 
-    FunctionCallStatement* StatementFactory::createFunctionCallStatement (FunctionDefinition* function, std::vector<Expression*> arguments)
+    ExpressionStatement* StatementFactory::createExpressionStatement (Expression* expression)
     {
-        auto* functionCallStatement = new FunctionCallStatement{{}, function, std::move(arguments)};
-        statements.emplace_back(functionCallStatement);
+        auto* expressionStatement = new ExpressionStatement{{}, expression};
+        statements.emplace_back(expressionStatement);
         
-        return functionCallStatement;
+        return expressionStatement;
     }
 
     IfStatement* StatementFactory::createIfConditionalStatement (Expression* condition, CompoundStatement* thenBody, CompoundStatement* elseBody)

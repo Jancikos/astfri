@@ -83,7 +83,7 @@ namespace libastfri::factories {
         public:
             VarRefExpression* createVarRefExpression (VariableDefintion* variable);
             ParamRefExpression* createParamRefExpression (ParameterDefinition* variable);
-            FunctionCallExpression* createFunctionCallExpression (FunctionDefinition* function, std::vector<Expression*> arguments);
+            FunctionCallExpression* createFunctionCallExpression (std::string functionName, std::vector<Expression*> arguments);
 
             ReferenceFactory(ReferenceFactory const&) = delete;
             void operator=(ReferenceFactory const&) = delete;

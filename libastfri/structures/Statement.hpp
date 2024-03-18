@@ -47,12 +47,12 @@ namespace libastfri::structures
         Expression* value;
     };
 
-    // FucntionCall statement
-    struct FunctionCallStatement : Statement
+    struct ExpressionStatement : Statement
     {
-        FunctionDefinition* functionName;
-        std::vector<Expression*> arguments;
+        Expression* expression; 
     };
+
+
 
     // Conditional statement
     struct ConditionalStatement : Statement

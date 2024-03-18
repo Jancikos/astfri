@@ -36,6 +36,7 @@ public:
   bool VisitIntegerLiteral(clang::IntegerLiteral *Declaration);
   bool VisitParmVarDecl(clang::ParmVarDecl *Declaration);
   bool VisitDeclRefExpr(clang::DeclRefExpr *Declaration);
+  bool VisitCallExpr(clang::CallExpr *Declaration);
 
   libastfri::structures::TranslationUnit *visitedTranslationUnit;
 

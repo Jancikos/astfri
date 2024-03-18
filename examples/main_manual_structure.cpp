@@ -83,13 +83,13 @@ int main() {
                        referenceFac.createVarRefExpression(variableRepCount),
                        referenceFac.createVarRefExpression(
                            variableRepMultiplier)))})),
-       statementFac.createFunctionCallStatement(
-           functionSimpleAddition,
+       statementFac.createExpressionStatement(referenceFac.createFunctionCallExpression(
+           functionSimpleAddition->name,
            {referenceFac.createParamRefExpression(params[0]),
-            referenceFac.createParamRefExpression(params[1])}),
+            referenceFac.createParamRefExpression(params[1])})),
        statementFac.createReturnStatement(
            referenceFac.createFunctionCallExpression(
-               functionSimpleAddition,
+               functionSimpleAddition->name,
                {referenceFac.createParamRefExpression(params[0]),
                 referenceFac.createParamRefExpression(params[1])}))});
 
