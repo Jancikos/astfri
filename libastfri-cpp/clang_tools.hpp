@@ -22,6 +22,14 @@ public:
   static libastfri::structures::UnaryOperators
   convertUnaryOperator(clang::UnaryOperator::Opcode op);
 
-  static void BeginClangTreeVisit(std::string pathToCode, libastfri::structures::TranslationUnit &visitedTranslationUnit);
+  template <typename T, typename P> static T *popPointer(P *&pointer)  {
+  T *result = static_cast<T *>(pointer);
+  pointer = nullptr;
+  return result;
+}
+
+  static void BeginClangTreeVisit(
+      std::string pathToCode,
+      libastfri::structures::TranslationUnit &visitedTranslationUnit);
 };
 } // namespace libastfri::cpp

@@ -3,13 +3,13 @@
 #include <memory>
 #include <sstream>
 
-#include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Function.hpp>
 #include <libastfri-cpp/clang_management.hpp>
 #include <libastfri-cpp/clang_tools.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
+#include <libastfri/structures/Expression.hpp>
+#include <libastfri/structures/Function.hpp>
 
 namespace libastfri::cpp {
 Type *AstfriClangTools::convertType(clang::QualType qt) {
@@ -98,5 +98,12 @@ void AstfriClangTools::BeginClangTreeVisit(
           visitedTranslationUnit),
       code, {""});
 }
+
+// TODO - presunut to sem z HPP, bol problem s includom
+// template <typename T, typename P> T *AstfriClangTools::popPointer(P *&pointer) {
+//   T *result = static_cast<T *>(pointer);
+//   pointer = nullptr;
+//   return result;
+// }
 
 } // namespace libastfri::cpp

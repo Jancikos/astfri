@@ -1,6 +1,7 @@
 #include <clang/AST/Stmt.h>
 #include <libastfri-cpp/clang_visitor.hpp>
 
+#include "libastfri-cpp/clang_tools.hpp"
 #include "libastfri/factories/FunctionFactory.hpp"
 #include "libastfri/structures/Expression.hpp"
 #include "libastfri/structures/Function.hpp"
@@ -52,15 +53,12 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
     // param->dump();
 
     VisitParmVarDecl(param);
-    params.emplace_back(
-        static_cast<lsfs::ParameterDefinition *>(
-            visitedVariable));
+    params.emplace_back(popVisitedVariable<lsfs::ParameterDefinition>());
   }
 
   // body
   VisitCompoundStmt(static_cast<clang::CompoundStmt *>(Declaration->getBody()));
-  auto *body =
-      static_cast<lsfs::CompoundStatement *>(visitedStatement);
+  auto *body = popVisitedStatement<lsfs::CompoundStatement>();
 
   visitedTranslationUnit->functions.push_back(
       funFac.createFunction(title, params, body, returnType));
@@ -85,12 +83,12 @@ bool AstfriClangVisitor::VisitStmt(clang::Stmt *Declaration) {
       return false; // imeplementovat ine operatory
     }
 
+    // TOOD - upravit na VisitExpr
     auto *lhs = static_cast<clang::DeclRefExpr *>(assigmentStmt->getLHS());
     auto *rhs = static_cast<clang::Expr *>(assigmentStmt->getRHS());
 
     VisitExpr(rhs);
-    auto *right =
-        static_cast<lsfs::Expression *>(visitedExpression);
+    auto *right = popVisitedExpression<lsfs::Expression>();
 
     auto *left = funFac.createVariable(
         lhs->getNameInfo().getAsString(), Tools::convertType(lhs->getType()),
@@ -121,19 +119,20 @@ bool AstfriClangVisitor::VisitCompoundStmt(clang::CompoundStmt *Declaration) {
   return false;
 }
 
+// TODO - na VerDecl
 bool AstfriClangVisitor::VisitDeclStmt(clang::DeclStmt *Declaration) {
   auto &funFac = lsff::FunctionFactory::getInstance();
   auto &statementFac = lsff::StatementFactory::getInstance();
 
   auto *decl = static_cast<clang::VarDecl *>(Declaration->getSingleDecl());
+  
 
   auto *var = funFac.createVariable(
       decl->getNameAsString(), Tools::convertType(decl->getType()), nullptr);
 
   if (decl->hasInit()) {
     VisitExpr(decl->getInit());
-    auto *init =
-        static_cast<lsfs::Expression *>(visitedExpression);
+    auto *init = popVisitedExpression<lsfs::Expression>();
     visitedStatement =
         statementFac.createDeclarationAndAssigmentStatement(var, init);
     return false;
@@ -174,13 +173,13 @@ bool AstfriClangVisitor::VisitIfStmt(clang::IfStmt *Declaration) {
 
   VisitStmt(Declaration->getThen());
   Declaration->getThen()->dump();
-  auto *thenStmt = visitedStatement;
+  auto *thenStmt = popVisitedStatement<lsfs::Statement>();
 
   VisitStmt(Declaration->getElse());
-  auto *elseStmt = visitedStatement;
+  auto *elseStmt = popVisitedStatement<lsfs::Statement>();
 
   VisitExpr(Declaration->getCond());
-  auto *condition = visitedExpression;
+  auto *condition = popVisitedExpression<lsfs::Expression>();
 
   visitedStatement =
       statementFac.createIfConditionalStatement(condition, thenStmt, elseStmt);
@@ -192,10 +191,10 @@ bool AstfriClangVisitor::VisitWhileStmt(clang::WhileStmt *Declaration) {
   auto &funFac = lsff::FunctionFactory::getInstance();
 
   VisitStmt(Declaration->getBody());
-  auto *body = visitedStatement;
+  auto *body = popVisitedStatement<lsfs::Statement>();
 
   VisitExpr(Declaration->getCond());
-  auto *condition = visitedExpression;
+  auto *condition = popVisitedExpression<lsfs::Expression>();
 
   visitedStatement = statementFac.createWhileLoopStatement(condition, body);
   return false;
@@ -215,11 +214,11 @@ bool AstfriClangVisitor::VisitExpr(clang::Expr *Declaration) {
   if (auto *binaryExpr = llvm::dyn_cast<clang::BinaryOperator>(Declaration)) {
     VisitExpr(binaryExpr->getLHS());
     auto *left =
-        static_cast<lsfs::Expression *>(visitedExpression);
+        popVisitedExpression<lsfs::Expression>();
 
     VisitExpr(binaryExpr->getRHS());
     auto *right =
-        static_cast<lsfs::Expression *>(visitedExpression);
+        popVisitedExpression<lsfs::Expression>();
 
     visitedExpression = exprFac.createBinaryExpression(
         Tools::convertBinaryOperator(binaryExpr->getOpcode()), left, right);
@@ -267,6 +266,22 @@ bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
       functionDecl->getNameInfo().getAsString(), args);
 
   return false;
+}
+
+template <typename T> T *AstfriClangVisitor::popVisitedStatement() {
+    return AstfriClangTools::popPointer<T>(visitedStatement);
+}
+
+template <typename T> T *AstfriClangVisitor::popVisitedExpression() {
+    return AstfriClangTools::popPointer<T>(visitedExpression);
+}
+
+template <typename T> T *AstfriClangVisitor::popVisitedVariable() {
+    return AstfriClangTools::popPointer<T>(visitedVariable);
+}
+
+template <typename T> T *AstfriClangVisitor::popVisitedFunction() {
+    return AstfriClangTools::popPointer<T>(visitedFunction);
 }
 
 } // namespace libastfri::cpp

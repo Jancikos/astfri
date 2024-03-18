@@ -20,7 +20,8 @@ class AstfriClangVisitor
   using Tools = AstfriClangTools;
 
 public:
-    AstfriClangVisitor(libastfri::structures::TranslationUnit &visitedTranslationUnit);
+  AstfriClangVisitor(
+      libastfri::structures::TranslationUnit &visitedTranslationUnit);
   bool VisitTranslationUnitDecl(clang::TranslationUnitDecl *Declaration);
 
   bool VisitFunctionDecl(clang::FunctionDecl *Declaration);
@@ -45,5 +46,10 @@ private:
   libastfri::structures::Expression *visitedExpression;
   libastfri::structures::BaseVariableDefintion *visitedVariable;
   libastfri::structures::FunctionDefinition *visitedFunction;
+
+  template <typename T> T *popVisitedStatement();
+  template <typename T> T *popVisitedExpression();
+  template <typename T> T *popVisitedVariable();
+  template <typename T> T *popVisitedFunction();
 };
 } // namespace libastfri::cpp
