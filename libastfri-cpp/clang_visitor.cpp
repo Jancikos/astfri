@@ -119,19 +119,15 @@ bool AstfriClangVisitor::VisitCompoundStmt(clang::CompoundStmt *Declaration) {
   return false;
 }
 
-// TODO - na VerDecl
-bool AstfriClangVisitor::VisitDeclStmt(clang::DeclStmt *Declaration) {
+bool AstfriClangVisitor::VisitVarDecl(clang::VarDecl *Declaration) {
   auto &funFac = lsff::FunctionFactory::getInstance();
   auto &statementFac = lsff::StatementFactory::getInstance();
 
-  auto *decl = static_cast<clang::VarDecl *>(Declaration->getSingleDecl());
-  
-
   auto *var = funFac.createVariable(
-      decl->getNameAsString(), Tools::convertType(decl->getType()), nullptr);
+      Declaration->getNameAsString(), Tools::convertType(Declaration->getType()), nullptr);
 
-  if (decl->hasInit()) {
-    VisitExpr(decl->getInit());
+  if (Declaration->hasInit()) {
+    VisitExpr(Declaration->getInit());
     auto *init = popVisitedExpression<lsfs::Expression>();
     visitedStatement =
         statementFac.createDeclarationAndAssigmentStatement(var, init);

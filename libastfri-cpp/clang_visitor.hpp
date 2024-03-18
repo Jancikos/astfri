@@ -28,7 +28,7 @@ public:
 
   bool VisitStmt(clang::Stmt *Declaration);
   bool VisitCompoundStmt(clang::CompoundStmt *Declaration);
-  bool VisitDeclStmt(clang::DeclStmt *Declaration);
+  bool VisitVarDecl(clang::VarDecl *Declaration);
   bool VisitReturnStmt(clang::ReturnStmt *Declaration);
   bool VisitIfStmt(clang::IfStmt *Declaration);
   bool VisitWhileStmt(clang::WhileStmt *Declaration);
