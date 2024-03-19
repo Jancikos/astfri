@@ -98,7 +98,7 @@ bool AstfriClangVisitor::VisitStmt(clang::Stmt *Declaration) {
     return false;
   }
 
-  return true;
+   return true;
 }
 
 bool AstfriClangVisitor::VisitCompoundStmt(clang::CompoundStmt *Declaration) {
@@ -110,8 +110,8 @@ bool AstfriClangVisitor::VisitCompoundStmt(clang::CompoundStmt *Declaration) {
   auto *compoundStatement = statementFac.createCompoundStatement({});
 
   for (auto stmt : Declaration->body()) {
-    VisitStmt(stmt);
-    compoundStatement->statements.push_back(visitedStatement);
+    TraverseStmt(stmt);
+    compoundStatement->statements.push_back(popVisitedStatement<lsfs::Statement>());
   }
 
   visitedStatement = compoundStatement;
@@ -167,11 +167,11 @@ bool AstfriClangVisitor::VisitIfStmt(clang::IfStmt *Declaration) {
   auto &statementFac = lsff::StatementFactory::getInstance();
   auto &funFac = lsff::FunctionFactory::getInstance();
 
-  VisitStmt(Declaration->getThen());
+  TraverseStmt(Declaration->getThen());
   Declaration->getThen()->dump();
-  auto *thenStmt = popVisitedStatement<lsfs::Statement>();
+  auto *thenStmt = popVisitedStatement<lsfs::CompoundStatement>();
 
-  VisitStmt(Declaration->getElse());
+  TraverseStmt(Declaration->getElse());
   auto *elseStmt = popVisitedStatement<lsfs::Statement>();
 
   VisitExpr(Declaration->getCond());
