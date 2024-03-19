@@ -1,4 +1,5 @@
 #include "libastfri-cpp/clang_tools.hpp"
+#include "libastfri/structures/Statement.hpp"
 #include <iostream>
 
 #include <libastfri-cpp/clang_management.hpp>
@@ -14,8 +15,8 @@ int main(int argc, char **argv) {
       libastfri::factories::StatementFactory::getInstance()
           .createTranslationUnit({});
 
-  libastfri::cpp::AstfriClangTools::BeginClangTreeVisit(argv[1],
-                                                 *visitedTranslationUnit);
+  libastfri::cpp::AstfriClangTools::BeginClangTreeVisit(
+      argv[1], *visitedTranslationUnit);
 
   // vypis translation unit
   std::cout << "Translation unit: " << std::endl;
@@ -26,7 +27,13 @@ int main(int argc, char **argv) {
       std::cout << "    Param: " << param->name << " (" << param->type->name
                 << ")" << std::endl;
     }
+
+    std::cout << "    Body: " << std::endl;
+    for (auto *stmt : fun->body->statements) {
+      // tu zrejme prichadza potreba visitora pre vypis...
+      std::cout << "      " << i++ << ": " << stmt->toString() << std::endl;
+    }
   }
 
-  return 0;
+    return 0;
 }
