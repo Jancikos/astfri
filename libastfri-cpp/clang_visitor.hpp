@@ -20,25 +20,26 @@ class AstfriClangVisitor
   using Tools = AstfriClangTools;
 
 public:
+// clang_visitor.cpp
   AstfriClangVisitor(
       libastfri::structures::TranslationUnit &visitedTranslationUnit);
   bool VisitTranslationUnitDecl(clang::TranslationUnitDecl *Declaration);
-
   bool VisitFunctionDecl(clang::FunctionDecl *Declaration);
+  bool VisitVarDecl(clang::VarDecl *Declaration);
+  bool VisitParmVarDecl(clang::ParmVarDecl *Declaration);
 
+// clang_visitor_stmt.cpp
   bool TraverseStmt(clang::Stmt *S, DataRecursionQueue *Queue = nullptr);
-
   bool VisitStmt(clang::Stmt *Declaration);
   bool VisitCompoundStmt(clang::CompoundStmt *Declaration);
-  bool VisitVarDecl(clang::VarDecl *Declaration);
   bool VisitReturnStmt(clang::ReturnStmt *Declaration);
   bool VisitIfStmt(clang::IfStmt *Declaration);
   bool VisitWhileStmt(clang::WhileStmt *Declaration);
 
+// clang_visitor_expr.cpp
   bool VisitExpr(clang::Expr *Declaration);
   bool VisitBinaryOperator(clang::BinaryOperator *Declaration);
   bool VisitIntegerLiteral(clang::IntegerLiteral *Declaration);
-  bool VisitParmVarDecl(clang::ParmVarDecl *Declaration);
   bool VisitDeclRefExpr(clang::DeclRefExpr *Declaration);
   bool VisitCallExpr(clang::CallExpr *Declaration);
 
@@ -51,19 +52,19 @@ private:
   libastfri::structures::FunctionDefinition *visitedFunction;
 
   template <typename T> T *popVisitedStatement() {
-    return AstfriClangTools::popPointer<T>(visitedStatement);
+    return Tools::popPointer<T>(visitedStatement);
   }
 
   template <typename T> T *popVisitedExpression() {
-    return AstfriClangTools::popPointer<T>(visitedExpression);
+    return Tools::popPointer<T>(visitedExpression);
   }
 
   template <typename T> T *popVisitedVariable() {
-    return AstfriClangTools::popPointer<T>(visitedVariable);
+    return Tools::popPointer<T>(visitedVariable);
   }
 
   template <typename T> T *popVisitedFunction() {
-    return AstfriClangTools::popPointer<T>(visitedFunction);
+    return Tools::popPointer<T>(visitedFunction);
   }
 };
 } // namespace libastfri::cpp
