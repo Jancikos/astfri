@@ -90,13 +90,12 @@ bool AstfriClangVisitor::TraverseStmt(clang::Stmt *S,
   }
 
   // ak sa jedna o binary expression s operaciou priradenia, tak ho spracuj ako
-
   // assigment statement
   if (auto *binaryExpr = static_cast<lsfs::BinaryExpression *>(expr)) {
     if (binaryExpr->op == lsfs::BinaryOperators::Assign) {
       auto &statementFac = lsff::StatementFactory::getInstance();
 
-      auto *left = static_cast<lsfs::VarRefExpression *>(binaryExpr->left);
+      auto *left = static_cast<lsfs::VarRefExpression *>(binaryExpr->left); // TODO - vyriesit nejako bezpecnejsie
       auto *right = binaryExpr->right;
 
       visitedStatement =

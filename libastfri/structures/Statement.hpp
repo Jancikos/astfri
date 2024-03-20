@@ -76,7 +76,10 @@ namespace libastfri::structures
         }
     };
 
-    struct AssigmentStatement : Statement
+
+    // TODO - Assigment statement nahradit za ExpressionStatement s BinaryExpression
+    // lebo aj toto je platny vyraz; (c = a + b) == a + b
+     struct AssigmentStatement : Statement
     {
         VariableDefintion* left;
         Expression* right;
