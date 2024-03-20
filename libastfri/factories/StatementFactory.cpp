@@ -51,6 +51,8 @@ namespace libastfri::factories {
         auto* declarationStatement = new DeclarationStatement{{}, variable};
         statements.emplace_back(declarationStatement);
 
+        declarationStatement->rnd = 600;
+
         return declarationStatement;
     }
 
@@ -58,6 +60,8 @@ namespace libastfri::factories {
     {
         auto* assigmentStatement = new AssigmentStatement{{}, left, right};
         statements.emplace_back(assigmentStatement);
+
+        assigmentStatement->rnd = 601;
 
         return assigmentStatement;
     }
@@ -67,6 +71,8 @@ namespace libastfri::factories {
         auto* declarationAndAssigmentStatement = new DeclarationAndAssigmentStatement({{{}, var}, exp});
         statements.emplace_back(declarationAndAssigmentStatement);
         
+        declarationAndAssigmentStatement->rnd = 60001;
+        
         return declarationAndAssigmentStatement;
     }
 
@@ -74,6 +80,8 @@ namespace libastfri::factories {
     {
         auto* returnStatement = new ReturnStatement{{}, value};
         statements.emplace_back(returnStatement);
+
+        returnStatement->rnd = 333;
         
         return returnStatement;
     }
@@ -82,6 +90,8 @@ namespace libastfri::factories {
     {
         auto* expressionStatement = new ExpressionStatement{{}, expression};
         statements.emplace_back(expressionStatement);
+
+        expressionStatement->rnd = 888;
         
         return expressionStatement;
     }
