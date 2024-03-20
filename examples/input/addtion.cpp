@@ -25,7 +25,7 @@ int simpliestAddition2(int a, int b)
 
     int repCount = 0;
     while (a + repCount < 0) {
-        repCount += repMultiplier;
+        repCount = repMultiplier + 1;
     }
 
     return simpliestAddition2(a, b);

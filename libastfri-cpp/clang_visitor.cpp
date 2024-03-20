@@ -2,13 +2,13 @@
 #include <libastfri-cpp/clang_visitor.hpp>
 
 #include <libastfri-cpp/clang_tools.hpp>
+#include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/FunctionFactory.hpp>
+#include <libastfri/factories/StatementFactory.hpp>
+#include <libastfri/factories/TypeFactory.hpp>
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Function.hpp>
 #include <libastfri/structures/Statement.hpp>
-#include <libastfri/factories/ExpressionFactory.hpp>
-#include <libastfri/factories/StatementFactory.hpp>
-#include <libastfri/factories/TypeFactory.hpp>
 
 namespace lsff = libastfri::factories;
 namespace lsfs = libastfri::structures;
@@ -16,7 +16,9 @@ namespace lsfs = libastfri::structures;
 namespace libastfri::cpp {
 AstfriClangVisitor::AstfriClangVisitor(
     lsfs::TranslationUnit &visitedTranslationUnit)
-    : visitedTranslationUnit(&visitedTranslationUnit) {}
+    : visitedTranslationUnit(&visitedTranslationUnit),
+      visitedExpression(nullptr), visitedStatement(nullptr),
+      visitedVariable(nullptr), visitedFunction(nullptr) {}
 
 bool AstfriClangVisitor::VisitTranslationUnitDecl(
     clang::TranslationUnitDecl *Declaration) {
@@ -56,7 +58,8 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
   }
 
   // body
-  VisitCompoundStmt(static_cast<clang::CompoundStmt *>(Declaration->getBody()));
+  VisitCompoundStmt(
+      llvm::dyn_cast<clang::CompoundStmt>(Declaration->getBody()));
   auto *body = popVisitedStatement<lsfs::CompoundStatement>();
 
   visitedTranslationUnit->functions.push_back(
@@ -75,8 +78,7 @@ bool AstfriClangVisitor::VisitVarDecl(clang::VarDecl *Declaration) {
                                     nullptr);
 
   if (Declaration->hasInit()) {
-    VisitExpr(Declaration->getInit());
-    auto *init = popVisitedExpression<lsfs::Expression>();
+    auto *init = getExpression(Declaration->getInit());
     visitedStatement =
         statementFac.createDeclarationAndAssigmentStatement(var, init);
     return false;
@@ -91,8 +93,7 @@ bool AstfriClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Declaration) {
 
   lsfs::Expression *defValue = nullptr;
   if (Declaration->hasDefaultArg()) {
-    VisitExpr(Declaration->getDefaultArg());
-    defValue = popVisitedExpression<lsfs::Expression>();
+    defValue = getExpression(Declaration->getDefaultArg());
   }
 
   visitedVariable = funFac.createParameter(

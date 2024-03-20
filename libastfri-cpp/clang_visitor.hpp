@@ -4,6 +4,7 @@
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/Decl.h>
 #include <clang/AST/RecursiveASTVisitor.h>
+#include <clang/AST/Stmt.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Tooling/Tooling.h>
@@ -20,7 +21,7 @@ class AstfriClangVisitor
   using Tools = AstfriClangTools;
 
 public:
-// clang_visitor.cpp
+  // clang_visitor.cpp
   AstfriClangVisitor(
       libastfri::structures::TranslationUnit &visitedTranslationUnit);
   bool VisitTranslationUnitDecl(clang::TranslationUnitDecl *Declaration);
@@ -28,15 +29,16 @@ public:
   bool VisitVarDecl(clang::VarDecl *Declaration);
   bool VisitParmVarDecl(clang::ParmVarDecl *Declaration);
 
-// clang_visitor_stmt.cpp
-  bool TraverseStmt(clang::Stmt *S, DataRecursionQueue *Queue = nullptr);
+  // clang_visitor_stmt.cpp
+  structures::Statement *getStatement(clang::Stmt *Declaration);
   bool VisitStmt(clang::Stmt *Declaration);
   bool VisitCompoundStmt(clang::CompoundStmt *Declaration);
   bool VisitReturnStmt(clang::ReturnStmt *Declaration);
   bool VisitIfStmt(clang::IfStmt *Declaration);
   bool VisitWhileStmt(clang::WhileStmt *Declaration);
 
-// clang_visitor_expr.cpp
+  // clang_visitor_expr.cpp
+  structures::Expression *getExpression(clang::Expr *Declaration);
   bool VisitExpr(clang::Expr *Declaration);
   bool VisitBinaryOperator(clang::BinaryOperator *Declaration);
   bool VisitIntegerLiteral(clang::IntegerLiteral *Declaration);

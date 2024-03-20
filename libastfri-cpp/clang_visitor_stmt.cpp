@@ -1,62 +1,51 @@
 #include <clang/AST/Stmt.h>
 #include <libastfri-cpp/clang_visitor.hpp>
 
+#include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/FunctionFactory.hpp>
+#include <libastfri/factories/StatementFactory.hpp>
+#include <libastfri/factories/TypeFactory.hpp>
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Function.hpp>
 #include <libastfri/structures/Statement.hpp>
-#include <libastfri/factories/ExpressionFactory.hpp>
-#include <libastfri/factories/StatementFactory.hpp>
-#include <libastfri/factories/TypeFactory.hpp>
 
 namespace lsff = libastfri::factories;
 namespace lsfs = libastfri::structures;
 
 namespace libastfri::cpp {
 
-bool AstfriClangVisitor::TraverseStmt(clang::Stmt *S,
-                                      DataRecursionQueue *Queue) {
-  if (S == nullptr) {
-    return true;
+lsfs::Statement *AstfriClangVisitor::getStatement(clang::Stmt *Declaration) {
+  // skontroluj pociatocny stav
+    assert(visitedStatement == nullptr);
+    assert(visitedExpression == nullptr);
+
+  if (Declaration == nullptr) {
+    return nullptr; // ak je nullptr, tak vrat nullptr
   }
 
-  auto result = RecursiveASTVisitor::TraverseStmt(S, Queue);
+  auto traversalFailed = TraverseStmt(Declaration);
+  if (traversalFailed) {
+    // TODO - lepsie ohandlovat chybu
+    throw std::runtime_error("Stmt traversal failed");
+    return nullptr; // prehliadka sa nepodarila
+  }
+  auto *statement = popVisitedStatement<lsfs::Statement>();
 
-  if (result) {
-    return true;
+  if (statement != nullptr) {
+    return statement; // ak sa nasiel statement, tak ho vrat
   }
 
-  if (visitedStatement != nullptr) {
-    return false; // nasiel sa statement
+  // skus skontrovlovat, ci sa nejedna o expression
+  auto *expr = popVisitedExpression<lsfs::Expression>();
+  if (expr != nullptr) {
+    auto &statementFac = lsff::StatementFactory::getInstance();
+    return statementFac.createExpressionStatement(
+        expr); // ak sa jedna o expression, tak ho spracuj ako expression
+               // statement
   }
 
-  // skus pozriet ci sa nejedna o expression
-  auto *expr = popVisitedExpression<Expression>();
-
-  if (expr == nullptr) {
-    return true; // nenasiel sa ziadny nacitany statement ani expression
-  }
-
-  // ak sa jedna o binary expression s operaciou priradenia, tak ho spracuj ako
-  // assigment statement
-  if (auto *binaryExpr = static_cast<lsfs::BinaryExpression *>(expr)) {
-    if (binaryExpr->op == lsfs::BinaryOperators::Assign) {
-      auto &statementFac = lsff::StatementFactory::getInstance();
-
-      auto *left = static_cast<lsfs::VarRefExpression *>(binaryExpr->left); // TODO - vyriesit nejako bezpecnejsie
-      auto *right = binaryExpr->right;
-
-      visitedStatement =
-          statementFac.createAssigmentStatement(left->variable, right);
-      return false;
-    }
-  }
-
-  // ak sa jedna o neodchyteny expression, tak ho spracuj ako expression
-  // statement
-  auto &statementFac = lsff::StatementFactory::getInstance();
-  visitedStatement = statementFac.createExpressionStatement(expr);
-  return false; // nasiel sa nacitany expression statement
+  throw std::runtime_error("No statement or expression found");
+  return nullptr; // nezachytili sme ziadny statement ani expression
 }
 
 bool AstfriClangVisitor::VisitStmt(clang::Stmt *Declaration) { return true; }
@@ -67,9 +56,7 @@ bool AstfriClangVisitor::VisitCompoundStmt(clang::CompoundStmt *Declaration) {
   auto *compoundStatement = statementFac.createCompoundStatement({});
 
   for (auto stmt : Declaration->body()) {
-    TraverseStmt(stmt);
-    compoundStatement->statements.push_back(
-        popVisitedStatement<lsfs::Statement>());
+    compoundStatement->statements.push_back(getStatement(stmt));
   }
 
   visitedStatement = compoundStatement;
@@ -80,9 +67,8 @@ bool AstfriClangVisitor::VisitCompoundStmt(clang::CompoundStmt *Declaration) {
 bool AstfriClangVisitor::VisitReturnStmt(clang::ReturnStmt *Declaration) {
   auto &statementFac = lsff::StatementFactory::getInstance();
 
-  VisitExpr(Declaration->getRetValue());
   visitedStatement = statementFac.createReturnStatement(
-      popVisitedExpression<lsfs::Expression>());
+      getExpression(Declaration->getRetValue()));
   return false;
 }
 
@@ -90,15 +76,11 @@ bool AstfriClangVisitor::VisitIfStmt(clang::IfStmt *Declaration) {
   auto &statementFac = lsff::StatementFactory::getInstance();
   auto &funFac = lsff::FunctionFactory::getInstance();
 
-  TraverseStmt(Declaration->getThen());
-  Declaration->getThen()->dump();
-  auto *thenStmt = popVisitedStatement<lsfs::CompoundStatement>();
+  auto *thenStmt = getStatement(Declaration->getThen());
 
-  TraverseStmt(Declaration->getElse());
-  auto *elseStmt = popVisitedStatement<lsfs::Statement>();
+  auto *elseStmt = getStatement(Declaration->getElse());
 
-  VisitExpr(Declaration->getCond());
-  auto *condition = popVisitedExpression<lsfs::Expression>();
+  auto *condition = getExpression(Declaration->getCond());
 
   visitedStatement =
       statementFac.createIfConditionalStatement(condition, thenStmt, elseStmt);
@@ -109,11 +91,9 @@ bool AstfriClangVisitor::VisitWhileStmt(clang::WhileStmt *Declaration) {
   auto &statementFac = lsff::StatementFactory::getInstance();
   auto &funFac = lsff::FunctionFactory::getInstance();
 
-  VisitStmt(Declaration->getBody());
-  auto *body = popVisitedStatement<lsfs::Statement>();
+  auto *body = getStatement(Declaration->getBody());
 
-  VisitExpr(Declaration->getCond());
-  auto *condition = popVisitedExpression<lsfs::Expression>();
+  auto *condition = getExpression(Declaration->getCond());
 
   visitedStatement = statementFac.createWhileLoopStatement(condition, body);
   return false;

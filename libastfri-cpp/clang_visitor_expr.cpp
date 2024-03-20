@@ -1,34 +1,48 @@
+#include <cassert>
 #include <clang/AST/Stmt.h>
 #include <libastfri-cpp/clang_visitor.hpp>
 
 #include <libastfri-cpp/clang_tools.hpp>
-#include <libastfri/factories/FunctionFactory.hpp>
-#include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Function.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
+#include <libastfri/factories/FunctionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
+#include <libastfri/structures/Expression.hpp>
+#include <libastfri/structures/Function.hpp>
 
 namespace lsff = libastfri::factories;
 namespace lsfs = libastfri::structures;
 
 namespace libastfri::cpp {
+
+lsfs::Expression *AstfriClangVisitor::getExpression(clang::Expr *Declaration) {
+  // skontroluj pociatocny stav
+  assert(visitedStatement == nullptr);
+  assert(visitedExpression == nullptr);
+
+  auto traversalFailed = TraverseStmt(Declaration);
+  if (traversalFailed) {
+    throw std::runtime_error("Expr traversal failed");
+    return nullptr; // prehliadka sa nepodarila
+  }
+  auto *expression = popVisitedExpression<lsfs::Expression>();
+
+  if (expression != nullptr) {
+    return expression; // ak sa nasiel expression, tak ho vrat
+  }
+
+  throw std::runtime_error("No expression found");
+  return nullptr; // nezachytili sme ziadny expression
+}
+
 bool AstfriClangVisitor::VisitExpr(clang::Expr *Declaration) { return true; }
 
 bool AstfriClangVisitor::VisitBinaryOperator(
     clang::BinaryOperator *Declaration) {
   auto &exprFac = lsff::ExpressionFactory::getInstance();
 
-  // TODO - neviem spustit len TraverseExpr ale musim volat cely TraverseStmt???
-  // viem si naimplementovat vlastny TraverseExpr?
-
-  RecursiveASTVisitor::TraverseStmt(
-      Declaration->getLHS()); // musim volat TraverseStmt z predka, aby sa
-                              // neriesilo spracovanie LHS ako statement
-  auto *left = popVisitedExpression<lsfs::Expression>();
-
-  RecursiveASTVisitor::TraverseStmt(Declaration->getRHS());
-  auto *right = popVisitedExpression<lsfs::Expression>();
+  auto *left = getExpression(Declaration->getLHS());
+  auto *right = getExpression(Declaration->getRHS());
 
   visitedExpression = exprFac.createBinaryExpression(
       Tools::convertBinaryOperator(Declaration->getOpcode()), left, right);
@@ -62,16 +76,15 @@ bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
 
   std::vector<lsfs::Expression *> args;
   for (auto arg : Declaration->arguments()) {
-    VisitExpr(arg);
-    args.push_back(popVisitedExpression<Expression>());
+    args.push_back(getExpression(arg));
   }
 
+    // TOOD - zbavit sa static_cast
   auto *functionDecl =
       static_cast<clang::FunctionDecl *>(Declaration->getCalleeDecl());
 
   visitedExpression = refFac.createFunctionCallExpression(
       functionDecl->getNameInfo().getAsString(), args);
-
   return false;
 }
 
