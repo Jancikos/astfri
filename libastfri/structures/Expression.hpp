@@ -47,6 +47,7 @@ namespace libastfri::structures
     //// operatory pouzivane v vyrazoch
     enum class BinaryOperators
     {
+        Assign,
         Add, Subtract, Multiply, Divide, Modulo,
         Equal, NotEqual, Less, LessEqual, Greater, GreaterEqual
     };

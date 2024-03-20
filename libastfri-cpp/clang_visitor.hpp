@@ -26,6 +26,8 @@ public:
 
   bool VisitFunctionDecl(clang::FunctionDecl *Declaration);
 
+  bool TraverseStmt(clang::Stmt *S, DataRecursionQueue *Queue = nullptr);
+
   bool VisitStmt(clang::Stmt *Declaration);
   bool VisitCompoundStmt(clang::CompoundStmt *Declaration);
   bool VisitVarDecl(clang::VarDecl *Declaration);
@@ -34,6 +36,7 @@ public:
   bool VisitWhileStmt(clang::WhileStmt *Declaration);
 
   bool VisitExpr(clang::Expr *Declaration);
+  bool VisitBinaryOperator(clang::BinaryOperator *Declaration);
   bool VisitIntegerLiteral(clang::IntegerLiteral *Declaration);
   bool VisitParmVarDecl(clang::ParmVarDecl *Declaration);
   bool VisitDeclRefExpr(clang::DeclRefExpr *Declaration);

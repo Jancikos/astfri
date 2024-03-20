@@ -44,8 +44,7 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
   std::string title = Declaration->getNameInfo().getAsString();
 
   // return type
-  lsfs::Type *returnType =
-      Tools::convertType(Declaration->getReturnType());
+  lsfs::Type *returnType = Tools::convertType(Declaration->getReturnType());
 
   // params
   std::vector<lsfs::ParameterDefinition *> params;
@@ -64,54 +63,66 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
       funFac.createFunction(title, params, body, returnType));
   //   visitedFunction = visitedTranslationUnit->functions.back();
 
-  // The return value indicates whether we want the visitation to proceed.
-  // Return false to stop the traversal of the AST.
   return false;
 }
 
-bool AstfriClangVisitor::VisitStmt(clang::Stmt *Declaration) {
-
-  // visitedStatement => lsfs::AssigmentStatement
-  // TODO - zistit kedy ma byt BinaryOperator pouzity ako expression a kedy ako
-  // statement
-  if (auto *assigmentStmt =
-          llvm::dyn_cast<clang::BinaryOperator>(Declaration)) {
-    auto &funFac = lsff::FunctionFactory::getInstance();
-    auto &statementFac = lsff::StatementFactory::getInstance();
-
-    if (assigmentStmt->getOpcode() != clang::BinaryOperatorKind::BO_Assign) {
-      return false; // imeplementovat ine operatory
-    }
-
-    // TOOD - upravit na VisitExpr
-    auto *lhs = static_cast<clang::DeclRefExpr *>(assigmentStmt->getLHS());
-    auto *rhs = static_cast<clang::Expr *>(assigmentStmt->getRHS());
-
-    VisitExpr(rhs);
-    auto *right = popVisitedExpression<lsfs::Expression>();
-
-    auto *left = funFac.createVariable(
-        lhs->getNameInfo().getAsString(), Tools::convertType(lhs->getType()),
-        nullptr); // todo - extrahovat do VisitDeclRefExpr
-
-    visitedStatement = statementFac.createAssigmentStatement(left, right);
-    return false;
+bool AstfriClangVisitor::TraverseStmt(clang::Stmt *S,
+                                      DataRecursionQueue *Queue) {
+  if (S == nullptr) {
+    return true;
   }
 
-   return true;
+  auto result = RecursiveASTVisitor::TraverseStmt(S, Queue);
+
+  if (result) {
+    return true;
+  }
+
+  if (visitedStatement != nullptr) {
+    return false; // nasiel sa statement
+  }
+
+  // skus pozriet ci sa nejedna o expression
+  auto *expr = popVisitedExpression<Expression>();
+
+  if (expr == nullptr) {
+    return true; // nenasiel sa ziadny nacitany statement ani expression
+  }
+
+  // ak sa jedna o binary expression s operaciou priradenia, tak ho spracuj ako
+
+  // assigment statement
+  if (auto *binaryExpr = static_cast<lsfs::BinaryExpression *>(expr)) {
+    if (binaryExpr->op == lsfs::BinaryOperators::Assign) {
+      auto &statementFac = lsff::StatementFactory::getInstance();
+
+      auto *left = static_cast<lsfs::VarRefExpression *>(binaryExpr->left);
+      auto *right = binaryExpr->right;
+
+      visitedStatement =
+          statementFac.createAssigmentStatement(left->variable, right);
+      return false;
+    }
+  }
+
+  // ak sa jedna o neodchyteny expression, tak ho spracuj ako expression
+  // statement
+  auto &statementFac = lsff::StatementFactory::getInstance();
+  visitedStatement = statementFac.createExpressionStatement(expr);
+  return false; // nasiel sa nacitany expression statement
 }
 
+bool AstfriClangVisitor::VisitStmt(clang::Stmt *Declaration) { return true; }
+
 bool AstfriClangVisitor::VisitCompoundStmt(clang::CompoundStmt *Declaration) {
-  // For debugging, dumping the AST nodes will show which nodes are already
-  // being visited.
-  // Declaration->dump();
 
   auto &statementFac = lsff::StatementFactory::getInstance();
   auto *compoundStatement = statementFac.createCompoundStatement({});
 
   for (auto stmt : Declaration->body()) {
     TraverseStmt(stmt);
-    compoundStatement->statements.push_back(popVisitedStatement<lsfs::Statement>());
+    compoundStatement->statements.push_back(
+        popVisitedStatement<lsfs::Statement>());
   }
 
   visitedStatement = compoundStatement;
@@ -123,8 +134,9 @@ bool AstfriClangVisitor::VisitVarDecl(clang::VarDecl *Declaration) {
   auto &funFac = lsff::FunctionFactory::getInstance();
   auto &statementFac = lsff::StatementFactory::getInstance();
 
-  auto *var = funFac.createVariable(
-      Declaration->getNameAsString(), Tools::convertType(Declaration->getType()), nullptr);
+  auto *var = funFac.createVariable(Declaration->getNameAsString(),
+                                    Tools::convertType(Declaration->getType()),
+                                    nullptr);
 
   if (Declaration->hasInit()) {
     VisitExpr(Declaration->getInit());
@@ -142,7 +154,8 @@ bool AstfriClangVisitor::VisitReturnStmt(clang::ReturnStmt *Declaration) {
   auto &statementFac = lsff::StatementFactory::getInstance();
 
   VisitExpr(Declaration->getRetValue());
-  visitedStatement = statementFac.createReturnStatement(visitedExpression);
+  visitedStatement = statementFac.createReturnStatement(
+      popVisitedExpression<lsfs::Expression>());
   return false;
 }
 
@@ -152,7 +165,7 @@ bool AstfriClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Declaration) {
   lsfs::Expression *defValue = nullptr;
   if (Declaration->hasDefaultArg()) {
     VisitExpr(Declaration->getDefaultArg());
-    defValue = visitedExpression;
+    defValue = popVisitedExpression<lsfs::Expression>();
   }
 
   visitedVariable = funFac.createParameter(
@@ -162,7 +175,6 @@ bool AstfriClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Declaration) {
   return false;
 }
 
-// todo - overit preco sa zrejme nevolag
 bool AstfriClangVisitor::VisitIfStmt(clang::IfStmt *Declaration) {
   auto &statementFac = lsff::StatementFactory::getInstance();
   auto &funFac = lsff::FunctionFactory::getInstance();
@@ -196,32 +208,26 @@ bool AstfriClangVisitor::VisitWhileStmt(clang::WhileStmt *Declaration) {
   return false;
 }
 
-bool AstfriClangVisitor::VisitExpr(clang::Expr *Declaration) {
-  if (Declaration == nullptr) {
-    visitedExpression = nullptr;
-    return false;
-  }
+bool AstfriClangVisitor::VisitExpr(clang::Expr *Declaration) { return true; }
 
+bool AstfriClangVisitor::VisitBinaryOperator(
+    clang::BinaryOperator *Declaration) {
   auto &exprFac = lsff::ExpressionFactory::getInstance();
-  auto &literalFac = lsff::LiteralFactory::getInstance();
-  auto &typeFac = lsff::TypeFactory::getInstance();
 
-  // visitedExpression => lsfs::BinaryExpression
-  if (auto *binaryExpr = llvm::dyn_cast<clang::BinaryOperator>(Declaration)) {
-    VisitExpr(binaryExpr->getLHS());
-    auto *left =
-        popVisitedExpression<lsfs::Expression>();
+  // TODO - neviem spustit len TraverseExpr ale musim volat cely TraverseStmt???
+  // viem si naimplementovat vlastny TraverseExpr?
 
-    VisitExpr(binaryExpr->getRHS());
-    auto *right =
-        popVisitedExpression<lsfs::Expression>();
+  RecursiveASTVisitor::TraverseStmt(
+      Declaration->getLHS()); // musim volat TraverseStmt z predka, aby sa
+                              // neriesilo spracovanie LHS ako statement
+  auto *left = popVisitedExpression<lsfs::Expression>();
 
-    visitedExpression = exprFac.createBinaryExpression(
-        Tools::convertBinaryOperator(binaryExpr->getOpcode()), left, right);
-    return false;
-  }
+  RecursiveASTVisitor::TraverseStmt(Declaration->getRHS());
+  auto *right = popVisitedExpression<lsfs::Expression>();
 
-  return true;
+  visitedExpression = exprFac.createBinaryExpression(
+      Tools::convertBinaryOperator(Declaration->getOpcode()), left, right);
+  return false;
 }
 
 bool AstfriClangVisitor::VisitIntegerLiteral(
@@ -252,7 +258,7 @@ bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
   std::vector<lsfs::Expression *> args;
   for (auto arg : Declaration->arguments()) {
     VisitExpr(arg);
-    args.push_back(visitedExpression);
+    args.push_back(popVisitedExpression<Expression>());
   }
 
   auto *functionDecl =
@@ -265,19 +271,19 @@ bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
 }
 
 template <typename T> T *AstfriClangVisitor::popVisitedStatement() {
-    return AstfriClangTools::popPointer<T>(visitedStatement);
+  return AstfriClangTools::popPointer<T>(visitedStatement);
 }
 
 template <typename T> T *AstfriClangVisitor::popVisitedExpression() {
-    return AstfriClangTools::popPointer<T>(visitedExpression);
+  return AstfriClangTools::popPointer<T>(visitedExpression);
 }
 
 template <typename T> T *AstfriClangVisitor::popVisitedVariable() {
-    return AstfriClangTools::popPointer<T>(visitedVariable);
+  return AstfriClangTools::popPointer<T>(visitedVariable);
 }
 
 template <typename T> T *AstfriClangVisitor::popVisitedFunction() {
-    return AstfriClangTools::popPointer<T>(visitedFunction);
+  return AstfriClangTools::popPointer<T>(visitedFunction);
 }
 
 } // namespace libastfri::cpp

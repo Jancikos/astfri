@@ -1,3 +1,4 @@
+#include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
 #include <fstream>
 #include <memory>
@@ -41,6 +42,8 @@ Type *AstfriClangTools::convertType(clang::QualType qt) {
 libastfri::structures::BinaryOperators
 AstfriClangTools::convertBinaryOperator(clang::BinaryOperator::Opcode op) {
   switch (op) {
+  case clang::BinaryOperator::Opcode::BO_Assign:
+    return libastfri::structures::BinaryOperators::Assign;
   case clang::BinaryOperator::Opcode::BO_Add:
     return libastfri::structures::BinaryOperators::Add;
   case clang::BinaryOperator::Opcode::BO_Sub:
@@ -100,7 +103,8 @@ void AstfriClangTools::BeginClangTreeVisit(
 }
 
 // TODO - presunut to sem z HPP, bol problem s includom
-// template <typename T, typename P> T *AstfriClangTools::popPointer(P *&pointer) {
+// template <typename T, typename P> T *AstfriClangTools::popPointer(P
+// *&pointer) {
 //   T *result = static_cast<T *>(pointer);
 //   pointer = nullptr;
 //   return result;
