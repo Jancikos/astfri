@@ -50,9 +50,20 @@ private:
   libastfri::structures::BaseVariableDefintion *visitedVariable;
   libastfri::structures::FunctionDefinition *visitedFunction;
 
-  template <typename T> T *popVisitedStatement();
-  template <typename T> T *popVisitedExpression();
-  template <typename T> T *popVisitedVariable();
-  template <typename T> T *popVisitedFunction();
+  template <typename T> T *popVisitedStatement() {
+    return AstfriClangTools::popPointer<T>(visitedStatement);
+  }
+
+  template <typename T> T *popVisitedExpression() {
+    return AstfriClangTools::popPointer<T>(visitedExpression);
+  }
+
+  template <typename T> T *popVisitedVariable() {
+    return AstfriClangTools::popPointer<T>(visitedVariable);
+  }
+
+  template <typename T> T *popVisitedFunction() {
+    return AstfriClangTools::popPointer<T>(visitedFunction);
+  }
 };
 } // namespace libastfri::cpp

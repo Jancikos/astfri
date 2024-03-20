@@ -269,20 +269,4 @@ bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
   return false;
 }
 
-template <typename T> T *AstfriClangVisitor::popVisitedStatement() {
-  return AstfriClangTools::popPointer<T>(visitedStatement);
-}
-
-template <typename T> T *AstfriClangVisitor::popVisitedExpression() {
-  return AstfriClangTools::popPointer<T>(visitedExpression);
-}
-
-template <typename T> T *AstfriClangVisitor::popVisitedVariable() {
-  return AstfriClangTools::popPointer<T>(visitedVariable);
-}
-
-template <typename T> T *AstfriClangVisitor::popVisitedFunction() {
-  return AstfriClangTools::popPointer<T>(visitedFunction);
-}
-
 } // namespace libastfri::cpp
