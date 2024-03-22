@@ -12,12 +12,6 @@ void AstfriClangConsumer::HandleTranslationUnit(clang::ASTContext &p_context) {
     AstfriClangVisitor visitor(*visitedTranslationUnit);
 
     visitor.TraverseDecl(p_context.getTranslationUnitDecl());
-
-    // todo - ako to spravit nejako takto
-    //   visitedTranslationUnit = &*visitor.visitedTranslationUnit;
-
-    //   visitedTranslationUnit->functions =
-    //   std::move(visitor.visitedTranslationUnit->functions);
 }
 
 AstfriClangTraverseAction::AstfriClangTraverseAction(

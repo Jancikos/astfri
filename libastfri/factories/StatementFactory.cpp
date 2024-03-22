@@ -62,17 +62,6 @@ StatementFactory::createDeclarationAndAssigmentStatement(
     return declarationAndAssigmentStatement;
 }
 
-AssigmentStatement *
-StatementFactory::createAssigmentStatement(VariableDefintion *left,
-                                           Expression *right) {
-    auto *assigmentStatement = new AssigmentStatement{{}, left, right};
-    statements.emplace_back(assigmentStatement);
-
-    assigmentStatement->rnd = 601;
-
-    return assigmentStatement;
-}
-
 ReturnStatement *StatementFactory::createReturnStatement(Expression *value) {
     auto *returnStatement = new ReturnStatement{{}, value};
     statements.emplace_back(returnStatement);
@@ -138,7 +127,7 @@ StatementFactory::createDoWhileLoopStatement(Expression *condition,
 }
 
 ForLoopStatement *StatementFactory::createForLoopStatement(
-    AssigmentStatement *init, Expression *condition, AssigmentStatement *step,
+    ExpressionStatement *init, Expression *condition, ExpressionStatement *step,
     CompoundStatement *body) {
     ForLoopStatement *forLoopStatement =
         new ForLoopStatement{{{}, condition, body}, init, step};

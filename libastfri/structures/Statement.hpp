@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-#include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Declaration.hpp>
+#include <libastfri/structures/Expression.hpp>
 
 namespace libastfri::structures {
 /**
@@ -62,22 +62,6 @@ struct DeclarationAndAssigmentStatement : DeclarationStatement {
         // result += variable->toString();
         result += " = ";
         // result += exp->toString();
-        return result;
-    }
-};
-
-// TODO - Assigment statement nahradit za ExpressionStatement s BinaryExpression
-// lebo aj toto je platny vyraz; (c = a + b) == a + b
-struct AssigmentStatement : Statement {
-    VariableDefintion *left;
-    Expression *right;
-
-    std::string toString() const {
-        // Implement the toString() function for AssigmentStatement
-        std::string result = "AssigmentStatement: ";
-        // result += left->toString();
-        result += " = ";
-        // result += right->toString();
         return result;
     }
 };
@@ -174,8 +158,8 @@ struct DoWhileLoopStatement : LoopStatement {
 };
 
 struct ForLoopStatement : LoopStatement {
-    AssigmentStatement *init;
-    AssigmentStatement *step;
+    ExpressionStatement *init;
+    ExpressionStatement *step;
 
     std::string toString() const {
         // Implement the toString() function for ForLoopStatement

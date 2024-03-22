@@ -102,12 +102,4 @@ void AstfriClangTools::BeginClangTreeVisit(
         code, {""});
 }
 
-// TODO - presunut to sem z HPP, bol problem s includom
-// template <typename T, typename P> T *AstfriClangTools::popPointer(P
-// *&pointer) {
-//   T *result = static_cast<T *>(pointer);
-//   pointer = nullptr;
-//   return result;
-// }
-
 } // namespace libastfri::cpp

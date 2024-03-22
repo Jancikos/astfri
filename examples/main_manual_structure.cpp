@@ -1,8 +1,8 @@
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Statement.hpp>
 
-#include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/DeclarationFactory.hpp>
+#include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 
@@ -37,9 +37,9 @@ int main() {
                     paramsSimpleAddition[1])))});
     auto retTypeSimpleAddition = typeFac.getIntType();
 
-    auto functionSimpleAddition =
-        declarationFac.createFunction("simpleAddition", paramsSimpleAddition,
-                                   bodySimpleAddition, retTypeSimpleAddition);
+    auto functionSimpleAddition = declarationFac.createFunction(
+        "simpleAddition", paramsSimpleAddition, bodySimpleAddition,
+        retTypeSimpleAddition);
 
     // int brutalAddition(int a, int b)
     std::vector<ParameterDefinition *> params;
@@ -65,8 +65,12 @@ int main() {
                  referenceFac.createVarRefExpression(variableC),
                  literalFac.getIntLiteral(0)),
              statementFac.createCompoundStatement(
-                 {statementFac.createAssigmentStatement(
-                     variableRepMultiplier, literalFac.getIntLiteral(-1))})),
+                 {statementFac.createExpressionStatement(
+                     expressionFac.createBinaryExpression(
+                         BinaryOperators::Assign,
+                         referenceFac.createVarRefExpression(
+                             variableRepMultiplier),
+                         literalFac.getIntLiteral(-1)))})),
          statementFac.createDeclarationAndAssigmentStatement(
              variableRepCount, literalFac.getIntLiteral(0)),
          statementFac.createWhileLoopStatement(
@@ -78,13 +82,16 @@ int main() {
                      referenceFac.createVarRefExpression(variableRepCount)),
                  literalFac.getIntLiteral(0)),
              statementFac.createCompoundStatement(
-                 {statementFac.createAssigmentStatement(
-                     variableRepCount,
+                 {statementFac.createExpressionStatement(
                      expressionFac.createBinaryExpression(
-                         BinaryOperators::Add,
+                         BinaryOperators::Assign,
                          referenceFac.createVarRefExpression(variableRepCount),
-                         referenceFac.createVarRefExpression(
-                             variableRepMultiplier)))})),
+                         expressionFac.createBinaryExpression(
+                             BinaryOperators::Add,
+                             referenceFac.createVarRefExpression(
+                                 variableRepCount),
+                             referenceFac.createVarRefExpression(
+                                 variableRepMultiplier))))})),
          statementFac.createExpressionStatement(
              referenceFac.createFunctionCallExpression(
                  functionSimpleAddition->name,

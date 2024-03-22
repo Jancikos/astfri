@@ -25,6 +25,8 @@ int simpliestAddition2(int a, int b) {
     while (a + repCount < 0) {
         repCount = repMultiplier + 1;
     }
+    
+    // TODO - otestovat for loop
 
     return simpliestAddition2(a, b);
 }

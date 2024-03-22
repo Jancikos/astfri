@@ -30,15 +30,11 @@ class StatementFactory {
     createTranslationUnit(std::vector<FunctionDefinition *> functions);
     CompoundStatement *
     createCompoundStatement(std::vector<Statement *> statements);
-    DeclarationStatement *
-    createDeclarationStatement(Declaration *declaration);
+    DeclarationStatement *createDeclarationStatement(Declaration *declaration);
     DeclarationAndAssigmentStatement *
     createDeclarationAndAssigmentStatement(Declaration *declaration,
                                            Expression *expression);
 
-    // TOOD - zrejme vyradit a lebo bola  nahradena expression statementom
-    AssigmentStatement *createAssigmentStatement(VariableDefintion *declaration,
-                                                 Expression *expression);
     ReturnStatement *createReturnStatement(Expression *value);
 
     ExpressionStatement *createExpressionStatement(Expression *expression);
@@ -58,9 +54,9 @@ class StatementFactory {
 
     DoWhileLoopStatement *createDoWhileLoopStatement(Expression *condition,
                                                      CompoundStatement *body);
-    ForLoopStatement *createForLoopStatement(AssigmentStatement *init,
+    ForLoopStatement *createForLoopStatement(ExpressionStatement *init,
                                              Expression *condition,
-                                             AssigmentStatement *step,
+                                             ExpressionStatement *step,
                                              CompoundStatement *body);
 };
 } // namespace libastfri::factories
