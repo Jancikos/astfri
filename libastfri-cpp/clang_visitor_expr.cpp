@@ -79,9 +79,8 @@ bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
         args.push_back(getExpression(arg));
     }
 
-    // TOOD - zbavit sa static_cast
-    auto *functionDecl =
-        static_cast<clang::FunctionDecl *>(Declaration->getCalleeDecl());
+    auto *functionDecl = llvm::dyn_cast<clang::FunctionDecl>(
+        Declaration->getCalleeDecl()->getAsFunction());
 
     visitedExpression = refFac.createFunctionCallExpression(
         functionDecl->getNameInfo().getAsString(), args);
