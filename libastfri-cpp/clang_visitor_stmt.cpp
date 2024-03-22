@@ -1,16 +1,12 @@
-#include <clang/AST/Stmt.h>
+#include <cassert>
 #include <libastfri-cpp/clang_visitor.hpp>
 
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
-#include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Declaration.hpp>
-#include <libastfri/structures/Statement.hpp>
 
 namespace lsff = libastfri::factories;
-namespace lsfs = libastfri::structures;
 
 namespace libastfri::cpp {
 

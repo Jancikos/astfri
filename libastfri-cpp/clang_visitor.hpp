@@ -27,7 +27,7 @@ class AstfriClangVisitor
     AstfriClangVisitor(
         lsfs::TranslationUnit &visitedTranslationUnit);
 
-    // clang_visitor.cpp
+    // clang_visitor_decl.cpp
     lsfs::Declaration *getDeclaration(clang::Decl *Decl);
     bool VisitTranslationUnitDecl(clang::TranslationUnitDecl *Decl);
     bool VisitFunctionDecl(clang::FunctionDecl *Decl);
