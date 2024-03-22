@@ -42,7 +42,7 @@ struct CompoundStatement : Statement {
 };
 
 struct DeclarationStatement : Statement {
-    VariableDefintion *variable;
+    Declaration *declaration;
 
     std::string toString() const {
         // Implement the toString() function for DeclarationStatement

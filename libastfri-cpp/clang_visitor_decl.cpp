@@ -1,8 +1,8 @@
 #include <cassert>
 #include <libastfri-cpp/clang_visitor.hpp>
 
-#include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/DeclarationFactory.hpp>
+#include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 
@@ -60,34 +60,31 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
     // params
     std::vector<lsfs::ParameterDefinition *> params;
     for (auto paramDecl : Declaration->parameters()) {
-        VisitParmVarDecl(paramDecl); // nemozem volat TRaverseDecl, lebo to odchyti VisitVarDecl
+        VisitParmVarDecl(paramDecl); // nemozem volat TRaverseDecl, lebo to
+                                     // odchyti VisitVarDecl
         params.push_back(popVisitedDeclaration<lsfs::ParameterDefinition>());
     }
 
     // body
     auto *body = getStatement<lsfs::CompoundStatement>(Declaration->getBody());
 
-    visitedDeclaration = declFac.createFunction(title, params, body, returnType);
+    visitedDeclaration =
+        declFac.createFunction(title, params, body, returnType);
     return false;
 }
 
-// TOOD - premysliet, ci je spravne ze sa tu vytvara statement
 bool AstfriClangVisitor::VisitVarDecl(clang::VarDecl *Declaration) {
     auto &declFac = lsff::DeclarationFactory::getInstance();
     auto &statementFac = lsff::StatementFactory::getInstance();
 
-    auto *var = declFac.createVariable(
+    visitedDeclaration = declFac.createVariable(
         Declaration->getNameAsString(),
         Tools::convertType(Declaration->getType()), nullptr);
 
     if (Declaration->hasInit()) {
-        auto *init = getExpression(Declaration->getInit());
-        visitedStatement =
-            statementFac.createDeclarationAndAssigmentStatement(var, init);
-        return false;
+        visitedExpression = getExpression(Declaration->getInit());
     }
 
-    visitedStatement = statementFac.createDeclarationStatement(var);
     return false;
 }
 

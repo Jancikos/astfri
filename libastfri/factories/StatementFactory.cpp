@@ -41,13 +41,25 @@ StatementFactory::createCompoundStatement(std::vector<Statement *> statements) {
 }
 
 DeclarationStatement *
-StatementFactory::createDeclarationStatement(VariableDefintion *variable) {
-    auto *declarationStatement = new DeclarationStatement{{}, variable};
+StatementFactory::createDeclarationStatement(Declaration *declaration) {
+    auto *declarationStatement = new DeclarationStatement{{}, declaration};
     statements.emplace_back(declarationStatement);
 
     declarationStatement->rnd = 600;
 
     return declarationStatement;
+}
+
+DeclarationAndAssigmentStatement *
+StatementFactory::createDeclarationAndAssigmentStatement(
+    Declaration *variable, Expression *expression) {
+    auto *declarationAndAssigmentStatement =
+        new DeclarationAndAssigmentStatement({{{}, variable}, expression});
+    statements.emplace_back(declarationAndAssigmentStatement);
+
+    declarationAndAssigmentStatement->rnd = 60001;
+
+    return declarationAndAssigmentStatement;
 }
 
 AssigmentStatement *
@@ -59,18 +71,6 @@ StatementFactory::createAssigmentStatement(VariableDefintion *left,
     assigmentStatement->rnd = 601;
 
     return assigmentStatement;
-}
-
-DeclarationAndAssigmentStatement *
-StatementFactory::createDeclarationAndAssigmentStatement(VariableDefintion *var,
-                                                         Expression *exp) {
-    auto *declarationAndAssigmentStatement =
-        new DeclarationAndAssigmentStatement({{{}, var}, exp});
-    statements.emplace_back(declarationAndAssigmentStatement);
-
-    declarationAndAssigmentStatement->rnd = 60001;
-
-    return declarationAndAssigmentStatement;
 }
 
 ReturnStatement *StatementFactory::createReturnStatement(Expression *value) {

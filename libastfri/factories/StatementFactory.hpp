@@ -31,12 +31,14 @@ class StatementFactory {
     CompoundStatement *
     createCompoundStatement(std::vector<Statement *> statements);
     DeclarationStatement *
-    createDeclarationStatement(VariableDefintion *variable);
-    AssigmentStatement *createAssigmentStatement(VariableDefintion *left,
-                                                 Expression *right);
+    createDeclarationStatement(Declaration *declaration);
     DeclarationAndAssigmentStatement *
-    createDeclarationAndAssigmentStatement(VariableDefintion *var,
-                                           Expression *exp);
+    createDeclarationAndAssigmentStatement(Declaration *declaration,
+                                           Expression *expression);
+
+    // TOOD - zrejme vyradit a lebo bola  nahradena expression statementom
+    AssigmentStatement *createAssigmentStatement(VariableDefintion *declaration,
+                                                 Expression *expression);
     ReturnStatement *createReturnStatement(Expression *value);
 
     ExpressionStatement *createExpressionStatement(Expression *expression);
