@@ -4,7 +4,7 @@
 #include <vector>
 
 #include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Function.hpp>
+#include <libastfri/structures/Declaration.hpp>
 
 namespace libastfri::structures {
 /**

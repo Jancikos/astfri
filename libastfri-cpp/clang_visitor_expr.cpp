@@ -4,11 +4,11 @@
 
 #include <libastfri-cpp/clang_tools.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
-#include <libastfri/factories/FunctionFactory.hpp>
+#include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 #include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Function.hpp>
+#include <libastfri/structures/Declaration.hpp>
 
 namespace lsff = libastfri::factories;
 namespace lsfs = libastfri::structures;
@@ -25,7 +25,7 @@ lsfs::Expression *AstfriClangVisitor::getExpression(clang::Expr *Declaration) {
         throw std::runtime_error("Expr traversal failed");
         return nullptr; // prehliadka sa nepodarila
     }
-    auto *expression = popVisitedExpression<lsfs::Expression>();
+    auto *expression = Tools::popPointer<lsfs::Expression>(visitedExpression);
 
     if (expression != nullptr) {
         return expression; // ak sa nasiel expression, tak ho vrat
@@ -59,10 +59,10 @@ bool AstfriClangVisitor::VisitIntegerLiteral(
 }
 
 bool AstfriClangVisitor::VisitDeclRefExpr(clang::DeclRefExpr *Declaration) {
-    auto &funFac = lsff::FunctionFactory::getInstance();
+    auto &declFac = lsff::DeclarationFactory::getInstance();
     auto &refFac = lsff::ReferenceFactory::getInstance();
 
-    auto *var = funFac.createVariable(
+    auto *var = declFac.createVariable(
         Declaration->getNameInfo().getAsString(),
         Tools::convertType(Declaration->getType()), nullptr);
     visitedExpression = refFac.createVarRefExpression(var);
@@ -70,7 +70,7 @@ bool AstfriClangVisitor::VisitDeclRefExpr(clang::DeclRefExpr *Declaration) {
 }
 
 bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
-    auto &funFac = lsff::FunctionFactory::getInstance();
+    auto &declFac = lsff::DeclarationFactory::getInstance();
     auto &refFac = lsff::ReferenceFactory::getInstance();
     auto &exprFac = lsff::ExpressionFactory::getInstance();
 
@@ -81,6 +81,8 @@ bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
 
     auto *functionDecl = llvm::dyn_cast<clang::FunctionDecl>(
         Declaration->getCalleeDecl()->getAsFunction());
+
+    auto *functionDef = 
 
     visitedExpression = refFac.createFunctionCallExpression(
         functionDecl->getNameInfo().getAsString(), args);

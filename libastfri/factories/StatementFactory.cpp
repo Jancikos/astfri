@@ -1,5 +1,5 @@
 #include <libastfri/factories/StatementFactory.hpp>
-#include <libastfri/structures/Function.hpp>
+#include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Statement.hpp>
 
 namespace libastfri::factories {

@@ -11,10 +11,12 @@
 
 #include <libastfri-cpp/clang_tools.hpp>
 #include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Function.hpp>
+#include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Statement.hpp>
 #include <libastfri/structures/Type.hpp>
 
+
+namespace lsfs = libastfri::structures;
 namespace libastfri::cpp {
 class AstfriClangVisitor
     : public clang::RecursiveASTVisitor<AstfriClangVisitor> {
@@ -23,50 +25,75 @@ class AstfriClangVisitor
   public:
     // clang_visitor.cpp
     AstfriClangVisitor(
-        libastfri::structures::TranslationUnit &visitedTranslationUnit);
-    bool VisitTranslationUnitDecl(clang::TranslationUnitDecl *Declaration);
-    bool VisitFunctionDecl(clang::FunctionDecl *Declaration);
-    bool VisitVarDecl(clang::VarDecl *Declaration);
-    bool VisitParmVarDecl(clang::ParmVarDecl *Declaration);
+        lsfs::TranslationUnit &visitedTranslationUnit);
+
+    // clang_visitor.cpp
+    lsfs::Declaration *getDeclaration(clang::Decl *Decl);
+    bool VisitTranslationUnitDecl(clang::TranslationUnitDecl *Decl);
+    bool VisitFunctionDecl(clang::FunctionDecl *Decl);
+    bool VisitVarDecl(clang::VarDecl *Decl);
+    bool VisitParmVarDecl(clang::ParmVarDecl *Decl);
 
     // clang_visitor_stmt.cpp
-    structures::Statement *getStatement(clang::Stmt *Declaration);
-    bool VisitStmt(clang::Stmt *Declaration);
-    bool VisitCompoundStmt(clang::CompoundStmt *Declaration);
-    bool VisitReturnStmt(clang::ReturnStmt *Declaration);
-    bool VisitIfStmt(clang::IfStmt *Declaration);
-    bool VisitWhileStmt(clang::WhileStmt *Declaration);
+    lsfs::Statement *getStatement(clang::Stmt *Stmt);
+    bool VisitStmt(clang::Stmt *Stmt);
+    bool VisitCompoundStmt(clang::CompoundStmt *Stmt);
+    bool VisitReturnStmt(clang::ReturnStmt *Stmt);
+    bool VisitIfStmt(clang::IfStmt *Stmt);
+    bool VisitWhileStmt(clang::WhileStmt *Stmt);
 
     // clang_visitor_expr.cpp
-    structures::Expression *getExpression(clang::Expr *Declaration);
-    bool VisitExpr(clang::Expr *Declaration);
-    bool VisitBinaryOperator(clang::BinaryOperator *Declaration);
-    bool VisitIntegerLiteral(clang::IntegerLiteral *Declaration);
-    bool VisitDeclRefExpr(clang::DeclRefExpr *Declaration);
-    bool VisitCallExpr(clang::CallExpr *Declaration);
+    lsfs::Expression *getExpression(clang::Expr *Expr);
+    bool VisitExpr(clang::Expr *Expr);
+    bool VisitBinaryOperator(clang::BinaryOperator *Expr);
+    bool VisitIntegerLiteral(clang::IntegerLiteral *Expr);
+    bool VisitDeclRefExpr(clang::DeclRefExpr *Expr);
+    bool VisitCallExpr(clang::CallExpr *Expr);
 
-    libastfri::structures::TranslationUnit *visitedTranslationUnit;
-
+    lsfs::TranslationUnit *visitedTranslationUnit;
   private:
-    libastfri::structures::Statement *visitedStatement;
-    libastfri::structures::Expression *visitedExpression;
-    libastfri::structures::BaseVariableDefintion *visitedVariable;
-    libastfri::structures::FunctionDefinition *visitedFunction;
+    lsfs::Declaration *visitedDeclaration;
+    lsfs::Statement *visitedStatement;
+    lsfs::Expression *visitedExpression;
+
+    // temaplate methods
+
+    template <typename T> T *popVisitedDeclaration() {
+        return Tools::popPointer<T>(visitedDeclaration);
+    }
+    template<typename T> T *getDeclaration(clang::Decl *Decl) {
+        auto* declaration = getDeclaration(Decl);
+        if (declaration == nullptr) {
+            return nullptr;
+        }
+
+        // TOOD - preco tu nemoze byt dynamic_cast?
+        // return dynamic_cast<T*>(declaration);
+        return static_cast<T*>(declaration);
+    }
 
     template <typename T> T *popVisitedStatement() {
         return Tools::popPointer<T>(visitedStatement);
+    }
+    template <typename T> T *getStatement(clang::Stmt *Stmt) {
+        auto* statement = getStatement(Stmt);
+        if (statement == nullptr) {
+            return nullptr;
+        }
+
+        return static_cast<T*>(statement);
     }
 
     template <typename T> T *popVisitedExpression() {
         return Tools::popPointer<T>(visitedExpression);
     }
+    template <typename T> T *getExpression(clang::Expr *Expr) {
+        auto* expression = getExpression(Expr);
+        if (expression == nullptr) {
+            return nullptr;
+        }
 
-    template <typename T> T *popVisitedVariable() {
-        return Tools::popPointer<T>(visitedVariable);
-    }
-
-    template <typename T> T *popVisitedFunction() {
-        return Tools::popPointer<T>(visitedFunction);
+        return static_cast<T*>(expression);
     }
 };
 } // namespace libastfri::cpp

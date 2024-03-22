@@ -10,7 +10,7 @@
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 #include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Function.hpp>
+#include <libastfri/structures/Declaration.hpp>
 
 namespace libastfri::cpp {
 Type *AstfriClangTools::convertType(clang::QualType qt) {

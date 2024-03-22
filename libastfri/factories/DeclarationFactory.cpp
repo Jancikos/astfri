@@ -1,44 +1,45 @@
-#include "FunctionFactory.hpp"
-#include "libastfri/structures/Function.hpp"
+#include <libastfri/factories/DeclarationFactory.hpp>
+#include <libastfri/structures/Declaration.hpp>
 
 namespace libastfri::factories {
-FunctionFactory &FunctionFactory::getInstance() {
-    static FunctionFactory instance;
+DeclarationFactory &DeclarationFactory::getInstance() {
+    static DeclarationFactory instance;
 
     return instance;
 }
 
-FunctionFactory::FunctionFactory() {}
+DeclarationFactory::DeclarationFactory() {}
 
-FunctionFactory::~FunctionFactory() {
+DeclarationFactory::~DeclarationFactory() {
     for (auto *variable : variables) {
         delete variable;
     }
     variables.clear();
 }
 
-VariableDefintion *FunctionFactory::createVariable(std::string name, Type *type,
+VariableDefintion *DeclarationFactory::createVariable(std::string name, Type *type,
                                                    Expression *value) {
-    auto *variable = new VariableDefintion{{name, type, value}};
+    auto *variable = new VariableDefintion{{{}, name, type, value}};
     variables.emplace_back(variable);
 
     return variable;
 }
 
-ParameterDefinition *FunctionFactory::createParameter(std::string name,
+ParameterDefinition *DeclarationFactory::createParameter(std::string name,
                                                       Type *type,
                                                       Expression *value) {
-    auto *parameter = new ParameterDefinition{{name, type, value}};
+    auto *parameter = new ParameterDefinition{{{}, name, type, value}};
     variables.emplace_back(parameter);
 
     return parameter;
 }
 
 FunctionDefinition *
-FunctionFactory::createFunction(std::string name,
+DeclarationFactory::createFunction(std::string name,
                                 std::vector<ParameterDefinition *> parameters,
                                 CompoundStatement *body, Type *returnType) {
-    auto *function = new FunctionDefinition{name, parameters, body, returnType};
+    auto *function =
+        new FunctionDefinition{{}, name, parameters, body, returnType};
     functions.emplace_back(function);
 
     return function;

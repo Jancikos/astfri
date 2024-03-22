@@ -8,9 +8,11 @@ struct Type;
 struct Expression;
 struct CompoundStatement;
 
+struct Declaration {};
+
 // zaklad, ktory sa pouziva pri definiciach premennych, parametrov, atributov,
 // atd.
-struct BaseVariableDefintion {
+struct BaseVariableDefintion : Declaration {
     std::string name;
     Type *type;
     Expression *value;
@@ -23,7 +25,7 @@ struct VariableDefintion : BaseVariableDefintion {};
 struct ParameterDefinition : BaseVariableDefintion {};
 
 // funkcia
-struct FunctionDefinition {
+struct FunctionDefinition : Declaration {
     std::string name;
     std::vector<ParameterDefinition *> parameters;
     CompoundStatement *body;

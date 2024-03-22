@@ -1,23 +1,23 @@
 #pragma once
 
-#include "libastfri/factories/ExpressionFactory.hpp"
+#include <libastfri/factories/ExpressionFactory.hpp>
 #include <string>
 
-#include <libastfri/structures/Function.hpp>
+#include <libastfri/structures/Declaration.hpp>
 
 using namespace libastfri::structures;
 
 namespace libastfri::factories {
-class FunctionFactory {
+class DeclarationFactory {
   public:
-    static FunctionFactory &getInstance();
+    static DeclarationFactory &getInstance();
 
   private:
     UsedList<BaseVariableDefintion *> variables;
     UsedList<FunctionDefinition *> functions;
 
-    FunctionFactory();
-    ~FunctionFactory();
+    DeclarationFactory();
+    ~DeclarationFactory();
 
   public:
     VariableDefintion *createVariable(std::string name, Type *type,
@@ -30,7 +30,7 @@ class FunctionFactory {
                    std::vector<ParameterDefinition *> parameters,
                    CompoundStatement *body, Type *returnType);
 
-    FunctionFactory(FunctionFactory const &) = delete;
-    void operator=(FunctionFactory const &) = delete;
+    DeclarationFactory(DeclarationFactory const &) = delete;
+    void operator=(DeclarationFactory const &) = delete;
 };
 } // namespace libastfri::factories

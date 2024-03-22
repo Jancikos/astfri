@@ -2,11 +2,11 @@
 #include <libastfri-cpp/clang_visitor.hpp>
 
 #include <libastfri/factories/ExpressionFactory.hpp>
-#include <libastfri/factories/FunctionFactory.hpp>
+#include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 #include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Function.hpp>
+#include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Statement.hpp>
 
 namespace lsff = libastfri::factories;
@@ -29,7 +29,7 @@ lsfs::Statement *AstfriClangVisitor::getStatement(clang::Stmt *Declaration) {
         throw std::runtime_error("Stmt traversal failed");
         return nullptr; // prehliadka sa nepodarila
     }
-    auto *statement = popVisitedStatement<lsfs::Statement>();
+    auto *statement = Tools::popPointer<lsfs::Statement>(visitedStatement);
 
     if (statement != nullptr) {
         return statement; // ak sa nasiel statement, tak ho vrat
@@ -74,7 +74,7 @@ bool AstfriClangVisitor::VisitReturnStmt(clang::ReturnStmt *Declaration) {
 
 bool AstfriClangVisitor::VisitIfStmt(clang::IfStmt *Declaration) {
     auto &statementFac = lsff::StatementFactory::getInstance();
-    auto &funFac = lsff::FunctionFactory::getInstance();
+    auto &declFac = lsff::DeclarationFactory::getInstance();
 
     auto *thenStmt = getStatement(Declaration->getThen());
 
@@ -89,7 +89,7 @@ bool AstfriClangVisitor::VisitIfStmt(clang::IfStmt *Declaration) {
 
 bool AstfriClangVisitor::VisitWhileStmt(clang::WhileStmt *Declaration) {
     auto &statementFac = lsff::StatementFactory::getInstance();
-    auto &funFac = lsff::FunctionFactory::getInstance();
+    auto &declFac = lsff::DeclarationFactory::getInstance();
 
     auto *body = getStatement(Declaration->getBody());
 

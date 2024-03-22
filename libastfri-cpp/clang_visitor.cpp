@@ -3,11 +3,11 @@
 
 #include <libastfri-cpp/clang_tools.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
-#include <libastfri/factories/FunctionFactory.hpp>
+#include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
+#include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Expression.hpp>
-#include <libastfri/structures/Function.hpp>
 #include <libastfri/structures/Statement.hpp>
 
 namespace lsff = libastfri::factories;
@@ -17,16 +17,36 @@ namespace libastfri::cpp {
 AstfriClangVisitor::AstfriClangVisitor(
     lsfs::TranslationUnit &visitedTranslationUnit)
     : visitedTranslationUnit(&visitedTranslationUnit),
-      visitedExpression(nullptr), visitedStatement(nullptr),
-      visitedVariable(nullptr), visitedFunction(nullptr) {}
+      visitedDeclaration(nullptr), visitedExpression(nullptr),
+      visitedStatement(nullptr) {}
+
+lsfs::Declaration *AstfriClangVisitor::getDeclaration(clang::Decl *Decl) {
+    // skontroluj pociatocny stav
+    assert(visitedDeclaration == nullptr);
+
+    auto traversalFailed = TraverseDecl(Decl);
+    if (traversalFailed) {
+        throw std::runtime_error("Decl traversal failed");
+        return nullptr; // prehliadka sa nepodarila
+    }
+
+    auto *declaration =
+        Tools::popPointer<lsfs::Declaration>(visitedDeclaration);
+    if (declaration != nullptr) {
+        return declaration; // ak sa nasiel declaration, tak ho vrat
+    }
+
+    throw std::runtime_error("No declaration found");
+    return nullptr; // nezachytili sme ziadny declaration
+}
 
 bool AstfriClangVisitor::VisitTranslationUnitDecl(
     clang::TranslationUnitDecl *Declaration) {
 
     for (auto *decl : Declaration->decls()) {
         if (auto *funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl)) {
-            VisitFunctionDecl(funDecl);
-            // visitedTranslationUnit->functions.push_back(visitedFunction);
+            visitedTranslationUnit->functions.push_back(
+                getDeclaration<lsfs::FunctionDefinition>(funDecl));
         }
     }
 
@@ -38,7 +58,7 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
     // being visited.
     Declaration->dump();
 
-    auto &funFac = lsff::FunctionFactory::getInstance();
+    auto &declFac = lsff::DeclarationFactory::getInstance();
     auto &literalFac = lsff::LiteralFactory::getInstance();
     auto &statementFac = lsff::StatementFactory::getInstance();
 
@@ -50,30 +70,24 @@ bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
 
     // params
     std::vector<lsfs::ParameterDefinition *> params;
-    for (auto param : Declaration->parameters()) {
-        // param->dump();
-
-        VisitParmVarDecl(param);
-        params.emplace_back(popVisitedVariable<lsfs::ParameterDefinition>());
+    for (auto paramDecl : Declaration->parameters()) {
+        VisitParmVarDecl(paramDecl); // nemozem volat TRaverseDecl, lebo to odchyti VisitVarDecl
+        params.push_back(popVisitedDeclaration<lsfs::ParameterDefinition>());
     }
 
     // body
-    VisitCompoundStmt(
-        llvm::dyn_cast<clang::CompoundStmt>(Declaration->getBody()));
-    auto *body = popVisitedStatement<lsfs::CompoundStatement>();
+    auto *body = getStatement<lsfs::CompoundStatement>(Declaration->getBody());
 
-    visitedTranslationUnit->functions.push_back(
-        funFac.createFunction(title, params, body, returnType));
-    //   visitedFunction = visitedTranslationUnit->functions.back();
-
+    visitedDeclaration = declFac.createFunction(title, params, body, returnType);
     return false;
 }
 
+// TOOD - premysliet, ci je spravne ze sa tu vytvara statement
 bool AstfriClangVisitor::VisitVarDecl(clang::VarDecl *Declaration) {
-    auto &funFac = lsff::FunctionFactory::getInstance();
+    auto &declFac = lsff::DeclarationFactory::getInstance();
     auto &statementFac = lsff::StatementFactory::getInstance();
 
-    auto *var = funFac.createVariable(
+    auto *var = declFac.createVariable(
         Declaration->getNameAsString(),
         Tools::convertType(Declaration->getType()), nullptr);
 
@@ -89,14 +103,14 @@ bool AstfriClangVisitor::VisitVarDecl(clang::VarDecl *Declaration) {
 }
 
 bool AstfriClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Declaration) {
-    auto &funFac = lsff::FunctionFactory::getInstance();
+    auto &declFac = lsff::DeclarationFactory::getInstance();
 
     lsfs::Expression *defValue = nullptr;
     if (Declaration->hasDefaultArg()) {
         defValue = getExpression(Declaration->getDefaultArg());
     }
 
-    visitedVariable = funFac.createParameter(
+    visitedDeclaration = declFac.createParameter(
         Declaration->getNameAsString(),
         Tools::convertType(Declaration->getType()), defValue);
 

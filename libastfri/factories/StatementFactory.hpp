@@ -1,6 +1,6 @@
 #pragma once
 
-#include "libastfri/structures/Function.hpp"
+#include <libastfri/structures/Declaration.hpp>
 
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/structures/Statement.hpp>

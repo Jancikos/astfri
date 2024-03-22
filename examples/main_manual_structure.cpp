@@ -2,7 +2,7 @@
 #include <libastfri/structures/Statement.hpp>
 
 #include <libastfri/factories/ExpressionFactory.hpp>
-#include <libastfri/factories/FunctionFactory.hpp>
+#include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 
@@ -19,14 +19,14 @@ int main() {
     auto &statementFac = StatementFactory::getInstance();
     auto &expressionFac = ExpressionFactory::getInstance();
     auto &referenceFac = ReferenceFactory::getInstance();
-    auto &functionFac = FunctionFactory::getInstance();
+    auto &declarationFac = DeclarationFactory::getInstance();
 
     // int simpleAddition(int a, int b)
     std::vector<ParameterDefinition *> paramsSimpleAddition;
     paramsSimpleAddition.push_back(
-        functionFac.createParameter("a", typeFac.getIntType()));
+        declarationFac.createParameter("a", typeFac.getIntType()));
     paramsSimpleAddition.push_back(
-        functionFac.createParameter("b", typeFac.getIntType()));
+        declarationFac.createParameter("b", typeFac.getIntType()));
 
     auto bodySimpleAddition = statementFac.createCompoundStatement(
         {statementFac.createReturnStatement(
@@ -38,18 +38,18 @@ int main() {
     auto retTypeSimpleAddition = typeFac.getIntType();
 
     auto functionSimpleAddition =
-        functionFac.createFunction("simpleAddition", paramsSimpleAddition,
+        declarationFac.createFunction("simpleAddition", paramsSimpleAddition,
                                    bodySimpleAddition, retTypeSimpleAddition);
 
     // int brutalAddition(int a, int b)
     std::vector<ParameterDefinition *> params;
-    params.push_back(functionFac.createParameter("a", typeFac.getIntType()));
-    params.push_back(functionFac.createParameter("b", typeFac.getIntType()));
-    auto variableC = functionFac.createVariable("c", typeFac.getIntType());
+    params.push_back(declarationFac.createParameter("a", typeFac.getIntType()));
+    params.push_back(declarationFac.createParameter("b", typeFac.getIntType()));
+    auto variableC = declarationFac.createVariable("c", typeFac.getIntType());
     auto variableRepMultiplier =
-        functionFac.createVariable("repMultiplier", typeFac.getIntType());
+        declarationFac.createVariable("repMultiplier", typeFac.getIntType());
     auto variableRepCount =
-        functionFac.createVariable("repCount", typeFac.getIntType());
+        declarationFac.createVariable("repCount", typeFac.getIntType());
 
     auto body = statementFac.createCompoundStatement(
         {statementFac.createDeclarationAndAssigmentStatement(
@@ -99,7 +99,7 @@ int main() {
     auto retType = typeFac.getIntType();
 
     auto functionBrutalAddition =
-        functionFac.createFunction("brutalAddition", params, body, retType);
+        declarationFac.createFunction("brutalAddition", params, body, retType);
 
     return 0;
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "libastfri/structures/Function.hpp"
+#include <libastfri/structures/Declaration.hpp>
 #include <string>
 
 namespace libastfri::structures {

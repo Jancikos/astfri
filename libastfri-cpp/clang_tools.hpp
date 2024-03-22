@@ -1,7 +1,7 @@
 #pragma once
 
 #include "libastfri/structures/Expression.hpp"
-#include "libastfri/structures/Function.hpp"
+#include <libastfri/structures/Declaration.hpp>
 #include <clang/AST/ASTConsumer.h>
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/Decl.h>
