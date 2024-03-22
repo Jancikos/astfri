@@ -1,6 +1,5 @@
 
-int simpleAddition(int a, int b=0)
-{
+int simpleAddition(int a, int b = 0) {
     int c;
 
     c = 2;
@@ -15,8 +14,7 @@ int simpleAddition(int a, int b=0)
     return a + b;
 }
 
-int simpliestAddition2(int a, int b)
-{
+int simpliestAddition2(int a, int b) {
     int repMultiplier = 1;
 
     if (a < 0) {
@@ -31,8 +29,4 @@ int simpliestAddition2(int a, int b)
     return simpliestAddition2(a, b);
 }
 
-
-int simpliestAddition(int o)
-{
-    return o + o;
-}
+int simpliestAddition(int o) { return o + o; }

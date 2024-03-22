@@ -15,21 +15,21 @@
 
 namespace libastfri::cpp {
 class AstfriClangTools {
-public:
-  static libastfri::structures::Type *convertType(clang::QualType qt);
-  static libastfri::structures::BinaryOperators
-  convertBinaryOperator(clang::BinaryOperator::Opcode op);
-  static libastfri::structures::UnaryOperators
-  convertUnaryOperator(clang::UnaryOperator::Opcode op);
+  public:
+    static libastfri::structures::Type *convertType(clang::QualType qt);
+    static libastfri::structures::BinaryOperators
+    convertBinaryOperator(clang::BinaryOperator::Opcode op);
+    static libastfri::structures::UnaryOperators
+    convertUnaryOperator(clang::UnaryOperator::Opcode op);
 
-  template <typename T, typename P> static T *popPointer(P *&pointer)  {
-  T *result = static_cast<T *>(pointer);
-  pointer = nullptr;
-  return result;
-}
+    template <typename T, typename P> static T *popPointer(P *&pointer) {
+        T *result = static_cast<T *>(pointer);
+        pointer = nullptr;
+        return result;
+    }
 
-  static void BeginClangTreeVisit(
-      std::string pathToCode,
-      libastfri::structures::TranslationUnit &visitedTranslationUnit);
+    static void BeginClangTreeVisit(
+        std::string pathToCode,
+        libastfri::structures::TranslationUnit &visitedTranslationUnit);
 };
 } // namespace libastfri::cpp

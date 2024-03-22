@@ -14,107 +14,110 @@ using namespace libastfri::factories;
  * reprezentovanie kodu funcki na konci suboru
  */
 int main() {
-  auto &typeFac = TypeFactory::getInstance();
-  auto &literalFac = LiteralFactory::getInstance();
-  auto &statementFac = StatementFactory::getInstance();
-  auto &expressionFac = ExpressionFactory::getInstance();
-  auto &referenceFac = ReferenceFactory::getInstance();
-  auto &functionFac = FunctionFactory::getInstance();
+    auto &typeFac = TypeFactory::getInstance();
+    auto &literalFac = LiteralFactory::getInstance();
+    auto &statementFac = StatementFactory::getInstance();
+    auto &expressionFac = ExpressionFactory::getInstance();
+    auto &referenceFac = ReferenceFactory::getInstance();
+    auto &functionFac = FunctionFactory::getInstance();
 
-  // int simpleAddition(int a, int b)
-  std::vector<ParameterDefinition *> paramsSimpleAddition;
-  paramsSimpleAddition.push_back(
-      functionFac.createParameter("a", typeFac.getIntType()));
-  paramsSimpleAddition.push_back(
-      functionFac.createParameter("b", typeFac.getIntType()));
+    // int simpleAddition(int a, int b)
+    std::vector<ParameterDefinition *> paramsSimpleAddition;
+    paramsSimpleAddition.push_back(
+        functionFac.createParameter("a", typeFac.getIntType()));
+    paramsSimpleAddition.push_back(
+        functionFac.createParameter("b", typeFac.getIntType()));
 
-  auto bodySimpleAddition = statementFac.createCompoundStatement(
-      {statementFac.createReturnStatement(expressionFac.createBinaryExpression(
-          BinaryOperators::Add,
-          referenceFac.createParamRefExpression(paramsSimpleAddition[0]),
-          referenceFac.createParamRefExpression(paramsSimpleAddition[1])))});
-  auto retTypeSimpleAddition = typeFac.getIntType();
+    auto bodySimpleAddition = statementFac.createCompoundStatement(
+        {statementFac.createReturnStatement(
+            expressionFac.createBinaryExpression(
+                BinaryOperators::Add,
+                referenceFac.createParamRefExpression(paramsSimpleAddition[0]),
+                referenceFac.createParamRefExpression(
+                    paramsSimpleAddition[1])))});
+    auto retTypeSimpleAddition = typeFac.getIntType();
 
-  auto functionSimpleAddition =
-      functionFac.createFunction("simpleAddition", paramsSimpleAddition,
-                                 bodySimpleAddition, retTypeSimpleAddition);
+    auto functionSimpleAddition =
+        functionFac.createFunction("simpleAddition", paramsSimpleAddition,
+                                   bodySimpleAddition, retTypeSimpleAddition);
 
-  // int brutalAddition(int a, int b)
-  std::vector<ParameterDefinition *> params;
-  params.push_back(functionFac.createParameter("a", typeFac.getIntType()));
-  params.push_back(functionFac.createParameter("b", typeFac.getIntType()));
-  auto variableC = functionFac.createVariable("c", typeFac.getIntType());
-  auto variableRepMultiplier =
-      functionFac.createVariable("repMultiplier", typeFac.getIntType());
-  auto variableRepCount =
-      functionFac.createVariable("repCount", typeFac.getIntType());
+    // int brutalAddition(int a, int b)
+    std::vector<ParameterDefinition *> params;
+    params.push_back(functionFac.createParameter("a", typeFac.getIntType()));
+    params.push_back(functionFac.createParameter("b", typeFac.getIntType()));
+    auto variableC = functionFac.createVariable("c", typeFac.getIntType());
+    auto variableRepMultiplier =
+        functionFac.createVariable("repMultiplier", typeFac.getIntType());
+    auto variableRepCount =
+        functionFac.createVariable("repCount", typeFac.getIntType());
 
-  auto body = statementFac.createCompoundStatement(
-      {statementFac.createDeclarationAndAssigmentStatement(
-           variableC, expressionFac.createBinaryExpression(
-                          BinaryOperators::Add,
-                          referenceFac.createParamRefExpression(params[0]),
-                          referenceFac.createParamRefExpression(params[1]))),
-       statementFac.createDeclarationAndAssigmentStatement(
-           variableRepMultiplier, literalFac.getIntLiteral(1)),
-       statementFac.createIfConditionalStatement(
-           expressionFac.createBinaryExpression(
-               BinaryOperators::Less,
-               referenceFac.createVarRefExpression(variableC),
-               literalFac.getIntLiteral(0)),
-           statementFac.createCompoundStatement(
-               {statementFac.createAssigmentStatement(
-                   variableRepMultiplier, literalFac.getIntLiteral(-1))})),
-       statementFac.createDeclarationAndAssigmentStatement(
-           variableRepCount, literalFac.getIntLiteral(0)),
-       statementFac.createWhileLoopStatement(
-           expressionFac.createBinaryExpression(
-               BinaryOperators::Less,
-               expressionFac.createBinaryExpression(
-                   BinaryOperators::Add,
-                   referenceFac.createVarRefExpression(variableC),
-                   referenceFac.createVarRefExpression(variableRepCount)),
-               literalFac.getIntLiteral(0)),
-           statementFac.createCompoundStatement(
-               {statementFac.createAssigmentStatement(
-                   variableRepCount,
-                   expressionFac.createBinaryExpression(
-                       BinaryOperators::Add,
-                       referenceFac.createVarRefExpression(variableRepCount),
-                       referenceFac.createVarRefExpression(
-                           variableRepMultiplier)))})),
-       statementFac.createExpressionStatement(referenceFac.createFunctionCallExpression(
-           functionSimpleAddition->name,
-           {referenceFac.createParamRefExpression(params[0]),
-            referenceFac.createParamRefExpression(params[1])})),
-       statementFac.createReturnStatement(
-           referenceFac.createFunctionCallExpression(
-               functionSimpleAddition->name,
-               {referenceFac.createParamRefExpression(params[0]),
-                referenceFac.createParamRefExpression(params[1])}))});
+    auto body = statementFac.createCompoundStatement(
+        {statementFac.createDeclarationAndAssigmentStatement(
+             variableC, expressionFac.createBinaryExpression(
+                            BinaryOperators::Add,
+                            referenceFac.createParamRefExpression(params[0]),
+                            referenceFac.createParamRefExpression(params[1]))),
+         statementFac.createDeclarationAndAssigmentStatement(
+             variableRepMultiplier, literalFac.getIntLiteral(1)),
+         statementFac.createIfConditionalStatement(
+             expressionFac.createBinaryExpression(
+                 BinaryOperators::Less,
+                 referenceFac.createVarRefExpression(variableC),
+                 literalFac.getIntLiteral(0)),
+             statementFac.createCompoundStatement(
+                 {statementFac.createAssigmentStatement(
+                     variableRepMultiplier, literalFac.getIntLiteral(-1))})),
+         statementFac.createDeclarationAndAssigmentStatement(
+             variableRepCount, literalFac.getIntLiteral(0)),
+         statementFac.createWhileLoopStatement(
+             expressionFac.createBinaryExpression(
+                 BinaryOperators::Less,
+                 expressionFac.createBinaryExpression(
+                     BinaryOperators::Add,
+                     referenceFac.createVarRefExpression(variableC),
+                     referenceFac.createVarRefExpression(variableRepCount)),
+                 literalFac.getIntLiteral(0)),
+             statementFac.createCompoundStatement(
+                 {statementFac.createAssigmentStatement(
+                     variableRepCount,
+                     expressionFac.createBinaryExpression(
+                         BinaryOperators::Add,
+                         referenceFac.createVarRefExpression(variableRepCount),
+                         referenceFac.createVarRefExpression(
+                             variableRepMultiplier)))})),
+         statementFac.createExpressionStatement(
+             referenceFac.createFunctionCallExpression(
+                 functionSimpleAddition->name,
+                 {referenceFac.createParamRefExpression(params[0]),
+                  referenceFac.createParamRefExpression(params[1])})),
+         statementFac.createReturnStatement(
+             referenceFac.createFunctionCallExpression(
+                 functionSimpleAddition->name,
+                 {referenceFac.createParamRefExpression(params[0]),
+                  referenceFac.createParamRefExpression(params[1])}))});
 
-  auto retType = typeFac.getIntType();
+    auto retType = typeFac.getIntType();
 
-  auto functionBrutalAddition =
-      functionFac.createFunction("brutalAddition", params, body, retType);
+    auto functionBrutalAddition =
+        functionFac.createFunction("brutalAddition", params, body, retType);
 
-  return 0;
+    return 0;
 }
 
 int simpleAddition(int a, int b) { return a + b; }
 
 int brutalAddition(int a, int b) {
-  int c = a + b;
-  int repMultiplier = 1;
+    int c = a + b;
+    int repMultiplier = 1;
 
-  if (c < 0) {
-    repMultiplier = -1;
-  }
+    if (c < 0) {
+        repMultiplier = -1;
+    }
 
-  int repCount = 0;
-  while (c + repCount < 0) {
-    repCount += repMultiplier;
-  }
+    int repCount = 0;
+    while (c + repCount < 0) {
+        repCount += repMultiplier;
+    }
 
-  return simpleAddition(a, b);
+    return simpleAddition(a, b);
 }

@@ -9,14 +9,14 @@ AstfriClangConsumer::AstfriClangConsumer(
     : context(&context), visitedTranslationUnit(&visitedTranslationUnit) {}
 
 void AstfriClangConsumer::HandleTranslationUnit(clang::ASTContext &p_context) {
-  AstfriClangVisitor visitor(*visitedTranslationUnit);
+    AstfriClangVisitor visitor(*visitedTranslationUnit);
 
-  visitor.TraverseDecl(p_context.getTranslationUnitDecl());
+    visitor.TraverseDecl(p_context.getTranslationUnitDecl());
 
-  // todo - ako to spravit nejako takto
-  //   visitedTranslationUnit = &*visitor.visitedTranslationUnit;
+    // todo - ako to spravit nejako takto
+    //   visitedTranslationUnit = &*visitor.visitedTranslationUnit;
 
-//   visitedTranslationUnit->functions =
+    //   visitedTranslationUnit->functions =
     //   std::move(visitor.visitedTranslationUnit->functions);
 }
 
@@ -27,7 +27,7 @@ AstfriClangTraverseAction::AstfriClangTraverseAction(
 std::unique_ptr<clang::ASTConsumer>
 AstfriClangTraverseAction::CreateASTConsumer(clang::CompilerInstance &compiler,
                                              llvm::StringRef) {
-  return std::make_unique<AstfriClangConsumer>(compiler.getASTContext(),
-                                               *visitedTranslationUnit);
+    return std::make_unique<AstfriClangConsumer>(compiler.getASTContext(),
+                                                 *visitedTranslationUnit);
 }
 } // namespace libastfri::cpp

@@ -8,26 +8,29 @@
 using namespace libastfri::structures;
 
 namespace libastfri::factories {
-    class FunctionFactory
-    {
-        public:
-            static FunctionFactory& getInstance();
+class FunctionFactory {
+  public:
+    static FunctionFactory &getInstance();
 
-        private:
-            UsedList<BaseVariableDefintion*> variables;
-            UsedList<FunctionDefinition*> functions;
+  private:
+    UsedList<BaseVariableDefintion *> variables;
+    UsedList<FunctionDefinition *> functions;
 
-            FunctionFactory ();
-            ~FunctionFactory ();
-        public:
-            VariableDefintion* createVariable (std::string name, Type* type, Expression* value=nullptr);
-            ParameterDefinition* createParameter (std::string name, Type* type, Expression* value=nullptr);
+    FunctionFactory();
+    ~FunctionFactory();
 
-            FunctionDefinition* createFunction (std::string name, std::vector<ParameterDefinition*> parameters, CompoundStatement* body, Type* returnType);
+  public:
+    VariableDefintion *createVariable(std::string name, Type *type,
+                                      Expression *value = nullptr);
+    ParameterDefinition *createParameter(std::string name, Type *type,
+                                         Expression *value = nullptr);
 
+    FunctionDefinition *
+    createFunction(std::string name,
+                   std::vector<ParameterDefinition *> parameters,
+                   CompoundStatement *body, Type *returnType);
 
-            FunctionFactory(FunctionFactory const&) = delete;
-            void operator=(FunctionFactory const&) = delete;
-    };
-}
-
+    FunctionFactory(FunctionFactory const &) = delete;
+    void operator=(FunctionFactory const &) = delete;
+};
+} // namespace libastfri::factories

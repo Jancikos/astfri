@@ -14,23 +14,23 @@
 
 namespace libastfri::cpp {
 class AstfriClangConsumer : public clang::ASTConsumer {
-public:
-  clang::ASTContext *context;
-  libastfri::structures::TranslationUnit *visitedTranslationUnit;
+  public:
+    clang::ASTContext *context;
+    libastfri::structures::TranslationUnit *visitedTranslationUnit;
 
-  AstfriClangConsumer(
-      clang::ASTContext &context,
-      libastfri::structures::TranslationUnit &visitedTranslationUnit);
-  void HandleTranslationUnit(clang::ASTContext &p_context);
+    AstfriClangConsumer(
+        clang::ASTContext &context,
+        libastfri::structures::TranslationUnit &visitedTranslationUnit);
+    void HandleTranslationUnit(clang::ASTContext &p_context);
 };
 
 class AstfriClangTraverseAction : public clang::ASTFrontendAction {
-  using TUnit = libastfri::structures::TranslationUnit;
-  TUnit *visitedTranslationUnit;
+    using TUnit = libastfri::structures::TranslationUnit;
+    TUnit *visitedTranslationUnit;
 
-public:
-  AstfriClangTraverseAction(TUnit &visitedTranslationUnit);
-  std::unique_ptr<clang::ASTConsumer>
-  CreateASTConsumer(clang::CompilerInstance &compiler, llvm::StringRef);
+  public:
+    AstfriClangTraverseAction(TUnit &visitedTranslationUnit);
+    std::unique_ptr<clang::ASTConsumer>
+    CreateASTConsumer(clang::CompilerInstance &compiler, llvm::StringRef);
 };
 } // namespace libastfri::cpp
