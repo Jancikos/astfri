@@ -13,12 +13,15 @@ namespace libastfri::structures {
  */
 struct TranslationUnit {
     std::vector<FunctionDefinition *> functions;
+
+    TranslationUnit(std::vector<FunctionDefinition *> functions = {});
 };
 
 // "riadok" v kode
 struct Statement {
     int rnd; // TODO vymazat - teraz IBA PRE TRAPNY DEBUGGING
 
+    // potom presunut do .cpp
     Statement() {
         static int rnd = 0;
         this->rnd = rnd++;
@@ -32,6 +35,8 @@ struct Statement {
 struct CompoundStatement : Statement {
     std::vector<Statement *> statements;
 
+    CompoundStatement(std::vector<Statement *> statements = {});
+
     std::string toString() const {
         std::string result;
         for (const auto &statement : statements) {
@@ -44,6 +49,8 @@ struct CompoundStatement : Statement {
 struct DeclarationStatement : Statement {
     Declaration *declaration;
 
+    DeclarationStatement(Declaration *declaration);
+
     std::string toString() const {
         // Implement the toString() function for DeclarationStatement
         std::string result = "DeclarationStatement: ";
@@ -53,7 +60,9 @@ struct DeclarationStatement : Statement {
 };
 
 struct DeclarationAndAssigmentStatement : DeclarationStatement {
-    Expression *exp;
+    Expression *expression;
+
+    DeclarationAndAssigmentStatement(Declaration *declaration, Expression *expression);
 
     std::string toString() const {
         // Implement the toString() function for
@@ -69,6 +78,8 @@ struct DeclarationAndAssigmentStatement : DeclarationStatement {
 struct ReturnStatement : Statement {
     Expression *value;
 
+    ReturnStatement(Expression *value);
+
     std::string toString() const {
         // Implement the toString() function for ReturnStatement
         std::string result = "ReturnStatement: ";
@@ -79,6 +90,8 @@ struct ReturnStatement : Statement {
 
 struct ExpressionStatement : Statement {
     Expression *expression;
+
+    ExpressionStatement(Expression *expression);
 
     std::string toString() const {
         // Implement the toString() function for ExpressionStatement
@@ -92,6 +105,8 @@ struct ExpressionStatement : Statement {
 struct ConditionalStatement : Statement {
     Expression *condition;
 
+    ConditionalStatement(Expression *condition);
+
     std::string toString() const {
         // Implement the toString() function for ConditionalStatement
         std::string result = "ConditionalStatement: ";
@@ -103,6 +118,8 @@ struct ConditionalStatement : Statement {
 struct IfStatement : ConditionalStatement {
     CompoundStatement *thenBody;
     CompoundStatement *elseBody;
+
+    IfStatement(Expression *condition, CompoundStatement *thenBody, CompoundStatement *elseBody=nullptr);
 
     std::string toString() const {
         // Implement the toString() function for IfStatement
@@ -122,6 +139,8 @@ struct LoopStatement : Statement {
     Expression *condition;
     CompoundStatement *body;
 
+    LoopStatement(Expression *condition, CompoundStatement *body);
+
     std::string toString() const {
         // Implement the toString() function for LoopStatement
         std::string result = "LoopStatement: ";
@@ -134,6 +153,9 @@ struct LoopStatement : Statement {
 };
 
 struct WhileLoopStatement : LoopStatement {
+
+    WhileLoopStatement(Expression *condition, CompoundStatement *body);
+
     std::string toString() const {
         // Implement the toString() function for WhileLoopStatement
         std::string result = "WhileLoopStatement: ";
@@ -146,6 +168,9 @@ struct WhileLoopStatement : LoopStatement {
 };
 
 struct DoWhileLoopStatement : LoopStatement {
+
+    DoWhileLoopStatement(Expression *condition, CompoundStatement *body);
+
     std::string toString() const {
         // Implement the toString() function for DoWhileLoopStatement
         std::string result = "DoWhileLoopStatement: ";
@@ -160,6 +185,8 @@ struct DoWhileLoopStatement : LoopStatement {
 struct ForLoopStatement : LoopStatement {
     ExpressionStatement *init;
     ExpressionStatement *step;
+
+    ForLoopStatement(ExpressionStatement *init, Expression *condition, ExpressionStatement *step, CompoundStatement *body);
 
     std::string toString() const {
         // Implement the toString() function for ForLoopStatement
@@ -179,6 +206,6 @@ struct ForLoopStatement : LoopStatement {
 struct UnknownStatement : Statement {
     std::string message;
 
-    UnknownStatement(std::string message) : message(message) {}
+    UnknownStatement(std::string message);
 };
 } // namespace libastfri::structures

@@ -32,7 +32,7 @@ lsfs::TranslationUnit *StatementFactory::createTranslationUnit(
 
 lsfs::CompoundStatement *
 StatementFactory::createCompoundStatement(std::vector<lsfs::Statement *> statements) {
-    auto *compoundStatement = new lsfs::CompoundStatement{{}, std::move(statements)};
+    auto *compoundStatement = new lsfs::CompoundStatement(std::move(statements));
     statements.emplace_back(compoundStatement);
 
     return compoundStatement;
@@ -40,7 +40,7 @@ StatementFactory::createCompoundStatement(std::vector<lsfs::Statement *> stateme
 
 lsfs::DeclarationStatement *
 StatementFactory::createDeclarationStatement(lsfs::Declaration *declaration) {
-    auto *declarationStatement = new lsfs::DeclarationStatement{{}, declaration};
+    auto *declarationStatement = new lsfs::DeclarationStatement(declaration);
     statements.emplace_back(declarationStatement);
 
     declarationStatement->rnd = 600;
@@ -52,7 +52,7 @@ lsfs::DeclarationAndAssigmentStatement *
 StatementFactory::createDeclarationAndAssigmentStatement(
     lsfs::Declaration *variable, lsfs::Expression *expression) {
     auto *declarationAndAssigmentStatement =
-        new lsfs::DeclarationAndAssigmentStatement({{{}, variable}, expression});
+        new lsfs::DeclarationAndAssigmentStatement(variable, expression);
     statements.emplace_back(declarationAndAssigmentStatement);
 
     declarationAndAssigmentStatement->rnd = 60001;
@@ -61,7 +61,7 @@ StatementFactory::createDeclarationAndAssigmentStatement(
 }
 
 lsfs::ReturnStatement *StatementFactory::createReturnStatement(lsfs::Expression *value) {
-    auto *returnStatement = new lsfs::ReturnStatement{{}, value};
+    auto *returnStatement = new lsfs::ReturnStatement(value);
     statements.emplace_back(returnStatement);
 
     returnStatement->rnd = 333;
@@ -71,7 +71,7 @@ lsfs::ReturnStatement *StatementFactory::createReturnStatement(lsfs::Expression 
 
 lsfs::ExpressionStatement *
 StatementFactory::createExpressionStatement(lsfs::Expression *expression) {
-    auto *expressionStatement = new lsfs::ExpressionStatement{{}, expression};
+    auto *expressionStatement = new lsfs::ExpressionStatement(expression);
     statements.emplace_back(expressionStatement);
 
     expressionStatement->rnd = 888;
@@ -83,7 +83,7 @@ lsfs::IfStatement *
 StatementFactory::createIfConditionalStatement(lsfs::Expression *condition,
                                                lsfs::CompoundStatement *thenBody,
                                                lsfs::CompoundStatement *elseBody) {
-    auto *ifStatement = new lsfs::IfStatement{{{}, condition}, thenBody, elseBody};
+    auto *ifStatement = new lsfs::IfStatement(condition, thenBody, elseBody);
     statements.emplace_back(ifStatement);
 
     return ifStatement;
@@ -100,7 +100,7 @@ lsfs::IfStatement *StatementFactory::createIfConditionalStatement(
 lsfs::WhileLoopStatement *
 StatementFactory::createWhileLoopStatement(lsfs::Expression *condition,
                                            lsfs::CompoundStatement *body) {
-    auto *whileLoopStatement = new lsfs::WhileLoopStatement{{{}, condition, body}};
+    auto *whileLoopStatement = new lsfs::WhileLoopStatement(condition, body);
     statements.emplace_back(whileLoopStatement);
 
     return whileLoopStatement;
@@ -118,7 +118,7 @@ lsfs::DoWhileLoopStatement *
 StatementFactory::createDoWhileLoopStatement(lsfs::Expression *condition,
                                              lsfs::CompoundStatement *body) {
     auto *doWhileLoopStatement =
-        new lsfs::DoWhileLoopStatement{{{}, condition, body}};
+        new lsfs::DoWhileLoopStatement(condition, body);
     statements.emplace_back(doWhileLoopStatement);
 
     return doWhileLoopStatement;
@@ -128,7 +128,7 @@ lsfs::ForLoopStatement *StatementFactory::createForLoopStatement(
     lsfs::ExpressionStatement *init, lsfs::Expression *condition, lsfs::ExpressionStatement *step,
     lsfs::CompoundStatement *body) {
     lsfs::ForLoopStatement *forLoopStatement =
-        new lsfs::ForLoopStatement{{{}, condition, body}, init, step};
+        new lsfs::ForLoopStatement(init, condition, step, body);
     statements.emplace_back(forLoopStatement);
 
     return forLoopStatement;

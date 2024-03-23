@@ -16,7 +16,7 @@ LiteralFactory &LiteralFactory::getInstance() {
 template <typename K, typename T>
 T *LiteralFactory::getLiteralFromMap(K key, UsedMap<K, T> &map) {
     return &lsfu::Helper::getValueFromMap(key, map, [](auto &p_map, K p_key) {
-        return p_map.emplace(p_key, T{{{}}, p_key});
+        return p_map.emplace(p_key, T(p_key));
     });
 }
 
@@ -60,7 +60,7 @@ ExpressionFactory::~ExpressionFactory() {
 
 lsfs::UnaryExpression *ExpressionFactory::createUnaryExpression(lsfs::UnaryOperators op,
                                                           lsfs::Expression *operand) {
-    auto* expr = new lsfs::UnaryExpression{{}, op, operand};
+    auto* expr = new lsfs::UnaryExpression(op, operand);
     this->expressions.emplace_back(expr);
 
     return expr;
@@ -69,7 +69,7 @@ lsfs::UnaryExpression *ExpressionFactory::createUnaryExpression(lsfs::UnaryOpera
 lsfs::BinaryExpression *ExpressionFactory::createBinaryExpression(lsfs::BinaryOperators op,
                                                             lsfs::Expression *left,
                                                             lsfs::Expression *right) {
-    auto* expr = new lsfs::BinaryExpression{{}, left, op, right};
+    auto* expr = new lsfs::BinaryExpression(left, op, right);
     this->expressions.emplace_back(expr);
 
     return expr;
@@ -77,7 +77,7 @@ lsfs::BinaryExpression *ExpressionFactory::createBinaryExpression(lsfs::BinaryOp
 
 lsfs::UnknownExpression *ExpressionFactory::createUnknownExpression(
     std::string message) {
-    auto* expr = new lsfs::UnknownExpression{{}, message};
+    auto* expr = new lsfs::UnknownExpression(message);
 
     return expr;
 }
@@ -98,7 +98,7 @@ ReferenceFactory::~ReferenceFactory() {
 
 lsfs::VarRefExpression *
 ReferenceFactory::createVarRefExpression(lsfs::VariableDefintion *variable) {
-    lsfs::VarRefExpression *expr = new lsfs::VarRefExpression{{}, variable};
+    lsfs::VarRefExpression *expr = new lsfs::VarRefExpression(variable);
     this->refExpressions.push_back(expr);
 
     return expr;
@@ -106,7 +106,7 @@ ReferenceFactory::createVarRefExpression(lsfs::VariableDefintion *variable) {
 
 lsfs::ParamRefExpression *
 ReferenceFactory::createParamRefExpression(lsfs::ParameterDefinition *parameter) {
-    lsfs::ParamRefExpression *expr = new lsfs::ParamRefExpression{{}, parameter};
+    lsfs::ParamRefExpression *expr = new lsfs::ParamRefExpression(parameter);
     this->refExpressions.push_back(expr);
 
     return expr;
@@ -115,7 +115,7 @@ ReferenceFactory::createParamRefExpression(lsfs::ParameterDefinition *parameter)
 lsfs::FunctionCallExpression *ReferenceFactory::createFunctionCallExpression(
     std::string functionName, std::vector<lsfs::Expression *> arguments) {
     lsfs::FunctionCallExpression *expr =
-        new lsfs::FunctionCallExpression{{}, functionName, std::move(arguments)};
+        new lsfs::FunctionCallExpression(functionName, std::move(arguments));
     this->refExpressions.push_back(expr);
 
     return expr;

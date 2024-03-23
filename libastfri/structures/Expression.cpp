@@ -1,5 +1,3 @@
-#pragma once
-
 #include <libastfri/structures/Expression.hpp>
 
 namespace libastfri::structures {
