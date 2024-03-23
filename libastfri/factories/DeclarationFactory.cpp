@@ -44,4 +44,11 @@ DeclarationFactory::createFunction(std::string name,
 
     return function;
 }
+
+UknownDeclaration *DeclarationFactory::createUknownDeclaration(std::string message) {
+    auto *declaration = new UknownDeclaration{{}, message};
+
+    return declaration;
+}
+
 } // namespace libastfri::factories

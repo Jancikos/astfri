@@ -75,4 +75,9 @@ struct FunctionCallExpression : RefExpression {
     std::string functionName;
     std::vector<Expression *> arguments;
 };
+
+struct UnknownExpression : Expression {
+    std::string message;
+};
+
 } // namespace libastfri::structures

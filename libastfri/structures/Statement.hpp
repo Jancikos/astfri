@@ -175,4 +175,10 @@ struct ForLoopStatement : LoopStatement {
         return result;
     }
 };
+
+struct UnknownStatement : Statement {
+    std::string message;
+
+    UnknownStatement(std::string message) : message(message) {}
+};
 } // namespace libastfri::structures

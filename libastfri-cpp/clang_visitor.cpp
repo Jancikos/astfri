@@ -5,4 +5,11 @@ AstfriClangVisitor::AstfriClangVisitor(
     : visitedTranslationUnit(&visitedTranslationUnit),
       visitedDeclaration(nullptr), visitedExpression(nullptr),
       visitedStatement(nullptr) {}
+
+void AstfriClangVisitor::clearVisited() {
+    visitedDeclaration = nullptr;
+    visitedExpression = nullptr;
+    visitedStatement = nullptr;
+}
+
 } // namespace libastfri::cpp

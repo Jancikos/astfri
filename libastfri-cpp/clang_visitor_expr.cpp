@@ -1,8 +1,8 @@
 #include <cassert>
 #include <libastfri-cpp/clang_visitor.hpp>
 
-#include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/DeclarationFactory.hpp>
+#include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 
@@ -15,19 +15,27 @@ lsfs::Expression *AstfriClangVisitor::getExpression(clang::Expr *Declaration) {
     assert(visitedStatement == nullptr);
     assert(visitedExpression == nullptr);
 
-    auto traversalFailed = TraverseStmt(Declaration);
-    if (traversalFailed) {
-        throw std::runtime_error("Expr traversal failed");
-        return nullptr; // prehliadka sa nepodarila
-    }
-    auto *expression = Tools::popPointer<lsfs::Expression>(visitedExpression);
+    try {
+        auto traversalFailed = TraverseStmt(Declaration);
+        if (traversalFailed) {
+            // prehliadka sa nepodarila
+            throw std::runtime_error("Expr traversal failed");
+        }
+        auto *expression = popVisitedExpression<lsfs::Expression>();
 
-    if (expression != nullptr) {
-        return expression; // ak sa nasiel expression, tak ho vrat
-    }
+        if (expression != nullptr) {
+            return expression; // ak sa nasiel expression, tak ho vrat
+        }
 
-    throw std::runtime_error("No expression found");
-    return nullptr; // nezachytili sme ziadny expression
+        // nezachytili sme ziadny expression
+        throw std::runtime_error("No expression found");
+    } catch (std::exception &e) {
+        auto *exprFac = &lsff::ExpressionFactory::getInstance();
+
+        // clearVisited(); // TODO - je to potrebne?
+
+        return exprFac->createUnknownExpression(e.what());
+    }
 }
 
 bool AstfriClangVisitor::VisitExpr(clang::Expr *Declaration) { return true; }
@@ -77,10 +85,10 @@ bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
     auto *functionDecl = llvm::dyn_cast<clang::FunctionDecl>(
         Declaration->getCalleeDecl()->getAsFunction());
 
-    auto *functionDef = 
+    auto *functionDef =
 
-    visitedExpression = refFac.createFunctionCallExpression(
-        functionDecl->getNameInfo().getAsString(), args);
+        visitedExpression = refFac.createFunctionCallExpression(
+            functionDecl->getNameInfo().getAsString(), args);
     return false;
 }
 

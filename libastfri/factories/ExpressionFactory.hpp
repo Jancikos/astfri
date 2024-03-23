@@ -50,8 +50,7 @@ class ExpressionFactory : BaseExpressionFactory {
     static ExpressionFactory &getInstance();
 
   private:
-    UsedList<UnaryExpression> unaryExpressions;
-    UsedList<BinaryExpression> binaryExpressions;
+    UsedList<Expression*> expressions;
 
     ExpressionFactory();
 
@@ -61,6 +60,8 @@ class ExpressionFactory : BaseExpressionFactory {
     BinaryExpression *createBinaryExpression(BinaryOperators op,
                                              Expression *left,
                                              Expression *right);
+
+    UnknownExpression *createUnknownExpression(std::string message);
 
     ExpressionFactory(ExpressionFactory const &) = delete;
     void operator=(ExpressionFactory const &) = delete;

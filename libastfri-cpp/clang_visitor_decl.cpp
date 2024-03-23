@@ -13,20 +13,28 @@ lsfs::Declaration *AstfriClangVisitor::getDeclaration(clang::Decl *Decl) {
     // skontroluj pociatocny stav
     assert(visitedDeclaration == nullptr);
 
-    auto traversalFailed = TraverseDecl(Decl);
-    if (traversalFailed) {
-        throw std::runtime_error("Decl traversal failed");
-        return nullptr; // prehliadka sa nepodarila
-    }
+    try {
+        auto traversalFailed = TraverseDecl(Decl);
+        if (traversalFailed) {
+            // prehliadka sa nepodarila
+            throw std::runtime_error("Decl traversal failed");
+        }
 
-    auto *declaration =
-        Tools::popPointer<lsfs::Declaration>(visitedDeclaration);
-    if (declaration != nullptr) {
-        return declaration; // ak sa nasiel declaration, tak ho vrat
-    }
+        auto *declaration =
+            Tools::popPointer<lsfs::Declaration>(visitedDeclaration);
+        if (declaration != nullptr) {
+            return declaration; // ak sa nasiel declaration, tak ho vrat
+        }
 
-    throw std::runtime_error("No declaration found");
-    return nullptr; // nezachytili sme ziadny declaration
+        // nezachytili sme ziadny declaration
+        throw std::runtime_error("No declaration found");
+    } catch (std::exception &e) {
+        auto *declFac = &lsff::DeclarationFactory::getInstance();
+
+        // clearVisited(); // TODO - je to potrebne?
+
+        return declFac->createUknownDeclaration(e.what());
+    }
 }
 
 bool AstfriClangVisitor::VisitTranslationUnitDecl(

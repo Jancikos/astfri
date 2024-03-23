@@ -30,6 +30,8 @@ class DeclarationFactory {
                    std::vector<ParameterDefinition *> parameters,
                    CompoundStatement *body, Type *returnType);
 
+    UknownDeclaration *createUknownDeclaration(std::string message);
+
     DeclarationFactory(DeclarationFactory const &) = delete;
     void operator=(DeclarationFactory const &) = delete;
 };

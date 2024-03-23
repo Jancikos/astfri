@@ -31,4 +31,10 @@ struct FunctionDefinition : Declaration {
     CompoundStatement *body;
     Type *returnType;
 };
+
+
+struct UknownDeclaration : Declaration {
+    std::string message;
+};
+
 } // namespace libastfri::structures

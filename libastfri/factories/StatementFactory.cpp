@@ -135,4 +135,14 @@ ForLoopStatement *StatementFactory::createForLoopStatement(
 
     return forLoopStatement;
 }
+
+UnknownStatement *StatementFactory::createUnknownStatement(std::string message) {
+    auto *unknownStatement = new UnknownStatement(message);
+    statements.emplace_back(unknownStatement);
+
+    unknownStatement->rnd = 404;
+
+    return unknownStatement;
+}
+
 } // namespace libastfri::factories

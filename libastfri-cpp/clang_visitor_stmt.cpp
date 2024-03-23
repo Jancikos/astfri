@@ -17,44 +17,52 @@ lsfs::Statement *AstfriClangVisitor::getStatement(clang::Stmt *Declaration) {
     assert(visitedExpression == nullptr);
     assert(visitedDeclaration == nullptr);
 
-    if (Declaration == nullptr) {
-        return nullptr; // ak je nullptr, tak vrat nullptr
-    }
-
-    auto traversalFailed = TraverseStmt(Declaration);
-    if (traversalFailed) {
-        // TODO - lepsie ohandlovat chybu
-        throw std::runtime_error("Stmt traversal failed");
-        return nullptr; // prehliadka sa nepodarila
-    }
-    auto *statement = popVisitedStatement<lsfs::Statement>();
-
-    if (statement != nullptr) {
-        return statement; // ak sa nasiel statement, tak ho vrat
-    }
-
-    auto &statementFac = lsff::StatementFactory::getInstance();
-    // skus skontrovlovat, ci sa nejedna o declaration statement
-    auto *decl = popVisitedDeclaration<lsfs::Declaration>();
-    if (decl != nullptr) {
-
-        auto *expr = popVisitedExpression<lsfs::Expression>();
-        if (expr != nullptr) {
-            return statementFac.createDeclarationAndAssigmentStatement(decl,
-                                                                       expr);
+    try {
+        if (Declaration == nullptr) {
+            // nullovy pointer na vstupe
+            throw std::runtime_error("Null pointer to statement");
         }
 
-        return statementFac.createDeclarationStatement(decl);
-    }
+        auto traversalFailed = TraverseStmt(Declaration);
+        if (traversalFailed) {
+            // prehliadka sa nepodarila
+            throw std::runtime_error("Stmt traversal failed");
+        }
+        auto *statement = popVisitedStatement<lsfs::Statement>();
 
-    // skus skontrovlovat, ci sa nejedna o expression statement
-    auto *expr = popVisitedExpression<lsfs::Expression>();
-    if (expr != nullptr) {
-        return statementFac.createExpressionStatement(expr);
-    }
+        if (statement != nullptr) {
+            return statement; // ak sa nasiel statement, tak ho vrat
+        }
 
-    throw std::runtime_error("No statement or expression found");
-    return nullptr; // nezachytili sme ziadny statement ani expression
+        auto &statementFac = lsff::StatementFactory::getInstance();
+        // skus skontrovlovat, ci sa nejedna o declaration statement
+        auto *decl = popVisitedDeclaration<lsfs::Declaration>();
+        if (decl != nullptr) {
+
+            auto *expr = popVisitedExpression<lsfs::Expression>();
+            if (expr != nullptr) {
+                return statementFac.createDeclarationAndAssigmentStatement(decl,
+                                                                        expr);
+            }
+
+            return statementFac.createDeclarationStatement(decl);
+        }
+
+        // skus skontrovlovat, ci sa nejedna o expression statement
+        auto *expr = popVisitedExpression<lsfs::Expression>();
+        if (expr != nullptr) {
+            return statementFac.createExpressionStatement(expr);
+        }
+
+        // nezachytili sme ziadny statement ani expression
+        throw std::runtime_error("No statement or expression found");
+    } catch (std::exception &e) {
+        auto *statementFac = &lsff::StatementFactory::getInstance();
+        
+        clearVisited();
+        
+        return statementFac->createUnknownStatement(e.what());
+    }
 }
 
 bool AstfriClangVisitor::VisitStmt(clang::Stmt *Declaration) { return true; }

@@ -46,8 +46,7 @@ ConstLiteral *LiteralFactory::getConstLiteral(std::string literal) {
 
 //// ExpressionFactory
 ExpressionFactory::ExpressionFactory() {
-    this->unaryExpressions = UsedList<UnaryExpression>();
-    this->binaryExpressions = UsedList<BinaryExpression>();
+    this->expressions = UsedList<Expression *>();
 }
 
 ExpressionFactory &ExpressionFactory::getInstance() {
@@ -58,19 +57,26 @@ ExpressionFactory &ExpressionFactory::getInstance() {
 
 UnaryExpression *ExpressionFactory::createUnaryExpression(UnaryOperators op,
                                                           Expression *operand) {
-    UnaryExpression expr{{}, op, operand};
-    this->unaryExpressions.push_back(expr);
+    auto* expr = new UnaryExpression{{}, op, operand};
+    this->expressions.emplace_back(expr);
 
-    return &this->unaryExpressions.back();
+    return expr;
 }
 
 BinaryExpression *ExpressionFactory::createBinaryExpression(BinaryOperators op,
                                                             Expression *left,
                                                             Expression *right) {
-    BinaryExpression expr{{}, left, op, right};
-    this->binaryExpressions.push_back(expr);
+    auto* expr = new BinaryExpression{{}, left, op, right};
+    this->expressions.emplace_back(expr);
 
-    return &this->binaryExpressions.back();
+    return expr;
+}
+
+UnknownExpression *ExpressionFactory::createUnknownExpression(
+    std::string message) {
+    auto* expr = new UnknownExpression{{}, message};
+
+    return expr;
 }
 
 //// ReferenceFactory

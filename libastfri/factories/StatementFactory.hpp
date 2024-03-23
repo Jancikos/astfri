@@ -58,5 +58,7 @@ class StatementFactory {
                                              Expression *condition,
                                              ExpressionStatement *step,
                                              CompoundStatement *body);
+
+    UnknownStatement *createUnknownStatement(std::string message);
 };
 } // namespace libastfri::factories

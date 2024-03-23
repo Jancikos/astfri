@@ -56,6 +56,8 @@ class AstfriClangVisitor
     lsfs::Statement *visitedStatement;
     lsfs::Expression *visitedExpression;
 
+    void clearVisited();
+
     // temaplate methods
 
     template <typename T> T *popVisitedDeclaration() {

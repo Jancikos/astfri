@@ -9,7 +9,7 @@ int simpleAddition(int a, int b = 0) {
     int d = 4;
     int e = 4 + d;
 
-    d = 5;
+    d += 5;
 
     return a + b;
 }
@@ -27,6 +27,9 @@ int simpliestAddition2(int a, int b) {
     }
     
     // TODO - otestovat for loop
+    // for (int i = 0; i < 10; i++) {
+    //     repCount = repMultiplier + 1;
+    // }
 
     return simpliestAddition2(a, b);
 }
