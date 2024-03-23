@@ -22,7 +22,7 @@ DeclarationFactory::~DeclarationFactory() {
 
 lsfs::VariableDefintion *DeclarationFactory::createVariable(std::string name, lsfs::Type *type,
                                                    lsfs::Expression *value) {
-    auto *variable = new lsfs::VariableDefintion{{{}, name, type, value}};
+    auto *variable = new lsfs::VariableDefintion(name, type, value);
     variables.emplace_back(variable);
 
     return variable;
@@ -31,7 +31,7 @@ lsfs::VariableDefintion *DeclarationFactory::createVariable(std::string name, ls
 lsfs::ParameterDefinition *DeclarationFactory::createParameter(std::string name,
                                                       lsfs::Type *type,
                                                       lsfs::Expression *value) {
-    auto *parameter = new lsfs::ParameterDefinition{{{}, name, type, value}};
+    auto *parameter = new lsfs::ParameterDefinition(name, type, value);
     variables.emplace_back(parameter);
 
     return parameter;
@@ -42,14 +42,14 @@ DeclarationFactory::createFunction(std::string name,
                                 std::vector<lsfs::ParameterDefinition *> parameters,
                                 lsfs::CompoundStatement *body, lsfs::Type *returnType) {
     auto *function =
-        new lsfs::FunctionDefinition{{}, name, parameters, body, returnType};
+        new lsfs::FunctionDefinition(name, parameters, body, returnType);
     functions.emplace_back(function);
 
     return function;
 }
 
 lsfs::UknownDeclaration *DeclarationFactory::createUknownDeclaration(std::string message) {
-    auto *declaration = new lsfs::UknownDeclaration{{}, message};
+    auto *declaration = new lsfs::UknownDeclaration(message);
 
     return declaration;
 }

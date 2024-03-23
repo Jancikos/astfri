@@ -16,13 +16,19 @@ struct BaseVariableDefintion : Declaration {
     std::string name;
     Type *type;
     Expression *value;
+
+    BaseVariableDefintion(std::string name, Type *type, Expression *value=nullptr);
 };
 
 // premenna
-struct VariableDefintion : BaseVariableDefintion {};
+struct VariableDefintion : BaseVariableDefintion {
+    VariableDefintion(std::string name, Type *type, Expression *value=nullptr);
+};
 
 // parameter
-struct ParameterDefinition : BaseVariableDefintion {};
+struct ParameterDefinition : BaseVariableDefintion {
+    ParameterDefinition(std::string name, Type *type, Expression *value=nullptr);
+};
 
 // funkcia
 struct FunctionDefinition : Declaration {
@@ -30,11 +36,16 @@ struct FunctionDefinition : Declaration {
     std::vector<ParameterDefinition *> parameters;
     CompoundStatement *body;
     Type *returnType;
+
+    FunctionDefinition(std::string name, std::vector<ParameterDefinition *> parameters,
+                       CompoundStatement *body, Type *returnType);
 };
 
 
 struct UknownDeclaration : Declaration {
     std::string message;
+
+    UknownDeclaration(std::string message);
 };
 
 } // namespace libastfri::structures
