@@ -1,27 +1,27 @@
-#include <libastfri-cpp/clang_management.hpp>
+#include <libastfri-cpp/ClangManagement.hpp>
 
 #include <libastfri/factories/ExpressionFactory.hpp>
 
 namespace libastfri::cpp {
-AstfriClangConsumer::AstfriClangConsumer(
+ClangConsumer::ClangConsumer(
     clang::ASTContext &context,
     libastfri::structures::TranslationUnit &visitedTranslationUnit)
     : context(&context), visitedTranslationUnit(&visitedTranslationUnit) {}
 
-void AstfriClangConsumer::HandleTranslationUnit(clang::ASTContext &p_context) {
-    AstfriClangVisitor visitor(*visitedTranslationUnit);
+void ClangConsumer::HandleTranslationUnit(clang::ASTContext &p_context) {
+    ClangVisitor visitor(*visitedTranslationUnit);
 
     visitor.TraverseDecl(p_context.getTranslationUnitDecl());
 }
 
-AstfriClangTraverseAction::AstfriClangTraverseAction(
+ClangTraverseAction::ClangTraverseAction(
     libastfri::structures::TranslationUnit &visitedTranslationUnit)
     : visitedTranslationUnit(&visitedTranslationUnit) {}
 
 std::unique_ptr<clang::ASTConsumer>
-AstfriClangTraverseAction::CreateASTConsumer(clang::CompilerInstance &compiler,
+ClangTraverseAction::CreateASTConsumer(clang::CompilerInstance &compiler,
                                              llvm::StringRef) {
-    return std::make_unique<AstfriClangConsumer>(compiler.getASTContext(),
+    return std::make_unique<ClangConsumer>(compiler.getASTContext(),
                                                  *visitedTranslationUnit);
 }
 } // namespace libastfri::cpp

@@ -1,8 +1,8 @@
-#include "libastfri-cpp/clang_tools.hpp"
+#include "libastfri-cpp/ClangTools.hpp"
 #include "libastfri/structures/Statement.hpp"
 #include <iostream>
 
-#include <libastfri-cpp/clang_management.hpp>
+#include <libastfri-cpp/ClangManagement.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 
 int main(int argc, char **argv) {
@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
         libastfri::factories::StatementFactory::getInstance()
             .createTranslationUnit({});
 
-    libastfri::cpp::AstfriClangTools::BeginClangTreeVisit(
+    libastfri::cpp::ClangTools::BeginClangTreeVisit(
         argv[1], *visitedTranslationUnit);
 
     // vypis translation unit

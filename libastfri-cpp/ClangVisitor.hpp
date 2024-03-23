@@ -9,7 +9,7 @@
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Tooling/Tooling.h>
 
-#include <libastfri-cpp/clang_tools.hpp>
+#include <libastfri-cpp/ClangTools.hpp>
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Statement.hpp>
@@ -18,23 +18,23 @@
 
 namespace lsfs = libastfri::structures;
 namespace libastfri::cpp {
-class AstfriClangVisitor
-    : public clang::RecursiveASTVisitor<AstfriClangVisitor> {
-    using Tools = AstfriClangTools;
+class ClangVisitor
+    : public clang::RecursiveASTVisitor<ClangVisitor> {
+    using Tools = ClangTools;
 
   public:
-    // clang_visitor.cpp
-    AstfriClangVisitor(
+    // ClangVisitor.cpp
+    ClangVisitor(
         lsfs::TranslationUnit &visitedTranslationUnit);
 
-    // clang_visitor_decl.cpp
+    // ClangVisitor_decl.cpp
     lsfs::Declaration *getDeclaration(clang::Decl *Decl);
     bool VisitTranslationUnitDecl(clang::TranslationUnitDecl *Decl);
     bool VisitFunctionDecl(clang::FunctionDecl *Decl);
     bool VisitVarDecl(clang::VarDecl *Decl);
     bool VisitParmVarDecl(clang::ParmVarDecl *Decl);
 
-    // clang_visitor_stmt.cpp
+    // ClangVisitor_stmt.cpp
     lsfs::Statement *getStatement(clang::Stmt *Stmt);
     bool VisitStmt(clang::Stmt *Stmt);
     bool VisitCompoundStmt(clang::CompoundStmt *Stmt);
@@ -42,7 +42,7 @@ class AstfriClangVisitor
     bool VisitIfStmt(clang::IfStmt *Stmt);
     bool VisitWhileStmt(clang::WhileStmt *Stmt);
 
-    // clang_visitor_expr.cpp
+    // ClangVisitor_expr.cpp
     lsfs::Expression *getExpression(clang::Expr *Expr);
     bool VisitExpr(clang::Expr *Expr);
     bool VisitBinaryOperator(clang::BinaryOperator *Expr);

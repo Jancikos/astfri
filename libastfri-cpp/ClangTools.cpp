@@ -4,8 +4,8 @@
 #include <memory>
 #include <sstream>
 
-#include <libastfri-cpp/clang_management.hpp>
-#include <libastfri-cpp/clang_tools.hpp>
+#include <libastfri-cpp/ClangManagement.hpp>
+#include <libastfri-cpp/ClangTools.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
@@ -13,7 +13,7 @@
 #include <libastfri/structures/Declaration.hpp>
 
 namespace libastfri::cpp {
-Type *AstfriClangTools::convertType(clang::QualType qt) {
+Type *ClangTools::convertType(clang::QualType qt) {
     auto &typeFac = libastfri::factories::TypeFactory::getInstance();
 
     if (qt->isIntegerType()) {
@@ -40,7 +40,7 @@ Type *AstfriClangTools::convertType(clang::QualType qt) {
 }
 
 libastfri::structures::BinaryOperators
-AstfriClangTools::convertBinaryOperator(clang::BinaryOperator::Opcode op) {
+ClangTools::convertBinaryOperator(clang::BinaryOperator::Opcode op) {
     switch (op) {
     case clang::BinaryOperator::Opcode::BO_Assign:
         return libastfri::structures::BinaryOperators::Assign;
@@ -76,7 +76,7 @@ AstfriClangTools::convertBinaryOperator(clang::BinaryOperator::Opcode op) {
 }
 
 libastfri::structures::UnaryOperators
-AstfriClangTools::convertUnaryOperator(clang::UnaryOperator::Opcode op) {
+ClangTools::convertUnaryOperator(clang::UnaryOperator::Opcode op) {
     switch (op) {
     case clang::UnaryOperator::Opcode::UO_Minus:
         return libastfri::structures::UnaryOperators::Negative;
@@ -87,7 +87,7 @@ AstfriClangTools::convertUnaryOperator(clang::UnaryOperator::Opcode op) {
     throw std::runtime_error("Unknown unary operator");
 }
 
-void AstfriClangTools::BeginClangTreeVisit(
+void ClangTools::BeginClangTreeVisit(
     std::string pathToCode,
     libastfri::structures::TranslationUnit &visitedTranslationUnit) {
     auto ifst = std::ifstream(pathToCode);
@@ -97,7 +97,7 @@ void AstfriClangTools::BeginClangTreeVisit(
 
     // spusti clang prehliadku
     clang::tooling::runToolOnCodeWithArgs(
-        std::make_unique<libastfri::cpp::AstfriClangTraverseAction>(
+        std::make_unique<libastfri::cpp::ClangTraverseAction>(
             visitedTranslationUnit),
         code, {""});
 }

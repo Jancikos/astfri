@@ -1,5 +1,5 @@
 #include <cassert>
-#include <libastfri-cpp/clang_visitor.hpp>
+#include <libastfri-cpp/ClangVisitor.hpp>
 
 #include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
@@ -10,13 +10,13 @@ namespace lsff = libastfri::factories;
 
 namespace libastfri::cpp {
 
-lsfs::Expression *AstfriClangVisitor::getExpression(clang::Expr *Declaration) {
+lsfs::Expression *ClangVisitor::getExpression(clang::Expr *Expr) {
     // skontroluj pociatocny stav
     assert(visitedStatement == nullptr);
     assert(visitedExpression == nullptr);
 
     try {
-        auto traversalFailed = TraverseStmt(Declaration);
+        auto traversalFailed = TraverseStmt(Expr);
         if (traversalFailed) {
             // prehliadka sa nepodarila
             throw std::runtime_error("Expr traversal failed");
@@ -38,52 +38,52 @@ lsfs::Expression *AstfriClangVisitor::getExpression(clang::Expr *Declaration) {
     }
 }
 
-bool AstfriClangVisitor::VisitExpr(clang::Expr *Declaration) { return true; }
+bool ClangVisitor::VisitExpr(clang::Expr *Expr) { return true; }
 
-bool AstfriClangVisitor::VisitBinaryOperator(
-    clang::BinaryOperator *Declaration) {
+bool ClangVisitor::VisitBinaryOperator(
+    clang::BinaryOperator *Expr) {
     auto &exprFac = lsff::ExpressionFactory::getInstance();
 
-    auto *left = getExpression(Declaration->getLHS());
-    auto *right = getExpression(Declaration->getRHS());
+    auto *left = getExpression(Expr->getLHS());
+    auto *right = getExpression(Expr->getRHS());
 
     visitedExpression = exprFac.createBinaryExpression(
-        Tools::convertBinaryOperator(Declaration->getOpcode()), left, right);
+        Tools::convertBinaryOperator(Expr->getOpcode()), left, right);
     return false;
 }
 
-bool AstfriClangVisitor::VisitIntegerLiteral(
-    clang::IntegerLiteral *Declaration) {
+bool ClangVisitor::VisitIntegerLiteral(
+    clang::IntegerLiteral *Expr) {
     auto &literalFac = lsff::LiteralFactory::getInstance();
 
     visitedExpression =
-        literalFac.getIntLiteral(Declaration->getValue().getSExtValue());
+        literalFac.getIntLiteral(Expr->getValue().getSExtValue());
     return false;
 }
 
-bool AstfriClangVisitor::VisitDeclRefExpr(clang::DeclRefExpr *Declaration) {
+bool ClangVisitor::VisitDeclRefExpr(clang::DeclRefExpr *Expr) {
     auto &declFac = lsff::DeclarationFactory::getInstance();
     auto &refFac = lsff::ReferenceFactory::getInstance();
 
     auto *var = declFac.createVariable(
-        Declaration->getNameInfo().getAsString(),
-        Tools::convertType(Declaration->getType()), nullptr);
+        Expr->getNameInfo().getAsString(),
+        Tools::convertType(Expr->getType()), nullptr);
     visitedExpression = refFac.createVarRefExpression(var);
     return false;
 }
 
-bool AstfriClangVisitor::VisitCallExpr(clang::CallExpr *Declaration) {
+bool ClangVisitor::VisitCallExpr(clang::CallExpr *Expr) {
     auto &declFac = lsff::DeclarationFactory::getInstance();
     auto &refFac = lsff::ReferenceFactory::getInstance();
     auto &exprFac = lsff::ExpressionFactory::getInstance();
 
     std::vector<lsfs::Expression *> args;
-    for (auto arg : Declaration->arguments()) {
+    for (auto arg : Expr->arguments()) {
         args.push_back(getExpression(arg));
     }
 
     auto *functionDecl = llvm::dyn_cast<clang::FunctionDecl>(
-        Declaration->getCalleeDecl()->getAsFunction());
+        Expr->getCalleeDecl()->getAsFunction());
 
     auto *functionDef =
 

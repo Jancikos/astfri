@@ -8,28 +8,28 @@
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Tooling/Tooling.h>
 
-#include <libastfri-cpp/clang_visitor.hpp>
+#include <libastfri-cpp/ClangVisitor.hpp>
 #include <libastfri/structures/Statement.hpp>
 #include <memory>
 
 namespace libastfri::cpp {
-class AstfriClangConsumer : public clang::ASTConsumer {
+class ClangConsumer : public clang::ASTConsumer {
   public:
     clang::ASTContext *context;
     libastfri::structures::TranslationUnit *visitedTranslationUnit;
 
-    AstfriClangConsumer(
+    ClangConsumer(
         clang::ASTContext &context,
         libastfri::structures::TranslationUnit &visitedTranslationUnit);
     void HandleTranslationUnit(clang::ASTContext &p_context);
 };
 
-class AstfriClangTraverseAction : public clang::ASTFrontendAction {
+class ClangTraverseAction : public clang::ASTFrontendAction {
     using TUnit = libastfri::structures::TranslationUnit;
     TUnit *visitedTranslationUnit;
 
   public:
-    AstfriClangTraverseAction(TUnit &visitedTranslationUnit);
+    ClangTraverseAction(TUnit &visitedTranslationUnit);
     std::unique_ptr<clang::ASTConsumer>
     CreateASTConsumer(clang::CompilerInstance &compiler, llvm::StringRef);
 };

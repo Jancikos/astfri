@@ -14,7 +14,7 @@
 #include <libastfri/structures/Type.hpp>
 
 namespace libastfri::cpp {
-class AstfriClangTools {
+class ClangTools {
   public:
     static libastfri::structures::Type *convertType(clang::QualType qt);
     static libastfri::structures::BinaryOperators

@@ -1,5 +1,5 @@
 #include <cassert>
-#include <libastfri-cpp/clang_visitor.hpp>
+#include <libastfri-cpp/ClangVisitor.hpp>
 
 #include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
@@ -9,7 +9,7 @@
 namespace lsff = libastfri::factories;
 
 namespace libastfri::cpp {
-lsfs::Declaration *AstfriClangVisitor::getDeclaration(clang::Decl *Decl) {
+lsfs::Declaration *ClangVisitor::getDeclaration(clang::Decl *Decl) {
     // skontroluj pociatocny stav
     assert(visitedDeclaration == nullptr);
 
@@ -37,10 +37,10 @@ lsfs::Declaration *AstfriClangVisitor::getDeclaration(clang::Decl *Decl) {
     }
 }
 
-bool AstfriClangVisitor::VisitTranslationUnitDecl(
-    clang::TranslationUnitDecl *Declaration) {
+bool ClangVisitor::VisitTranslationUnitDecl(
+    clang::TranslationUnitDecl *Decl) {
 
-    for (auto *decl : Declaration->decls()) {
+    for (auto *decl : Decl->decls()) {
         if (auto *funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl)) {
             visitedTranslationUnit->functions.push_back(
                 getDeclaration<lsfs::FunctionDefinition>(funDecl));
@@ -50,63 +50,63 @@ bool AstfriClangVisitor::VisitTranslationUnitDecl(
     return false;
 }
 
-bool AstfriClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Declaration) {
+bool ClangVisitor::VisitFunctionDecl(clang::FunctionDecl *Decl) {
     // For debugging, dumping the AST nodes will show which nodes are already
     // being visited.
-    Declaration->dump();
+    Decl->dump();
 
     auto &declFac = lsff::DeclarationFactory::getInstance();
     auto &literalFac = lsff::LiteralFactory::getInstance();
     auto &statementFac = lsff::StatementFactory::getInstance();
 
     // title
-    std::string title = Declaration->getNameInfo().getAsString();
+    std::string title = Decl->getNameInfo().getAsString();
 
     // return type
-    lsfs::Type *returnType = Tools::convertType(Declaration->getReturnType());
+    lsfs::Type *returnType = Tools::convertType(Decl->getReturnType());
 
     // params
     std::vector<lsfs::ParameterDefinition *> params;
-    for (auto paramDecl : Declaration->parameters()) {
+    for (auto paramDecl : Decl->parameters()) {
         VisitParmVarDecl(paramDecl); // nemozem volat TRaverseDecl, lebo to
                                      // odchyti VisitVarDecl
         params.push_back(popVisitedDeclaration<lsfs::ParameterDefinition>());
     }
 
     // body
-    auto *body = getStatement<lsfs::CompoundStatement>(Declaration->getBody());
+    auto *body = getStatement<lsfs::CompoundStatement>(Decl->getBody());
 
     visitedDeclaration =
         declFac.createFunction(title, params, body, returnType);
     return false;
 }
 
-bool AstfriClangVisitor::VisitVarDecl(clang::VarDecl *Declaration) {
+bool ClangVisitor::VisitVarDecl(clang::VarDecl *Decl) {
     auto &declFac = lsff::DeclarationFactory::getInstance();
     auto &statementFac = lsff::StatementFactory::getInstance();
 
     visitedDeclaration = declFac.createVariable(
-        Declaration->getNameAsString(),
-        Tools::convertType(Declaration->getType()), nullptr);
+        Decl->getNameAsString(),
+        Tools::convertType(Decl->getType()), nullptr);
 
-    if (Declaration->hasInit()) {
-        visitedExpression = getExpression(Declaration->getInit());
+    if (Decl->hasInit()) {
+        visitedExpression = getExpression(Decl->getInit());
     }
 
     return false;
 }
 
-bool AstfriClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Declaration) {
+bool ClangVisitor::VisitParmVarDecl(clang::ParmVarDecl *Decl) {
     auto &declFac = lsff::DeclarationFactory::getInstance();
 
     lsfs::Expression *defValue = nullptr;
-    if (Declaration->hasDefaultArg()) {
-        defValue = getExpression(Declaration->getDefaultArg());
+    if (Decl->hasDefaultArg()) {
+        defValue = getExpression(Decl->getDefaultArg());
     }
 
     visitedDeclaration = declFac.createParameter(
-        Declaration->getNameAsString(),
-        Tools::convertType(Declaration->getType()), defValue);
+        Decl->getNameAsString(),
+        Tools::convertType(Decl->getType()), defValue);
 
     return false;
 }

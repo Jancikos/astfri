@@ -1,12 +1,13 @@
-#include <libastfri-cpp/clang_visitor.hpp>
+#include <libastfri-cpp/ClangVisitor.hpp>
+
 namespace libastfri::cpp {
-AstfriClangVisitor::AstfriClangVisitor(
+ClangVisitor::ClangVisitor(
     lsfs::TranslationUnit &visitedTranslationUnit)
     : visitedTranslationUnit(&visitedTranslationUnit),
       visitedDeclaration(nullptr), visitedExpression(nullptr),
       visitedStatement(nullptr) {}
 
-void AstfriClangVisitor::clearVisited() {
+void ClangVisitor::clearVisited() {
     visitedDeclaration = nullptr;
     visitedExpression = nullptr;
     visitedStatement = nullptr;
