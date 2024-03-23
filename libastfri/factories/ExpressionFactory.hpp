@@ -31,7 +31,8 @@ class LiteralFactory : BaseExpressionFactory {
     UsedMap<bool, lsfs::BoolLiteral> boolLiterals;
     UsedMap<std::string, lsfs::ConstLiteral> constLiterals;
 
-    LiteralFactory() {};
+    LiteralFactory() = default;
+    ~LiteralFactory() = default;	
 
   public:
     lsfs::IntLiteral *getIntLiteral(int literal);
@@ -52,7 +53,8 @@ class ExpressionFactory : BaseExpressionFactory {
   private:
     UsedList<lsfs::Expression*> expressions;
 
-    ExpressionFactory();
+    ExpressionFactory() = default;
+    ~ExpressionFactory();
 
   public:
     lsfs::UnaryExpression *createUnaryExpression(lsfs::UnaryOperators op,
@@ -76,7 +78,7 @@ class ReferenceFactory : BaseExpressionFactory {
     // TODO - prekonzultovat recyklaciu
     UsedList<lsfs::RefExpression *> refExpressions;
 
-    ReferenceFactory();
+    ReferenceFactory() = default;
     ~ReferenceFactory();
 
   public:

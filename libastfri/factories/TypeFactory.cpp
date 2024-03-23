@@ -4,7 +4,6 @@
 namespace lsfu = libastfri::utils;
 
 namespace libastfri::factories {
-TypeFactory::TypeFactory() {}
 
 TypeFactory &TypeFactory::getInstance() {
     static TypeFactory instance;

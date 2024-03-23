@@ -18,7 +18,7 @@ class StatementFactory {
     UsedList<lsfs::TranslationUnit *> translationUnits;
     UsedList<lsfs::Statement *> statements;
 
-    StatementFactory();
+    StatementFactory() = default;
     ~StatementFactory();
 
   public:

@@ -8,13 +8,16 @@ DeclarationFactory &DeclarationFactory::getInstance() {
     return instance;
 }
 
-DeclarationFactory::DeclarationFactory() {}
-
 DeclarationFactory::~DeclarationFactory() {
     for (auto *variable : variables) {
         delete variable;
     }
     variables.clear();
+
+    for (auto *function : functions) {
+        delete function;
+    }
+    functions.clear();
 }
 
 lsfs::VariableDefintion *DeclarationFactory::createVariable(std::string name, lsfs::Type *type,

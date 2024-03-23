@@ -17,7 +17,7 @@ class DeclarationFactory {
     UsedList<lsfs::BaseVariableDefintion *> variables;
     UsedList<lsfs::FunctionDefinition *> functions;
 
-    DeclarationFactory();
+    DeclarationFactory() = default;
     ~DeclarationFactory();
 
   public:

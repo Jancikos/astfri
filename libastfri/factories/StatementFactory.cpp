@@ -10,8 +10,6 @@ StatementFactory &StatementFactory::getInstance() {
     return instance;
 }
 
-StatementFactory::StatementFactory() {}
-
 StatementFactory::~StatementFactory() {
     for (auto *statement : statements) {
         delete statement;

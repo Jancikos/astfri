@@ -21,8 +21,10 @@ class TypeFactory {
     lsfs::VoidType voidType;
 
     std::map<std::string, lsfs::UserType> userTypes;
-    TypeFactory();
-
+    
+    TypeFactory() = default;
+    ~TypeFactory() = default;
+    
   public:
     lsfs::IntType *getIntType();
     lsfs::FloatType *getFloatType();

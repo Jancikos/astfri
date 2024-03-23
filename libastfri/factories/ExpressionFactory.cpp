@@ -45,14 +45,17 @@ lsfs::ConstLiteral *LiteralFactory::getConstLiteral(std::string literal) {
 }
 
 //// ExpressionFactory
-ExpressionFactory::ExpressionFactory() {
-    this->expressions = UsedList<lsfs::Expression *>();
-}
-
 ExpressionFactory &ExpressionFactory::getInstance() {
     static ExpressionFactory instance;
 
     return instance;
+}
+
+ExpressionFactory::~ExpressionFactory() {
+    for (auto expr : this->expressions) {
+        delete expr;
+    }
+    expressions.clear();
 }
 
 lsfs::UnaryExpression *ExpressionFactory::createUnaryExpression(lsfs::UnaryOperators op,
@@ -80,18 +83,17 @@ lsfs::UnknownExpression *ExpressionFactory::createUnknownExpression(
 }
 
 //// ReferenceFactory
-ReferenceFactory::ReferenceFactory() {}
+ReferenceFactory &ReferenceFactory::getInstance() {
+    static ReferenceFactory instance;
+
+    return instance;
+}
 
 ReferenceFactory::~ReferenceFactory() {
     for (auto expr : this->refExpressions) {
         delete expr;
     }
-}
-
-ReferenceFactory &ReferenceFactory::getInstance() {
-    static ReferenceFactory instance;
-
-    return instance;
+    refExpressions.clear();
 }
 
 lsfs::VarRefExpression *
