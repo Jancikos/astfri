@@ -2,7 +2,7 @@
 
 #include <libastfri/utils/Helper.hpp>
 
-using namespace libastfri::utils;
+namespace lsfu = libastfri::utils;
 
 namespace libastfri::factories {
 
@@ -15,38 +15,38 @@ LiteralFactory &LiteralFactory::getInstance() {
 
 template <typename K, typename T>
 T *LiteralFactory::getLiteralFromMap(K key, UsedMap<K, T> &map) {
-    return &Helper::getValueFromMap(key, map, [](auto &p_map, K p_key) {
+    return &lsfu::Helper::getValueFromMap(key, map, [](auto &p_map, K p_key) {
         return p_map.emplace(p_key, T{{{}}, p_key});
     });
 }
 
-IntLiteral *LiteralFactory::getIntLiteral(int literal) {
+lsfs::IntLiteral *LiteralFactory::getIntLiteral(int literal) {
     return getLiteralFromMap(literal, this->intLiterals);
 }
 
-FloatLiteral *LiteralFactory::getFloatLiteral(float literal) {
+lsfs::FloatLiteral *LiteralFactory::getFloatLiteral(float literal) {
     return getLiteralFromMap(literal, this->floatLiterals);
 }
 
-CharLiteral *LiteralFactory::getCharLiteral(char literal) {
+lsfs::CharLiteral *LiteralFactory::getCharLiteral(char literal) {
     return getLiteralFromMap(literal, this->charLiterals);
 }
 
-StringLiteral *LiteralFactory::getStringLiteral(std::string literal) {
+lsfs::StringLiteral *LiteralFactory::getStringLiteral(std::string literal) {
     return getLiteralFromMap(literal, this->stringLiterals);
 }
 
-BoolLiteral *LiteralFactory::getBoolLiteral(bool literal) {
+lsfs::BoolLiteral *LiteralFactory::getBoolLiteral(bool literal) {
     return getLiteralFromMap(literal, this->boolLiterals);
 }
 
-ConstLiteral *LiteralFactory::getConstLiteral(std::string literal) {
+lsfs::ConstLiteral *LiteralFactory::getConstLiteral(std::string literal) {
     return getLiteralFromMap(literal, this->constLiterals);
 }
 
 //// ExpressionFactory
 ExpressionFactory::ExpressionFactory() {
-    this->expressions = UsedList<Expression *>();
+    this->expressions = UsedList<lsfs::Expression *>();
 }
 
 ExpressionFactory &ExpressionFactory::getInstance() {
@@ -55,26 +55,26 @@ ExpressionFactory &ExpressionFactory::getInstance() {
     return instance;
 }
 
-UnaryExpression *ExpressionFactory::createUnaryExpression(UnaryOperators op,
-                                                          Expression *operand) {
-    auto* expr = new UnaryExpression{{}, op, operand};
+lsfs::UnaryExpression *ExpressionFactory::createUnaryExpression(lsfs::UnaryOperators op,
+                                                          lsfs::Expression *operand) {
+    auto* expr = new lsfs::UnaryExpression{{}, op, operand};
     this->expressions.emplace_back(expr);
 
     return expr;
 }
 
-BinaryExpression *ExpressionFactory::createBinaryExpression(BinaryOperators op,
-                                                            Expression *left,
-                                                            Expression *right) {
-    auto* expr = new BinaryExpression{{}, left, op, right};
+lsfs::BinaryExpression *ExpressionFactory::createBinaryExpression(lsfs::BinaryOperators op,
+                                                            lsfs::Expression *left,
+                                                            lsfs::Expression *right) {
+    auto* expr = new lsfs::BinaryExpression{{}, left, op, right};
     this->expressions.emplace_back(expr);
 
     return expr;
 }
 
-UnknownExpression *ExpressionFactory::createUnknownExpression(
+lsfs::UnknownExpression *ExpressionFactory::createUnknownExpression(
     std::string message) {
-    auto* expr = new UnknownExpression{{}, message};
+    auto* expr = new lsfs::UnknownExpression{{}, message};
 
     return expr;
 }
@@ -94,26 +94,26 @@ ReferenceFactory &ReferenceFactory::getInstance() {
     return instance;
 }
 
-VarRefExpression *
-ReferenceFactory::createVarRefExpression(VariableDefintion *variable) {
-    VarRefExpression *expr = new VarRefExpression{{}, variable};
+lsfs::VarRefExpression *
+ReferenceFactory::createVarRefExpression(lsfs::VariableDefintion *variable) {
+    lsfs::VarRefExpression *expr = new lsfs::VarRefExpression{{}, variable};
     this->refExpressions.push_back(expr);
 
     return expr;
 }
 
-ParamRefExpression *
-ReferenceFactory::createParamRefExpression(ParameterDefinition *parameter) {
-    ParamRefExpression *expr = new ParamRefExpression{{}, parameter};
+lsfs::ParamRefExpression *
+ReferenceFactory::createParamRefExpression(lsfs::ParameterDefinition *parameter) {
+    lsfs::ParamRefExpression *expr = new lsfs::ParamRefExpression{{}, parameter};
     this->refExpressions.push_back(expr);
 
     return expr;
 }
 
-FunctionCallExpression *ReferenceFactory::createFunctionCallExpression(
-    std::string functionName, std::vector<Expression *> arguments) {
-    FunctionCallExpression *expr =
-        new FunctionCallExpression{{}, functionName, std::move(arguments)};
+lsfs::FunctionCallExpression *ReferenceFactory::createFunctionCallExpression(
+    std::string functionName, std::vector<lsfs::Expression *> arguments) {
+    lsfs::FunctionCallExpression *expr =
+        new lsfs::FunctionCallExpression{{}, functionName, std::move(arguments)};
     this->refExpressions.push_back(expr);
 
     return expr;

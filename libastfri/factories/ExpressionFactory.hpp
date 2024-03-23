@@ -7,7 +7,7 @@
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Declaration.hpp>
 
-using namespace libastfri::structures;
+namespace lsfs = libastfri::structures;
 
 namespace libastfri::factories {
 template <typename T> using UsedList = std::vector<T>;
@@ -24,22 +24,22 @@ class LiteralFactory : BaseExpressionFactory {
     template <typename K, typename T>
     T *getLiteralFromMap(K literal, UsedMap<K, T> &map);
 
-    UsedMap<int, IntLiteral> intLiterals;
-    UsedMap<float, FloatLiteral> floatLiterals;
-    UsedMap<char, CharLiteral> charLiterals;
-    UsedMap<std::string, StringLiteral> stringLiterals;
-    UsedMap<bool, BoolLiteral> boolLiterals;
-    UsedMap<std::string, ConstLiteral> constLiterals;
+    UsedMap<int, lsfs::IntLiteral> intLiterals;
+    UsedMap<float, lsfs::FloatLiteral> floatLiterals;
+    UsedMap<char, lsfs::CharLiteral> charLiterals;
+    UsedMap<std::string, lsfs::StringLiteral> stringLiterals;
+    UsedMap<bool, lsfs::BoolLiteral> boolLiterals;
+    UsedMap<std::string, lsfs::ConstLiteral> constLiterals;
 
     LiteralFactory() {};
 
   public:
-    IntLiteral *getIntLiteral(int literal);
-    FloatLiteral *getFloatLiteral(float literal);
-    CharLiteral *getCharLiteral(char literal);
-    StringLiteral *getStringLiteral(std::string literal);
-    BoolLiteral *getBoolLiteral(bool literal);
-    ConstLiteral *getConstLiteral(std::string literal);
+    lsfs::IntLiteral *getIntLiteral(int literal);
+    lsfs::FloatLiteral *getFloatLiteral(float literal);
+    lsfs::CharLiteral *getCharLiteral(char literal);
+    lsfs::StringLiteral *getStringLiteral(std::string literal);
+    lsfs::BoolLiteral *getBoolLiteral(bool literal);
+    lsfs::ConstLiteral *getConstLiteral(std::string literal);
 
     LiteralFactory(LiteralFactory const &) = delete;
     void operator=(LiteralFactory const &) = delete;
@@ -50,18 +50,18 @@ class ExpressionFactory : BaseExpressionFactory {
     static ExpressionFactory &getInstance();
 
   private:
-    UsedList<Expression*> expressions;
+    UsedList<lsfs::Expression*> expressions;
 
     ExpressionFactory();
 
   public:
-    UnaryExpression *createUnaryExpression(UnaryOperators op,
-                                           Expression *operand);
-    BinaryExpression *createBinaryExpression(BinaryOperators op,
-                                             Expression *left,
-                                             Expression *right);
+    lsfs::UnaryExpression *createUnaryExpression(lsfs::UnaryOperators op,
+                                           lsfs::Expression *operand);
+    lsfs::BinaryExpression *createBinaryExpression(lsfs::BinaryOperators op,
+                                             lsfs::Expression *left,
+                                             lsfs::Expression *right);
 
-    UnknownExpression *createUnknownExpression(std::string message);
+    lsfs::UnknownExpression *createUnknownExpression(std::string message);
 
     ExpressionFactory(ExpressionFactory const &) = delete;
     void operator=(ExpressionFactory const &) = delete;
@@ -74,17 +74,17 @@ class ReferenceFactory : BaseExpressionFactory {
 
   private:
     // TODO - prekonzultovat recyklaciu
-    UsedList<RefExpression *> refExpressions;
+    UsedList<lsfs::RefExpression *> refExpressions;
 
     ReferenceFactory();
     ~ReferenceFactory();
 
   public:
-    VarRefExpression *createVarRefExpression(VariableDefintion *variable);
-    ParamRefExpression *createParamRefExpression(ParameterDefinition *variable);
-    FunctionCallExpression *
+    lsfs::VarRefExpression *createVarRefExpression(lsfs::VariableDefintion *variable);
+    lsfs::ParamRefExpression *createParamRefExpression(lsfs::ParameterDefinition *variable);
+    lsfs::FunctionCallExpression *
     createFunctionCallExpression(std::string functionName,
-                                 std::vector<Expression *> arguments);
+                                 std::vector<lsfs::Expression *> arguments);
 
     ReferenceFactory(ReferenceFactory const &) = delete;
     void operator=(ReferenceFactory const &) = delete;

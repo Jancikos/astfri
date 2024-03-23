@@ -5,7 +5,8 @@
 
 #include <libastfri/structures/Type.hpp>
 
-using namespace libastfri::structures;
+namespace lsfs = libastfri::structures;
+
 
 namespace libastfri::factories {
 class TypeFactory {
@@ -13,23 +14,23 @@ class TypeFactory {
     static TypeFactory &getInstance();
 
   private:
-    IntType intType;
-    FloatType floatType;
-    CharType charType;
-    BoolType boolType;
-    VoidType voidType;
+    lsfs::IntType intType;
+    lsfs::FloatType floatType;
+    lsfs::CharType charType;
+    lsfs::BoolType boolType;
+    lsfs::VoidType voidType;
 
-    std::map<std::string, UserType> userTypes;
+    std::map<std::string, lsfs::UserType> userTypes;
     TypeFactory();
 
   public:
-    IntType *getIntType();
-    FloatType *getFloatType();
-    CharType *getCharType();
-    BoolType *getBoolType();
-    VoidType *getVoidType();
+    lsfs::IntType *getIntType();
+    lsfs::FloatType *getFloatType();
+    lsfs::CharType *getCharType();
+    lsfs::BoolType *getBoolType();
+    lsfs::VoidType *getVoidType();
 
-    UserType *getUserType(std::string name);
+    lsfs::UserType *getUserType(std::string name);
 
     TypeFactory(TypeFactory const &) = delete;
     void operator=(TypeFactory const &) = delete;

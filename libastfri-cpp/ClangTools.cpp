@@ -12,8 +12,10 @@
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Declaration.hpp>
 
+namespace lsfs = libastfri::structures;
+
 namespace libastfri::cpp {
-Type *ClangTools::convertType(clang::QualType qt) {
+lsfs::Type *ClangTools::convertType(clang::QualType qt) {
     auto &typeFac = libastfri::factories::TypeFactory::getInstance();
 
     if (qt->isIntegerType()) {
@@ -39,49 +41,49 @@ Type *ClangTools::convertType(clang::QualType qt) {
     return typeFac.getUserType(qt.getAsString());
 }
 
-libastfri::structures::BinaryOperators
+lsfs::BinaryOperators
 ClangTools::convertBinaryOperator(clang::BinaryOperator::Opcode op) {
     switch (op) {
     case clang::BinaryOperator::Opcode::BO_Assign:
-        return libastfri::structures::BinaryOperators::Assign;
+        return lsfs::BinaryOperators::Assign;
     case clang::BinaryOperator::Opcode::BO_Add:
-        return libastfri::structures::BinaryOperators::Add;
+        return lsfs::BinaryOperators::Add;
     case clang::BinaryOperator::Opcode::BO_Sub:
-        return libastfri::structures::BinaryOperators::Subtract;
+        return lsfs::BinaryOperators::Subtract;
     case clang::BinaryOperator::Opcode::BO_Mul:
-        return libastfri::structures::BinaryOperators::Multiply;
+        return lsfs::BinaryOperators::Multiply;
     case clang::BinaryOperator::Opcode::BO_Div:
-        return libastfri::structures::BinaryOperators::Divide;
+        return lsfs::BinaryOperators::Divide;
     case clang::BinaryOperator::Opcode::BO_Rem:
-        return libastfri::structures::BinaryOperators::Modulo;
+        return lsfs::BinaryOperators::Modulo;
     case clang::BinaryOperator::Opcode::BO_LT:
-        return libastfri::structures::BinaryOperators::Less;
+        return lsfs::BinaryOperators::Less;
     case clang::BinaryOperator::Opcode::BO_GT:
-        return libastfri::structures::BinaryOperators::Greater;
+        return lsfs::BinaryOperators::Greater;
     case clang::BinaryOperator::Opcode::BO_LE:
-        return libastfri::structures::BinaryOperators::LessEqual;
+        return lsfs::BinaryOperators::LessEqual;
     case clang::BinaryOperator::Opcode::BO_GE:
-        return libastfri::structures::BinaryOperators::GreaterEqual;
+        return lsfs::BinaryOperators::GreaterEqual;
     case clang::BinaryOperator::Opcode::BO_EQ:
-        return libastfri::structures::BinaryOperators::Equal;
+        return lsfs::BinaryOperators::Equal;
     case clang::BinaryOperator::Opcode::BO_NE:
-        return libastfri::structures::BinaryOperators::NotEqual;
+        return lsfs::BinaryOperators::NotEqual;
         //   case clang::BinaryOperator::Opcode::BO_And:
-        //     return libastfri::structures::BinaryOperators::AND;
+        //     return lsfs::BinaryOperators::AND;
         //   case clang::BinaryOperator::Opcode::BO_Or:
-        //     return libastfri::structures::BinaryOperators::OR;
+        //     return lsfs::BinaryOperators::OR;
     }
 
     throw std::runtime_error("Unknown binary operator");
 }
 
-libastfri::structures::UnaryOperators
+lsfs::UnaryOperators
 ClangTools::convertUnaryOperator(clang::UnaryOperator::Opcode op) {
     switch (op) {
     case clang::UnaryOperator::Opcode::UO_Minus:
-        return libastfri::structures::UnaryOperators::Negative;
+        return lsfs::UnaryOperators::Negative;
     case clang::UnaryOperator::Opcode::UO_Not:
-        return libastfri::structures::UnaryOperators::Not;
+        return lsfs::UnaryOperators::Not;
     }
 
     throw std::runtime_error("Unknown unary operator");
@@ -89,7 +91,7 @@ ClangTools::convertUnaryOperator(clang::UnaryOperator::Opcode op) {
 
 void ClangTools::BeginClangTreeVisit(
     std::string pathToCode,
-    libastfri::structures::TranslationUnit &visitedTranslationUnit) {
+    lsfs::TranslationUnit &visitedTranslationUnit) {
     auto ifst = std::ifstream(pathToCode);
     auto ist = std::stringstream();
     ist << ifst.rdbuf();

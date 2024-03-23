@@ -1,11 +1,12 @@
 #pragma once
 
-#include <libastfri/factories/ExpressionFactory.hpp>
 #include <string>
 
+#include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/structures/Declaration.hpp>
 
-using namespace libastfri::structures;
+
+namespace lsfs = libastfri::structures;
 
 namespace libastfri::factories {
 class DeclarationFactory {
@@ -13,24 +14,24 @@ class DeclarationFactory {
     static DeclarationFactory &getInstance();
 
   private:
-    UsedList<BaseVariableDefintion *> variables;
-    UsedList<FunctionDefinition *> functions;
+    UsedList<lsfs::BaseVariableDefintion *> variables;
+    UsedList<lsfs::FunctionDefinition *> functions;
 
     DeclarationFactory();
     ~DeclarationFactory();
 
   public:
-    VariableDefintion *createVariable(std::string name, Type *type,
-                                      Expression *value = nullptr);
-    ParameterDefinition *createParameter(std::string name, Type *type,
-                                         Expression *value = nullptr);
+    lsfs::VariableDefintion *createVariable(std::string name, lsfs::Type *type,
+                                      lsfs::Expression *value = nullptr);
+    lsfs::ParameterDefinition *createParameter(std::string name, lsfs::Type *type,
+                                         lsfs::Expression *value = nullptr);
 
-    FunctionDefinition *
+    lsfs::FunctionDefinition *
     createFunction(std::string name,
-                   std::vector<ParameterDefinition *> parameters,
-                   CompoundStatement *body, Type *returnType);
+                   std::vector<lsfs::ParameterDefinition *> parameters,
+                   lsfs::CompoundStatement *body, lsfs::Type *returnType);
 
-    UknownDeclaration *createUknownDeclaration(std::string message);
+    lsfs::UknownDeclaration *createUknownDeclaration(std::string message);
 
     DeclarationFactory(DeclarationFactory const &) = delete;
     void operator=(DeclarationFactory const &) = delete;

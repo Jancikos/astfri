@@ -1,7 +1,7 @@
 #include <libastfri/factories/TypeFactory.hpp>
 #include <libastfri/utils/Helper.hpp>
 
-using namespace libastfri::utils;
+namespace lsfu = libastfri::utils;
 
 namespace libastfri::factories {
 TypeFactory::TypeFactory() {}
@@ -12,20 +12,20 @@ TypeFactory &TypeFactory::getInstance() {
     return instance;
 }
 
-IntType *TypeFactory::getIntType() { return &this->intType; }
+lsfs::IntType *TypeFactory::getIntType() { return &this->intType; }
 
-FloatType *TypeFactory::getFloatType() { return &this->floatType; }
+lsfs::FloatType *TypeFactory::getFloatType() { return &this->floatType; }
 
-CharType *TypeFactory::getCharType() { return &this->charType; }
+lsfs::CharType *TypeFactory::getCharType() { return &this->charType; }
 
-BoolType *TypeFactory::getBoolType() { return &this->boolType; }
+lsfs::BoolType *TypeFactory::getBoolType() { return &this->boolType; }
 
-VoidType *TypeFactory::getVoidType() { return &this->voidType; }
+lsfs::VoidType *TypeFactory::getVoidType() { return &this->voidType; }
 
-UserType *TypeFactory::getUserType(std::string name) {
-    return &Helper::getValueFromMap(
+lsfs::UserType *TypeFactory::getUserType(std::string name) {
+    return &lsfu::Helper::getValueFromMap(
         name, userTypes, [](auto &p_map, auto p_key) {
-            return p_map.emplace(p_key, UserType{{p_key}});
+            return p_map.emplace(p_key, lsfs::UserType{{p_key}});
         });
 }
 } // namespace libastfri::factories
