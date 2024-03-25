@@ -3,28 +3,48 @@
 
 namespace lsfu = libastfri::utils;
 
-namespace libastfri::factories {
+namespace libastfri::factories
+{
 
-TypeFactory &TypeFactory::getInstance() {
+TypeFactory& TypeFactory::getInstance()
+{
     static TypeFactory instance;
 
     return instance;
 }
 
-lsfs::IntType *TypeFactory::getIntType() { return &this->intType; }
+lsfs::IntType* TypeFactory::getIntType()
+{
+    return &this->intType;
+}
 
-lsfs::FloatType *TypeFactory::getFloatType() { return &this->floatType; }
+lsfs::FloatType* TypeFactory::getFloatType()
+{
+    return &this->floatType;
+}
 
-lsfs::CharType *TypeFactory::getCharType() { return &this->charType; }
+lsfs::CharType* TypeFactory::getCharType()
+{
+    return &this->charType;
+}
 
-lsfs::BoolType *TypeFactory::getBoolType() { return &this->boolType; }
+lsfs::BoolType* TypeFactory::getBoolType()
+{
+    return &this->boolType;
+}
 
-lsfs::VoidType *TypeFactory::getVoidType() { return &this->voidType; }
+lsfs::VoidType* TypeFactory::getVoidType()
+{
+    return &this->voidType;
+}
 
-lsfs::UserType *TypeFactory::getUserType(std::string name) {
+lsfs::UserType* TypeFactory::getUserType(std::string name)
+{
     return &lsfu::Helper::getValueFromMap(
-        name, userTypes, [](auto &p_map, auto p_key) {
-            return p_map.emplace(p_key, lsfs::UserType{{p_key}});
-        });
+        name,
+        userTypes,
+        [] (auto& p_map, auto p_key)
+        { return p_map.emplace(p_key, lsfs::UserType {{p_key}}); }
+    );
 }
 } // namespace libastfri::factories

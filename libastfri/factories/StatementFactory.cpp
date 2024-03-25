@@ -2,45 +2,58 @@
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Statement.hpp>
 
-namespace libastfri::factories {
+namespace libastfri::factories
+{
 
-StatementFactory &StatementFactory::getInstance() {
+StatementFactory& StatementFactory::getInstance()
+{
     static StatementFactory instance;
 
     return instance;
 }
 
-StatementFactory::~StatementFactory() {
-    for (auto *statement : statements) {
+StatementFactory::~StatementFactory()
+{
+    for (auto* statement : statements)
+    {
         delete statement;
     }
     statements.clear();
 
-    for (auto *translationUnit : translationUnits) {
+    for (auto* translationUnit : translationUnits)
+    {
         delete translationUnit;
     }
     translationUnits.clear();
 }
 
-lsfs::TranslationUnit *StatementFactory::createTranslationUnit(
-    std::vector<lsfs::FunctionDefinition *> functions) {
-    auto *translationUnitStatement = new lsfs::TranslationUnit{std::move(functions)};
+lsfs::TranslationUnit* StatementFactory::createTranslationUnit(
+    std::vector<lsfs::FunctionDefinition*> functions
+)
+{
+    auto* translationUnitStatement
+        = new lsfs::TranslationUnit {std::move(functions)};
     translationUnits.emplace_back(translationUnitStatement);
 
     return translationUnitStatement;
 }
 
-lsfs::CompoundStatement *
-StatementFactory::createCompoundStatement(std::vector<lsfs::Statement *> statements) {
-    auto *compoundStatement = new lsfs::CompoundStatement(std::move(statements));
+lsfs::CompoundStatement* StatementFactory::createCompoundStatement(
+    std::vector<lsfs::Statement*> statements
+)
+{
+    auto* compoundStatement
+        = new lsfs::CompoundStatement(std::move(statements));
     statements.emplace_back(compoundStatement);
 
     return compoundStatement;
 }
 
-lsfs::DeclarationStatement *
-StatementFactory::createDeclarationStatement(lsfs::Declaration *declaration) {
-    auto *declarationStatement = new lsfs::DeclarationStatement(declaration);
+lsfs::DeclarationStatement* StatementFactory::createDeclarationStatement(
+    lsfs::Declaration* declaration
+)
+{
+    auto* declarationStatement = new lsfs::DeclarationStatement(declaration);
     statements.emplace_back(declarationStatement);
 
     declarationStatement->rnd = 600;
@@ -48,11 +61,14 @@ StatementFactory::createDeclarationStatement(lsfs::Declaration *declaration) {
     return declarationStatement;
 }
 
-lsfs::DeclarationAndAssigmentStatement *
-StatementFactory::createDeclarationAndAssigmentStatement(
-    lsfs::Declaration *variable, lsfs::Expression *expression) {
-    auto *declarationAndAssigmentStatement =
-        new lsfs::DeclarationAndAssigmentStatement(variable, expression);
+lsfs::DeclarationAndAssigmentStatement* StatementFactory::
+    createDeclarationAndAssigmentStatement(
+        lsfs::Declaration* variable,
+        lsfs::Expression* expression
+    )
+{
+    auto* declarationAndAssigmentStatement
+        = new lsfs::DeclarationAndAssigmentStatement(variable, expression);
     statements.emplace_back(declarationAndAssigmentStatement);
 
     declarationAndAssigmentStatement->rnd = 60001;
@@ -60,8 +76,11 @@ StatementFactory::createDeclarationAndAssigmentStatement(
     return declarationAndAssigmentStatement;
 }
 
-lsfs::ReturnStatement *StatementFactory::createReturnStatement(lsfs::Expression *value) {
-    auto *returnStatement = new lsfs::ReturnStatement(value);
+lsfs::ReturnStatement* StatementFactory::createReturnStatement(
+    lsfs::Expression* value
+)
+{
+    auto* returnStatement = new lsfs::ReturnStatement(value);
     statements.emplace_back(returnStatement);
 
     returnStatement->rnd = 333;
@@ -69,9 +88,11 @@ lsfs::ReturnStatement *StatementFactory::createReturnStatement(lsfs::Expression 
     return returnStatement;
 }
 
-lsfs::ExpressionStatement *
-StatementFactory::createExpressionStatement(lsfs::Expression *expression) {
-    auto *expressionStatement = new lsfs::ExpressionStatement(expression);
+lsfs::ExpressionStatement* StatementFactory::createExpressionStatement(
+    lsfs::Expression* expression
+)
+{
+    auto* expressionStatement = new lsfs::ExpressionStatement(expression);
     statements.emplace_back(expressionStatement);
 
     expressionStatement->rnd = 888;
@@ -79,63 +100,82 @@ StatementFactory::createExpressionStatement(lsfs::Expression *expression) {
     return expressionStatement;
 }
 
-lsfs::IfStatement *
-StatementFactory::createIfConditionalStatement(lsfs::Expression *condition,
-                                               lsfs::CompoundStatement *thenBody,
-                                               lsfs::CompoundStatement *elseBody) {
-    auto *ifStatement = new lsfs::IfStatement(condition, thenBody, elseBody);
+lsfs::IfStatement* StatementFactory::createIfConditionalStatement(
+    lsfs::Expression* condition,
+    lsfs::CompoundStatement* thenBody,
+    lsfs::CompoundStatement* elseBody
+)
+{
+    auto* ifStatement = new lsfs::IfStatement(condition, thenBody, elseBody);
     statements.emplace_back(ifStatement);
 
     return ifStatement;
 }
 
-lsfs::IfStatement *StatementFactory::createIfConditionalStatement(
-    lsfs::Expression *condition, lsfs::Statement *thenStatement, lsfs::Statement *elseStatement) {
-    auto *thenBody = createCompoundStatement({thenStatement});
-    auto *elseBody = createCompoundStatement({elseStatement});
+lsfs::IfStatement* StatementFactory::createIfConditionalStatement(
+    lsfs::Expression* condition,
+    lsfs::Statement* thenStatement,
+    lsfs::Statement* elseStatement
+)
+{
+    auto* thenBody = createCompoundStatement({thenStatement});
+    auto* elseBody = createCompoundStatement({elseStatement});
 
     return createIfConditionalStatement(condition, thenBody, elseBody);
 }
 
-lsfs::WhileLoopStatement *
-StatementFactory::createWhileLoopStatement(lsfs::Expression *condition,
-                                           lsfs::CompoundStatement *body) {
-    auto *whileLoopStatement = new lsfs::WhileLoopStatement(condition, body);
+lsfs::WhileLoopStatement* StatementFactory::createWhileLoopStatement(
+    lsfs::Expression* condition,
+    lsfs::CompoundStatement* body
+)
+{
+    auto* whileLoopStatement = new lsfs::WhileLoopStatement(condition, body);
     statements.emplace_back(whileLoopStatement);
 
     return whileLoopStatement;
 }
 
-lsfs::WhileLoopStatement *
-StatementFactory::createWhileLoopStatement(lsfs::Expression *condition,
-                                           lsfs::Statement *statement) {
-    auto *body = createCompoundStatement({statement});
+lsfs::WhileLoopStatement* StatementFactory::createWhileLoopStatement(
+    lsfs::Expression* condition,
+    lsfs::Statement* statement
+)
+{
+    auto* body = createCompoundStatement({statement});
 
     return createWhileLoopStatement(condition, body);
 }
 
-lsfs::DoWhileLoopStatement *
-StatementFactory::createDoWhileLoopStatement(lsfs::Expression *condition,
-                                             lsfs::CompoundStatement *body) {
-    auto *doWhileLoopStatement =
-        new lsfs::DoWhileLoopStatement(condition, body);
+lsfs::DoWhileLoopStatement* StatementFactory::createDoWhileLoopStatement(
+    lsfs::Expression* condition,
+    lsfs::CompoundStatement* body
+)
+{
+    auto* doWhileLoopStatement
+        = new lsfs::DoWhileLoopStatement(condition, body);
     statements.emplace_back(doWhileLoopStatement);
 
     return doWhileLoopStatement;
 }
 
-lsfs::ForLoopStatement *StatementFactory::createForLoopStatement(
-    lsfs::ExpressionStatement *init, lsfs::Expression *condition, lsfs::ExpressionStatement *step,
-    lsfs::CompoundStatement *body) {
-    lsfs::ForLoopStatement *forLoopStatement =
-        new lsfs::ForLoopStatement(init, condition, step, body);
+lsfs::ForLoopStatement* StatementFactory::createForLoopStatement(
+    lsfs::ExpressionStatement* init,
+    lsfs::Expression* condition,
+    lsfs::ExpressionStatement* step,
+    lsfs::CompoundStatement* body
+)
+{
+    lsfs::ForLoopStatement* forLoopStatement
+        = new lsfs::ForLoopStatement(init, condition, step, body);
     statements.emplace_back(forLoopStatement);
 
     return forLoopStatement;
 }
 
-lsfs::UnknownStatement *StatementFactory::createUnknownStatement(std::string message) {
-    auto *unknownStatement = new lsfs::UnknownStatement(message);
+lsfs::UnknownStatement* StatementFactory::createUnknownStatement(
+    std::string message
+)
+{
+    auto* unknownStatement = new lsfs::UnknownStatement(message);
     statements.emplace_back(unknownStatement);
 
     unknownStatement->rnd = 404;

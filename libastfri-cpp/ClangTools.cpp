@@ -1,49 +1,58 @@
 #include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
 #include <fstream>
-#include <memory>
-#include <sstream>
-
 #include <libastfri-cpp/ClangManagement.hpp>
 #include <libastfri-cpp/ClangTools.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
-#include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Declaration.hpp>
+#include <libastfri/structures/Expression.hpp>
+#include <memory>
+#include <sstream>
 
 namespace lsfs = libastfri::structures;
 
-namespace libastfri::cpp {
-lsfs::Type *ClangTools::convertType(clang::QualType qt) {
-    auto &typeFac = libastfri::factories::TypeFactory::getInstance();
+namespace libastfri::cpp
+{
+lsfs::Type* ClangTools::convertType(clang::QualType qt)
+{
+    auto& typeFac = libastfri::factories::TypeFactory::getInstance();
 
-    if (qt->isIntegerType()) {
+    if (qt->isIntegerType())
+    {
         return typeFac.getIntType();
     }
 
-    if (qt->isFloatingType()) {
+    if (qt->isFloatingType())
+    {
         return typeFac.getFloatType();
     }
 
-    if (qt->isCharType()) {
+    if (qt->isCharType())
+    {
         return typeFac.getCharType();
     }
 
-    if (qt->isBooleanType()) {
+    if (qt->isBooleanType())
+    {
         return typeFac.getBoolType();
     }
 
-    if (qt->isVoidType()) {
+    if (qt->isVoidType())
+    {
         return typeFac.getVoidType();
     }
 
     return typeFac.getUserType(qt.getAsString());
 }
 
-lsfs::BinaryOperators
-ClangTools::convertBinaryOperator(clang::BinaryOperator::Opcode op) {
-    switch (op) {
+lsfs::BinaryOperators ClangTools::convertBinaryOperator(
+    clang::BinaryOperator::Opcode op
+)
+{
+    switch (op)
+    {
     case clang::BinaryOperator::Opcode::BO_Assign:
         return lsfs::BinaryOperators::Assign;
     case clang::BinaryOperator::Opcode::BO_Add:
@@ -77,9 +86,12 @@ ClangTools::convertBinaryOperator(clang::BinaryOperator::Opcode op) {
     throw std::runtime_error("Unknown binary operator");
 }
 
-lsfs::UnaryOperators
-ClangTools::convertUnaryOperator(clang::UnaryOperator::Opcode op) {
-    switch (op) {
+lsfs::UnaryOperators ClangTools::convertUnaryOperator(
+    clang::UnaryOperator::Opcode op
+)
+{
+    switch (op)
+    {
     case clang::UnaryOperator::Opcode::UO_Minus:
         return lsfs::UnaryOperators::Negative;
     case clang::UnaryOperator::Opcode::UO_Not:
@@ -91,17 +103,22 @@ ClangTools::convertUnaryOperator(clang::UnaryOperator::Opcode op) {
 
 void ClangTools::BeginClangTreeVisit(
     std::string pathToCode,
-    lsfs::TranslationUnit &visitedTranslationUnit) {
+    lsfs::TranslationUnit& visitedTranslationUnit
+)
+{
     auto ifst = std::ifstream(pathToCode);
-    auto ist = std::stringstream();
+    auto ist  = std::stringstream();
     ist << ifst.rdbuf();
     std::string code = ist.str();
 
     // spusti clang prehliadku
     clang::tooling::runToolOnCodeWithArgs(
         std::make_unique<libastfri::cpp::ClangTraverseAction>(
-            visitedTranslationUnit),
-        code, {""});
+            visitedTranslationUnit
+        ),
+        code,
+        {""}
+    );
 }
 
 } // namespace libastfri::cpp

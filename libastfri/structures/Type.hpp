@@ -2,37 +2,50 @@
 
 #include <string>
 
-namespace libastfri::structures {
+namespace libastfri::structures
+{
 // typ
-struct Type {
+struct Type
+{
     std::string name;
 
     Type(std::string name);
 };
 
 //// primitivne typy
-struct PrimitiveType : Type {
+struct PrimitiveType : Type
+{
     PrimitiveType(std::string name);
 };
 
-struct IntType : PrimitiveType {
+struct IntType : PrimitiveType
+{
     IntType();
 };
-struct FloatType : PrimitiveType {
+
+struct FloatType : PrimitiveType
+{
     FloatType();
 };
-struct CharType : PrimitiveType {
+
+struct CharType : PrimitiveType
+{
     CharType();
 };
-struct BoolType : PrimitiveType {
+
+struct BoolType : PrimitiveType
+{
     BoolType();
 };
-struct VoidType : PrimitiveType {
+
+struct VoidType : PrimitiveType
+{
     VoidType();
 };
 
 //// uzivatelske typy
-struct UserType : Type {
+struct UserType : Type
+{
     UserType(std::string name);
 };
 } // namespace libastfri::structures

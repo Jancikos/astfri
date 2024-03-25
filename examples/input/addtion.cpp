@@ -1,10 +1,11 @@
 
-int simpleAddition(int a, int b = 0) {
+int simpleAddition (int a, int b = 0)
+{
     int c;
 
-    c = 2;
+    c     = 2;
 
-    c = a + 1;
+    c     = a + 1;
 
     int d = 4;
     int e = 4 + d;
@@ -14,18 +15,21 @@ int simpleAddition(int a, int b = 0) {
     return a + b;
 }
 
-int simpliestAddition2(int a, int b) {
+int simpliestAddition2 (int a, int b)
+{
     int repMultiplier = 1;
 
-    if (a < 0) {
+    if (a < 0)
+    {
         repMultiplier = -1;
     }
 
     int repCount = 0;
-    while (a + repCount < 0) {
+    while (a + repCount < 0)
+    {
         repCount = repMultiplier + 1;
     }
-    
+
     // TODO - otestovat for loop
     // for (int i = 0; i < 10; i++) {
     //     repCount = repMultiplier + 1;
@@ -34,4 +38,7 @@ int simpliestAddition2(int a, int b) {
     return simpliestAddition2(a, b);
 }
 
-int simpliestAddition(int o) { return o + o; }
+int simpliestAddition (int o)
+{
+    return o + o;
+}

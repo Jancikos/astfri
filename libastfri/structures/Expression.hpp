@@ -3,49 +3,67 @@
 #include <libastfri/structures/Declaration.hpp>
 #include <string>
 
-namespace libastfri::structures {
+namespace libastfri::structures
+{
 struct VariableDefintion;
 struct ParameterDefinition;
 
 // vyraz
-struct Expression {};
+struct Expression
+{
+};
 
 //// konstaty (literals) pouzivane v vyrazoch su vlastne tiez vyrazy
-struct Literal : Expression {};
-struct IntLiteral : Literal {
+struct Literal : Expression
+{
+};
+
+struct IntLiteral : Literal
+{
     int value;
 
     IntLiteral(int value);
 };
-struct FloatLiteral : Literal {
+
+struct FloatLiteral : Literal
+{
     float value;
 
     FloatLiteral(float value);
 };
-struct CharLiteral : Literal {
+
+struct CharLiteral : Literal
+{
     char value;
 
     CharLiteral(char value);
 };
-struct StringLiteral : Literal {
+
+struct StringLiteral : Literal
+{
     std::string value;
 
     StringLiteral(std::string value);
 };
-struct BoolLiteral : Literal {
+
+struct BoolLiteral : Literal
+{
     bool value;
 
     BoolLiteral(bool value);
 };
+
 // TODO - prehodnotit
-struct ConstLiteral : Literal {
+struct ConstLiteral : Literal
+{
     std::string name;
 
     ConstLiteral(std::string name);
 };
 
 //// operatory pouzivane v vyrazoch
-enum class BinaryOperators {
+enum class BinaryOperators
+{
     Assign,
     Add,
     Subtract,
@@ -59,46 +77,65 @@ enum class BinaryOperators {
     Greater,
     GreaterEqual
 };
-enum class UnaryOperators { Not, Negative, GetValue };
+enum class UnaryOperators
+{
+    Not,
+    Negative,
+    GetValue
+};
 
 //// vyrazy
-struct BinaryExpression : Expression {
-    Expression *left;
+struct BinaryExpression : Expression
+{
+    Expression* left;
     BinaryOperators op;
-    Expression *right;
+    Expression* right;
 
-    BinaryExpression(Expression *left, BinaryOperators op, Expression *right);
+    BinaryExpression(Expression* left, BinaryOperators op, Expression* right);
 };
-struct UnaryExpression : Expression {
-    UnaryOperators op;
-    Expression *arg;
 
-    UnaryExpression(UnaryOperators op, Expression *arg);
+struct UnaryExpression : Expression
+{
+    UnaryOperators op;
+    Expression* arg;
+
+    UnaryExpression(UnaryOperators op, Expression* arg);
 };
 
 //// referencie na premenne
-struct RefExpression : Expression {};
-struct ParamRefExpression : RefExpression {
-    ParameterDefinition *parameter;
-
-    ParamRefExpression(ParameterDefinition *parameter);
+struct RefExpression : Expression
+{
 };
-struct VarRefExpression : RefExpression {
-    VariableDefintion *variable;
 
-    VarRefExpression(VariableDefintion *variable);
+struct ParamRefExpression : RefExpression
+{
+    ParameterDefinition* parameter;
+
+    ParamRefExpression(ParameterDefinition* parameter);
+};
+
+struct VarRefExpression : RefExpression
+{
+    VariableDefintion* variable;
+
+    VarRefExpression(VariableDefintion* variable);
 };
 
 // volanie funkcie
-struct FunctionCallExpression : RefExpression {
+struct FunctionCallExpression : RefExpression
+{
     // FunctionDefinition* function;
     std::string functionName;
-    std::vector<Expression *> arguments;
+    std::vector<Expression*> arguments;
 
-    FunctionCallExpression(std::string functionName, std::vector<Expression *> arguments={});
+    FunctionCallExpression(
+        std::string functionName,
+        std::vector<Expression*> arguments = {}
+    );
 };
 
-struct UnknownExpression : Expression {
+struct UnknownExpression : Expression
+{
     std::string message;
 
     UnknownExpression(std::string message);
