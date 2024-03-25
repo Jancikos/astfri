@@ -41,7 +41,7 @@ lsfs::CharLiteral* LiteralFactory::getCharLiteral(char literal)
 
 lsfs::StringLiteral* LiteralFactory::getStringLiteral(std::string literal)
 {
-    return getLiteralFromMap(literal, this->stringLiterals);
+    return getLiteralFromMap(std::move(literal), this->stringLiterals);
 }
 
 lsfs::BoolLiteral* LiteralFactory::getBoolLiteral(bool literal)
@@ -51,7 +51,7 @@ lsfs::BoolLiteral* LiteralFactory::getBoolLiteral(bool literal)
 
 lsfs::ConstLiteral* LiteralFactory::getConstLiteral(std::string literal)
 {
-    return getLiteralFromMap(literal, this->constLiterals);
+    return getLiteralFromMap(std::move(literal), this->constLiterals);
 }
 
 //// ExpressionFactory
@@ -98,7 +98,7 @@ lsfs::UnknownExpression* ExpressionFactory::createUnknownExpression(
     std::string message
 )
 {
-    auto* expr = new lsfs::UnknownExpression(message);
+    auto* expr = new lsfs::UnknownExpression(std::move(message));
 
     return expr;
 }
@@ -146,7 +146,7 @@ lsfs::FunctionCallExpression* ReferenceFactory::createFunctionCallExpression(
 )
 {
     lsfs::FunctionCallExpression* expr
-        = new lsfs::FunctionCallExpression(functionName, std::move(arguments));
+        = new lsfs::FunctionCallExpression(std::move(functionName), std::move(arguments));
     this->refExpressions.push_back(expr);
 
     return expr;

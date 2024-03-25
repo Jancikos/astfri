@@ -37,7 +37,7 @@ lsfs::Declaration* ClangVisitor::getDeclaration(clang::Decl* Decl)
     {
         auto* declFac = &lsff::DeclarationFactory::getInstance();
 
-        // clearVisited(); // TODO - je to potrebne?
+        clearVisited(); // WARN - skontrolovat ci neovplyvni predosle prehliadky
 
         return declFac->createUknownDeclaration(e.what());
     }

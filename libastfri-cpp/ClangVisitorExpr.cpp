@@ -38,7 +38,7 @@ lsfs::Expression* ClangVisitor::getExpression(clang::Expr* Expr)
     {
         auto* exprFac = &lsff::ExpressionFactory::getInstance();
 
-        // clearVisited(); // TODO - je to potrebne?
+        clearVisited(); // WARN - skontrolovat ci neovplyvni predosle prehliadky
 
         return exprFac->createUnknownExpression(e.what());
     }

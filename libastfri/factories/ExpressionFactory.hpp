@@ -86,7 +86,7 @@ public:
     static ReferenceFactory& getInstance ();
 
 private:
-    // TODO - prekonzultovat recyklaciu
+    // FUTURE - vyriesit recyklaciu pomocou unikatnej kombinacie nazvu a typu
     UsedList<lsfs::RefExpression*> refExpressions;
 
     ReferenceFactory() = default;
