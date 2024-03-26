@@ -1,2 +1,10 @@
+#pragma once
 
-// class PseudocodeVisitor : public astfri::IVisitor
+#include "libastfri/utils/OutputVisitor.hpp"
+namespace libastfri::output
+{
+    // class PseudocodeVisitor : public libastfri::utils::IOutputVisitor
+    // {
+
+    // };
+}

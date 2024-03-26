@@ -10,8 +10,9 @@ struct VariableDefintion;
 struct ParameterDefinition;
 
 // vyraz
-struct Expression
+struct Expression : virtual utils::IOutputVisitable
 {
+
 };
 
 //// konstaty (literals) pouzivane v vyrazoch su vlastne tiez vyrazy

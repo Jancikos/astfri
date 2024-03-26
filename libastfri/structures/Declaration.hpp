@@ -10,7 +10,7 @@ struct Type;
 struct Expression;
 struct CompoundStatement;
 
-struct Declaration
+struct Declaration : virtual utils::IOutputVisitable
 {
 };
 

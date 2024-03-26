@@ -11,4 +11,5 @@ project(
 
 add_subdirectory(libastfri)
 add_subdirectory(libastfri-cpp)
+add_subdirectory(libastfri-output)
 add_subdirectory(examples)

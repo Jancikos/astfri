@@ -20,7 +20,7 @@ struct TranslationUnit : utils::OutputVisitable<TranslationUnit>
 };
 
 // "riadok" v kode
-struct Statement
+struct Statement : virtual utils::IOutputVisitable
 {
     int rnd; // TODO vymazat - teraz IBA PRE TRAPNY DEBUGGING
 
@@ -71,10 +71,9 @@ struct DeclarationStatement :
     }
 };
 
-struct DeclarationAndAssigmentStatement :
-    DeclarationStatement,
-    utils::OutputVisitable<DeclarationAndAssigmentStatement>
+struct DeclarationAndAssigmentStatement : Statement, utils::OutputVisitable<DeclarationAndAssigmentStatement>
 {
+    Declaration* declaration;
     Expression* expression;
 
     DeclarationAndAssigmentStatement(

@@ -24,7 +24,7 @@ DeclarationAndAssigmentStatement::DeclarationAndAssigmentStatement(
     Declaration* declaration,
     Expression* expression
 ) :
-    DeclarationStatement(declaration),
+    declaration(declaration),
     expression(expression)
 {
 }

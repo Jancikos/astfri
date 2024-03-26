@@ -1,6 +1,7 @@
 #include <iostream>
 #include <libastfri-cpp/ClangManagement.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
+#include <libastfri-output/CodeVisitor.hpp>
 
 #include "libastfri-cpp/ClangTools.hpp"
 #include "libastfri/structures/Statement.hpp"
@@ -42,6 +43,12 @@ int main (int argc, char** argv)
                       << std::endl;
         }
     }
+
+    // vypis z CodeVisitora
+    std::cout << "CodeVisitor output: " << std::endl;
+    libastfri::output::CodeVisitor codeVisitor(std::cout);
+
+    codeVisitor.Visit(*visitedTranslationUnit);
 
     return 0;
 }

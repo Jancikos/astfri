@@ -3,5 +3,5 @@ add_executable(
 )
 
 target_link_libraries(
-    astfri-cpp-example PRIVATE astfri-cpp
+    astfri-cpp-example PRIVATE astfri-cpp astfri-output
 )

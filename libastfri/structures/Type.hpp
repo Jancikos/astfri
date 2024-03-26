@@ -6,7 +6,7 @@
 namespace libastfri::structures
 {
 // typ
-struct Type
+struct Type : virtual utils::IOutputVisitable
 {
     std::string name;
 
