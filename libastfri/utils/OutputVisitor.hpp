@@ -36,6 +36,7 @@ struct FunctionDefinition;
 struct UknownDeclaration;
 
 // type
+struct Type;
 struct IntType;
 struct FloatType;
 struct CharType;
@@ -85,6 +86,7 @@ public:
     virtual void Visit (structures::UknownDeclaration const& decl)   = 0;
 
     // type
+    virtual void Visit (structures::Type const& type)      = 0;
     virtual void Visit (structures::IntType const& type)   = 0;
     virtual void Visit (structures::FloatType const& type) = 0;
     virtual void Visit (structures::CharType const& type)  = 0;
@@ -213,6 +215,10 @@ public:
     }
 
     // type
+    virtual void Visit (structures::Type const& type) override
+    {
+    }
+
     virtual void Visit (structures::IntType const& type) override
     {
     }
@@ -235,6 +241,7 @@ public:
 
     virtual void Visit (structures::UserType const& type) override
     {
+        Visit(type);
     }
 };
 

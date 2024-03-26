@@ -1,6 +1,13 @@
 #pragma once
 
 #include <map>
+#include <string>
+
+namespace libastfri::structures
+{
+enum class BinaryOperators;
+enum class UnaryOperators;
+} // namespace libastfri::structures
 
 namespace libastfri::utils
 {
@@ -17,6 +24,9 @@ public:
         std::map<K, T>& map,
         Emplacer customEmplace
     );
+
+    static std::string convertBinaryOperator (structures::BinaryOperators op);
+    static std::string convertUnaryOperator (structures::UnaryOperators op);
 };
 
 template<typename K, typename T, typename Emplacer>
