@@ -1,5 +1,6 @@
 #pragma once
 
+#include <libastfri/utils/OutputVisitor.hpp>
 #include <string>
 #include <vector>
 
@@ -29,7 +30,9 @@ struct BaseVariableDefintion : Declaration
 };
 
 // premenna
-struct VariableDefintion : BaseVariableDefintion
+struct VariableDefintion :
+    BaseVariableDefintion,
+    utils::OutputVisitable<VariableDefintion>
 {
     VariableDefintion(
         std::string name,
@@ -39,7 +42,9 @@ struct VariableDefintion : BaseVariableDefintion
 };
 
 // parameter
-struct ParameterDefinition : BaseVariableDefintion
+struct ParameterDefinition :
+    BaseVariableDefintion,
+    utils::OutputVisitable<ParameterDefinition>
 {
     ParameterDefinition(
         std::string name,
@@ -49,7 +54,9 @@ struct ParameterDefinition : BaseVariableDefintion
 };
 
 // funkcia
-struct FunctionDefinition : Declaration
+struct FunctionDefinition :
+    Declaration,
+    utils::OutputVisitable<FunctionDefinition>
 {
     std::string name;
     std::vector<ParameterDefinition*> parameters;
@@ -64,7 +71,9 @@ struct FunctionDefinition : Declaration
     );
 };
 
-struct UknownDeclaration : Declaration
+struct UknownDeclaration :
+    Declaration,
+    utils::OutputVisitable<UknownDeclaration>
 {
     std::string message;
 

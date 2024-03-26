@@ -1,6 +1,7 @@
 #pragma once
 
 #include <libastfri/structures/Declaration.hpp>
+#include <libastfri/utils/OutputVisitor.hpp>
 #include <string>
 
 namespace libastfri::structures
@@ -18,35 +19,35 @@ struct Literal : Expression
 {
 };
 
-struct IntLiteral : Literal
+struct IntLiteral : Literal, utils::OutputVisitable<IntLiteral>
 {
     int value;
 
     IntLiteral(int value);
 };
 
-struct FloatLiteral : Literal
+struct FloatLiteral : Literal, utils::OutputVisitable<FloatLiteral>
 {
     float value;
 
     FloatLiteral(float value);
 };
 
-struct CharLiteral : Literal
+struct CharLiteral : Literal, utils::OutputVisitable<CharLiteral>
 {
     char value;
 
     CharLiteral(char value);
 };
 
-struct StringLiteral : Literal
+struct StringLiteral : Literal, utils::OutputVisitable<StringLiteral>
 {
     std::string value;
 
     StringLiteral(std::string value);
 };
 
-struct BoolLiteral : Literal
+struct BoolLiteral : Literal, utils::OutputVisitable<BoolLiteral>
 {
     bool value;
 
@@ -54,7 +55,7 @@ struct BoolLiteral : Literal
 };
 
 // TODO - prehodnotit
-struct ConstLiteral : Literal
+struct ConstLiteral : Literal, utils::OutputVisitable<ConstLiteral>
 {
     std::string name;
 
@@ -85,7 +86,7 @@ enum class UnaryOperators
 };
 
 //// vyrazy
-struct BinaryExpression : Expression
+struct BinaryExpression : Expression, utils::OutputVisitable<BinaryExpression>
 {
     Expression* left;
     BinaryOperators op;
@@ -94,7 +95,7 @@ struct BinaryExpression : Expression
     BinaryExpression(Expression* left, BinaryOperators op, Expression* right);
 };
 
-struct UnaryExpression : Expression
+struct UnaryExpression : Expression, utils::OutputVisitable<UnaryExpression>
 {
     UnaryOperators op;
     Expression* arg;
@@ -107,14 +108,18 @@ struct RefExpression : Expression
 {
 };
 
-struct ParamRefExpression : RefExpression
+struct ParamRefExpression :
+    RefExpression,
+    utils::OutputVisitable<ParamRefExpression>
 {
     ParameterDefinition* parameter;
 
     ParamRefExpression(ParameterDefinition* parameter);
 };
 
-struct VarRefExpression : RefExpression
+struct VarRefExpression :
+    RefExpression,
+    utils::OutputVisitable<VarRefExpression>
 {
     VariableDefintion* variable;
 
@@ -122,7 +127,9 @@ struct VarRefExpression : RefExpression
 };
 
 // volanie funkcie
-struct FunctionCallExpression : RefExpression
+struct FunctionCallExpression :
+    RefExpression,
+    utils::OutputVisitable<FunctionCallExpression>
 {
     // FunctionDefinition* function;
     std::string functionName;
@@ -134,7 +141,7 @@ struct FunctionCallExpression : RefExpression
     );
 };
 
-struct UnknownExpression : Expression
+struct UnknownExpression : Expression, utils::OutputVisitable<UnknownExpression>
 {
     std::string message;
 

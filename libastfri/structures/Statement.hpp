@@ -2,16 +2,17 @@
 
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Expression.hpp>
+#include <libastfri/utils/OutputVisitor.hpp>
 #include <string>
 #include <vector>
 
 namespace libastfri::structures
 {
 /**
- * @brief pre reprazentaciu celeho vstupneho bloku kodu
+ * @brief pre reprazentaciu celeho vstupneho bloku kodu / suboru
  *
  */
-struct TranslationUnit
+struct TranslationUnit : utils::OutputVisitable<TranslationUnit>
 {
     std::vector<FunctionDefinition*> functions;
 
@@ -36,7 +37,7 @@ struct Statement
     }
 };
 
-struct CompoundStatement : Statement
+struct CompoundStatement : Statement, utils::OutputVisitable<CompoundStatement>
 {
     std::vector<Statement*> statements;
 
@@ -53,7 +54,9 @@ struct CompoundStatement : Statement
     }
 };
 
-struct DeclarationStatement : Statement
+struct DeclarationStatement :
+    Statement,
+    utils::OutputVisitable<DeclarationStatement>
 {
     Declaration* declaration;
 
@@ -68,7 +71,9 @@ struct DeclarationStatement : Statement
     }
 };
 
-struct DeclarationAndAssigmentStatement : DeclarationStatement
+struct DeclarationAndAssigmentStatement :
+    DeclarationStatement,
+    utils::OutputVisitable<DeclarationAndAssigmentStatement>
 {
     Expression* expression;
 
@@ -89,7 +94,7 @@ struct DeclarationAndAssigmentStatement : DeclarationStatement
     }
 };
 
-struct ReturnStatement : Statement
+struct ReturnStatement : Statement, utils::OutputVisitable<ReturnStatement>
 {
     Expression* value;
 
@@ -104,7 +109,9 @@ struct ReturnStatement : Statement
     }
 };
 
-struct ExpressionStatement : Statement
+struct ExpressionStatement :
+    Statement,
+    utils::OutputVisitable<ExpressionStatement>
 {
     Expression* expression;
 
@@ -135,7 +142,7 @@ struct ConditionalStatement : Statement
     }
 };
 
-struct IfStatement : ConditionalStatement
+struct IfStatement : ConditionalStatement, utils::OutputVisitable<IfStatement>
 {
     CompoundStatement* thenBody;
     CompoundStatement* elseBody;
@@ -180,7 +187,9 @@ struct LoopStatement : Statement
     }
 };
 
-struct WhileLoopStatement : LoopStatement
+struct WhileLoopStatement :
+    LoopStatement,
+    utils::OutputVisitable<WhileLoopStatement>
 {
 
     WhileLoopStatement(Expression* condition, CompoundStatement* body);
@@ -197,7 +206,9 @@ struct WhileLoopStatement : LoopStatement
     }
 };
 
-struct DoWhileLoopStatement : LoopStatement
+struct DoWhileLoopStatement :
+    LoopStatement,
+    utils::OutputVisitable<DoWhileLoopStatement>
 {
 
     DoWhileLoopStatement(Expression* condition, CompoundStatement* body);
@@ -214,7 +225,9 @@ struct DoWhileLoopStatement : LoopStatement
     }
 };
 
-struct ForLoopStatement : LoopStatement
+struct ForLoopStatement :
+    LoopStatement,
+    utils::OutputVisitable<ForLoopStatement>
 {
     ExpressionStatement* init;
     ExpressionStatement* step;
@@ -242,7 +255,7 @@ struct ForLoopStatement : LoopStatement
     }
 };
 
-struct UnknownStatement : Statement
+struct UnknownStatement : Statement, utils::OutputVisitable<UnknownStatement>
 {
     std::string message;
 
