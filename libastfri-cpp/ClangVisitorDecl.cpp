@@ -1,9 +1,10 @@
-#include <cassert>
-#include <libastfri-cpp/ClangVisitor.hpp>
 #include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
+
+#include <cassert>
+#include <libastfri-cpp/ClangVisitor.hpp>
 
 namespace lsff = libastfri::factories;
 

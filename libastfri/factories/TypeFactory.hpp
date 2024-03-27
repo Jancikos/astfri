@@ -1,6 +1,7 @@
 #pragma once
 
 #include <libastfri/structures/Type.hpp>
+
 #include <map>
 #include <string>
 

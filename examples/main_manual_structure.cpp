@@ -2,6 +2,7 @@
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
+
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Statement.hpp>
 

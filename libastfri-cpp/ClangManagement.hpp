@@ -1,5 +1,7 @@
 #pragma once
 
+#include <libastfri/structures/Statement.hpp>
+
 #include <clang/AST/ASTConsumer.h>
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/Decl.h>
@@ -8,7 +10,6 @@
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Tooling/Tooling.h>
 #include <libastfri-cpp/ClangVisitor.hpp>
-#include <libastfri/structures/Statement.hpp>
 #include <memory>
 
 namespace libastfri::cpp

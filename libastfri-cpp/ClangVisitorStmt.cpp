@@ -1,9 +1,10 @@
-#include <cassert>
-#include <libastfri-cpp/ClangVisitor.hpp>
 #include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
+
+#include <cassert>
+#include <libastfri-cpp/ClangVisitor.hpp>
 
 namespace lsff = libastfri::factories;
 
@@ -153,7 +154,7 @@ bool ClangVisitor::VisitForStmt(clang::ForStmt* Stmt)
     auto* body         = getStatement(Stmt->getBody());
 
     auto* condition    = getExpression(Stmt->getCond());
-    auto* init       = getStatement(Stmt->getInit());
+    auto* init         = getStatement(Stmt->getInit());
     auto* inc          = getExpression(Stmt->getInc());
 
     visitedStatement

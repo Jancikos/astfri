@@ -1,4 +1,5 @@
 #include <libastfri/factories/StatementFactory.hpp>
+
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Statement.hpp>
 
@@ -179,8 +180,12 @@ lsfs::ForLoopStatement* StatementFactory::createForLoopStatement(
     lsfs::Statement* body
 )
 {
-    lsfs::ForLoopStatement* forLoopStatement
-        = new lsfs::ForLoopStatement(init, condition, step, tryGetCompoundStatement(body));
+    lsfs::ForLoopStatement* forLoopStatement = new lsfs::ForLoopStatement(
+        init,
+        condition,
+        step,
+        tryGetCompoundStatement(body)
+    );
     statements.emplace_back(forLoopStatement);
 
     return forLoopStatement;

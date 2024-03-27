@@ -1,13 +1,15 @@
+#include <libastfri/factories/ExpressionFactory.hpp>
+#include <libastfri/factories/StatementFactory.hpp>
+#include <libastfri/factories/TypeFactory.hpp>
+
+#include <libastfri/structures/Declaration.hpp>
+#include <libastfri/structures/Expression.hpp>
+
 #include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
 #include <fstream>
 #include <libastfri-cpp/ClangManagement.hpp>
 #include <libastfri-cpp/ClangTools.hpp>
-#include <libastfri/factories/ExpressionFactory.hpp>
-#include <libastfri/factories/StatementFactory.hpp>
-#include <libastfri/factories/TypeFactory.hpp>
-#include <libastfri/structures/Declaration.hpp>
-#include <libastfri/structures/Expression.hpp>
 #include <memory>
 #include <sstream>
 

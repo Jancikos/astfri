@@ -1,5 +1,10 @@
 #pragma once
 
+#include <libastfri/structures/Declaration.hpp>
+#include <libastfri/structures/Expression.hpp>
+#include <libastfri/structures/Statement.hpp>
+#include <libastfri/structures/Type.hpp>
+
 #include <clang/AST/ASTConsumer.h>
 #include <clang/AST/ASTContext.h>
 #include <clang/AST/Decl.h>
@@ -7,11 +12,6 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Tooling/Tooling.h>
-#include <libastfri/structures/Declaration.hpp>
-#include <libastfri/structures/Statement.hpp>
-#include <libastfri/structures/Type.hpp>
-
-#include "libastfri/structures/Expression.hpp"
 
 namespace libastfri::cpp
 {

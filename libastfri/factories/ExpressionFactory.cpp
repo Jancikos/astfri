@@ -1,4 +1,5 @@
 #include <libastfri/factories/ExpressionFactory.hpp>
+
 #include <libastfri/utils/Helper.hpp>
 
 namespace lsfu = libastfri::utils;
@@ -145,8 +146,10 @@ lsfs::FunctionCallExpression* ReferenceFactory::createFunctionCallExpression(
     std::vector<lsfs::Expression*> arguments
 )
 {
-    lsfs::FunctionCallExpression* expr
-        = new lsfs::FunctionCallExpression(std::move(functionName), std::move(arguments));
+    lsfs::FunctionCallExpression* expr = new lsfs::FunctionCallExpression(
+        std::move(functionName),
+        std::move(arguments)
+    );
     this->refExpressions.push_back(expr);
 
     return expr;

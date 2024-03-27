@@ -2,6 +2,7 @@
 
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Expression.hpp>
+
 #include <map>
 #include <string>
 #include <vector>

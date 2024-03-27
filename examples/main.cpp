@@ -1,10 +1,11 @@
-#include <iostream>
-#include <libastfri-cpp/ClangManagement.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
+
+#include <libastfri-cpp/ClangManagement.hpp>
+#include <libastfri-cpp/ClangTools.hpp>
+
 #include <libastfri-output/CodeVisitor.hpp>
 
-#include "libastfri-cpp/ClangTools.hpp"
-#include "libastfri/structures/Statement.hpp"
+#include <iostream>
 
 int main (int argc, char** argv)
 {

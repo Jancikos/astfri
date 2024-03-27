@@ -1,9 +1,10 @@
-#include <cassert>
-#include <libastfri-cpp/ClangVisitor.hpp>
 #include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
+
+#include <cassert>
+#include <libastfri-cpp/ClangVisitor.hpp>
 
 namespace lsff = libastfri::factories;
 
@@ -66,9 +67,9 @@ bool ClangVisitor::VisitBinaryOperator(clang::BinaryOperator* Expr)
 
 bool ClangVisitor::VisitUnaryOperator(clang::UnaryOperator* Expr)
 {
-    auto& exprFac = lsff::ExpressionFactory::getInstance();
+    auto& exprFac     = lsff::ExpressionFactory::getInstance();
 
-    auto* subExpr = getExpression(Expr->getSubExpr());
+    auto* subExpr     = getExpression(Expr->getSubExpr());
 
     visitedExpression = exprFac.createUnaryExpression(
         Tools::convertUnaryOperator(Expr->getOpcode()),

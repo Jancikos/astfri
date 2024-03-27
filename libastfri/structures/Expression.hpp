@@ -2,6 +2,7 @@
 
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/utils/OutputVisitor.hpp>
+
 #include <string>
 
 namespace libastfri::structures
@@ -12,7 +13,6 @@ struct ParameterDefinition;
 // vyraz
 struct Expression : virtual utils::IOutputVisitable
 {
-
 };
 
 //// konstaty (literals) pouzivane v vyrazoch su vlastne tiez vyrazy

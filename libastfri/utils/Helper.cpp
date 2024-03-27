@@ -1,5 +1,5 @@
-#include <libastfri/utils/Helper.hpp>
 #include <libastfri/structures/Expression.hpp>
+#include <libastfri/utils/Helper.hpp>
 
 namespace libastfri::utils
 {

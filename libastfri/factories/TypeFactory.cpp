@@ -1,4 +1,5 @@
 #include <libastfri/factories/TypeFactory.hpp>
+
 #include <libastfri/utils/Helper.hpp>
 
 namespace lsfu = libastfri::utils;

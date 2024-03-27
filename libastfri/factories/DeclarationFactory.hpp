@@ -1,7 +1,9 @@
 #pragma once
 
 #include <libastfri/factories/ExpressionFactory.hpp>
+
 #include <libastfri/structures/Declaration.hpp>
+
 #include <string>
 
 namespace lsfs = libastfri::structures;

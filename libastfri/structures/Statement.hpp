@@ -3,6 +3,7 @@
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/utils/OutputVisitor.hpp>
+
 #include <string>
 #include <vector>
 

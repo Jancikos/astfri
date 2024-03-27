@@ -1,4 +1,5 @@
 #include <libastfri/factories/DeclarationFactory.hpp>
+
 #include <libastfri/structures/Declaration.hpp>
 
 namespace libastfri::factories

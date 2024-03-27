@@ -1,8 +1,9 @@
-#include <libastfri-output/CodeVisitor.hpp>
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Statement.hpp>
 #include <libastfri/structures/Type.hpp>
+
+#include <libastfri-output/CodeVisitor.hpp>
 
 #include "libastfri/utils/Helper.hpp"
 
@@ -146,7 +147,7 @@ void CodeVisitor::Visit(lsfs::ForLoopStatement const& stmt)
 {
     this->printIndent();
     this->outStream << "for (";
-    
+
     // init
     this->inilinePrinting = true;
     stmt.init->accept(*this);
@@ -160,7 +161,7 @@ void CodeVisitor::Visit(lsfs::ForLoopStatement const& stmt)
     stmt.step->accept(*this);
     this->outStream << ")";
     this->printEndl(false);
-    
+
     // body
     stmt.body->accept(*this);
 }

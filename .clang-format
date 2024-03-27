@@ -73,15 +73,15 @@ ConstructorInitializerAllOnOneLineOrOnePerLine: false
 FixNamespaceComments: true
 IncludeBlocks:   Regroup
 IncludeCategories:
-  - Regex:           '^<(libteddy)/'
+  - Regex:           '^<(libastfri/factories)/'
     Priority:        1
-  - Regex:           '^<(libtsl)/'
+  - Regex:           '^<(libastfri)/structures/'
     Priority:        2
-  - Regex:           '^<(boost)/'
+  - Regex:           '^<(libastfri)/'
     Priority:        3
-  - Regex:           '^<(fmt)/'
+  - Regex:           '^<(libastfri-cpp)/'
     Priority:        4
-  - Regex:           '^<(ginac)/'
+  - Regex:           '^<(libastfri-output)/'
     Priority:        5
   - Regex:           '<.+>'
     Priority:        6

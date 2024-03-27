@@ -1,5 +1,6 @@
-#include <libastfri-cpp/ClangManagement.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
+
+#include <libastfri-cpp/ClangManagement.hpp>
 
 namespace libastfri::cpp
 {

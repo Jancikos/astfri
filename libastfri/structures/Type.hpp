@@ -1,6 +1,7 @@
 #pragma once
 
 #include <libastfri/utils/OutputVisitor.hpp>
+
 #include <string>
 
 namespace libastfri::structures

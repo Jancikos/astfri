@@ -1,6 +1,7 @@
 #pragma once
 
 #include <libastfri/factories/ExpressionFactory.hpp>
+
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Statement.hpp>
 #include <libastfri/structures/Type.hpp>
@@ -21,7 +22,9 @@ private:
 
     StatementFactory() = default;
     ~StatementFactory();
-    lsfs::CompoundStatement* tryGetCompoundStatement (lsfs::Statement* Statement);
+    lsfs::CompoundStatement* tryGetCompoundStatement (lsfs::Statement* Statement
+    );
+
 public:
     StatementFactory(StatementFactory const&) = delete;
     void operator= (StatementFactory const&)  = delete;
