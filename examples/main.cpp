@@ -23,27 +23,6 @@ int main (int argc, char** argv)
         *visitedTranslationUnit
     );
 
-    // vypis translation unit
-    std::cout << "Translation unit: " << std::endl;
-    int i = 0;
-    for (auto* fun : visitedTranslationUnit->functions)
-    {
-        std::cout << "  Function: " << fun->name << std::endl;
-        for (auto* param : fun->parameters)
-        {
-            std::cout << "    Param: " << param->name << " ("
-                      << param->type->name << ")" << std::endl;
-        }
-
-        std::cout << "    Body: " << std::endl;
-        for (auto* stmt : fun->body->statements)
-        {
-            // tu zrejme prichadza potreba visitora pre vypis...
-            std::cout << "      " << i++ << ": " << stmt->toString()
-                      << std::endl;
-        }
-    }
-
     // vypis z CodeVisitora
     std::cout << "CodeVisitor output: " << std::endl;
     libastfri::output::CodeVisitor codeVisitor(std::cout);

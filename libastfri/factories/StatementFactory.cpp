@@ -74,8 +74,6 @@ lsfs::DeclarationStatement* StatementFactory::createDeclarationStatement(
     auto* declarationStatement = new lsfs::DeclarationStatement(declaration);
     statements.emplace_back(declarationStatement);
 
-    declarationStatement->rnd = 600;
-
     return declarationStatement;
 }
 
@@ -89,8 +87,6 @@ lsfs::DeclarationAndAssigmentStatement* StatementFactory::
         = new lsfs::DeclarationAndAssigmentStatement(variable, expression);
     statements.emplace_back(declarationAndAssigmentStatement);
 
-    declarationAndAssigmentStatement->rnd = 60001;
-
     return declarationAndAssigmentStatement;
 }
 
@@ -101,8 +97,6 @@ lsfs::ReturnStatement* StatementFactory::createReturnStatement(
     auto* returnStatement = new lsfs::ReturnStatement(value);
     statements.emplace_back(returnStatement);
 
-    returnStatement->rnd = 333;
-
     return returnStatement;
 }
 
@@ -112,8 +106,6 @@ lsfs::ExpressionStatement* StatementFactory::createExpressionStatement(
 {
     auto* expressionStatement = new lsfs::ExpressionStatement(expression);
     statements.emplace_back(expressionStatement);
-
-    expressionStatement->rnd = 888;
 
     return expressionStatement;
 }
@@ -200,8 +192,6 @@ lsfs::UnknownStatement* StatementFactory::createUnknownStatement(
 {
     auto* unknownStatement = new lsfs::UnknownStatement(message);
     statements.emplace_back(unknownStatement);
-
-    unknownStatement->rnd = 404;
 
     return unknownStatement;
 }
