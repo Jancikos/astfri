@@ -173,14 +173,14 @@ lsfs::DoWhileLoopStatement* StatementFactory::createDoWhileLoopStatement(
 }
 
 lsfs::ForLoopStatement* StatementFactory::createForLoopStatement(
-    lsfs::ExpressionStatement* init,
+    lsfs::Statement* init,
     lsfs::Expression* condition,
-    lsfs::ExpressionStatement* step,
-    lsfs::CompoundStatement* body
+    lsfs::Expression* step,
+    lsfs::Statement* body
 )
 {
     lsfs::ForLoopStatement* forLoopStatement
-        = new lsfs::ForLoopStatement(init, condition, step, body);
+        = new lsfs::ForLoopStatement(init, condition, step, tryGetCompoundStatement(body));
     statements.emplace_back(forLoopStatement);
 
     return forLoopStatement;

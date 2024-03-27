@@ -22,6 +22,7 @@ public:
     virtual void Visit(structures::UnknownStatement const& stmt) override;
     virtual void Visit(structures::IfStatement const& stmt) override;
     virtual void Visit(structures::WhileLoopStatement const& stmt) override;
+    virtual void Visit(structures::ForLoopStatement const& stmt) override;
 
     // decl
     virtual void Visit(structures::FunctionDefinition const& functionDef) override;
@@ -47,6 +48,8 @@ public:
 protected:
     std::ostream& outStream;
     int level = 0;
+    // ci ma byt statement na novom riadku
+    bool inilinePrinting = false;
     void printIndent ();
     void printOnNewLine (std::string const& str, bool endLine = true);
     void printEndl (bool semicolon = true);

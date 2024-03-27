@@ -40,6 +40,7 @@ public:
     bool VisitReturnStmt (clang::ReturnStmt* Stmt);
     bool VisitIfStmt (clang::IfStmt* Stmt);
     bool VisitWhileStmt (clang::WhileStmt* Stmt);
+    bool VisitForStmt (clang::ForStmt* Stmt);
 
     // ClangVisitor_expr.cpp
     lsfs::Expression* getExpression (clang::Expr* Expr);

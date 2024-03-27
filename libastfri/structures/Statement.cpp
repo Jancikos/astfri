@@ -77,9 +77,9 @@ DoWhileLoopStatement::DoWhileLoopStatement(
 }
 
 ForLoopStatement::ForLoopStatement(
-    ExpressionStatement* init,
+    Statement* init,
     Expression* condition,
-    ExpressionStatement* step,
+    Expression* step,
     CompoundStatement* body
 ) :
     LoopStatement(condition, body),

@@ -111,20 +111,20 @@ bool ClangVisitor::VisitReturnStmt(clang::ReturnStmt* Stmt)
 
 bool ClangVisitor::VisitIfStmt(clang::IfStmt* Stmt)
 {
-    auto& statementFac = lsff::StatementFactory::getInstance();
-    auto& declFac      = lsff::DeclarationFactory::getInstance();
+    auto& statementFac        = lsff::StatementFactory::getInstance();
+    auto& declFac             = lsff::DeclarationFactory::getInstance();
 
-    auto* thenStmt     = getStatement(Stmt->getThen());
+    auto* thenStmt            = getStatement(Stmt->getThen());
 
-    lsfs::Statement* elseStmt     = nullptr;
+    lsfs::Statement* elseStmt = nullptr;
     if (Stmt->getElse() != nullptr)
     {
         elseStmt = getStatement(Stmt->getElse());
     }
 
-    auto* condition    = getExpression(Stmt->getCond());
+    auto* condition  = getExpression(Stmt->getCond());
 
-    visitedStatement   = statementFac.createIfConditionalStatement(
+    visitedStatement = statementFac.createIfConditionalStatement(
         condition,
         thenStmt,
         elseStmt
@@ -144,4 +144,21 @@ bool ClangVisitor::VisitWhileStmt(clang::WhileStmt* Stmt)
     visitedStatement   = statementFac.createWhileLoopStatement(condition, body);
     return false;
 }
+
+bool ClangVisitor::VisitForStmt(clang::ForStmt* Stmt)
+{
+    auto& statementFac = lsff::StatementFactory::getInstance();
+    auto& declFac      = lsff::DeclarationFactory::getInstance();
+
+    auto* body         = getStatement(Stmt->getBody());
+
+    auto* condition    = getExpression(Stmt->getCond());
+    auto* init       = getStatement(Stmt->getInit());
+    auto* inc          = getExpression(Stmt->getInc());
+
+    visitedStatement
+        = statementFac.createForLoopStatement(init, condition, inc, body);
+    return false;
+}
+
 } // namespace libastfri::cpp

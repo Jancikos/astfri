@@ -72,10 +72,10 @@ public:
         lsfs::CompoundStatement* body
     );
     lsfs::ForLoopStatement* createForLoopStatement (
-        lsfs::ExpressionStatement* init,
+        lsfs::Statement* init,
         lsfs::Expression* condition,
-        lsfs::ExpressionStatement* step,
-        lsfs::CompoundStatement* body
+        lsfs::Expression* step,
+        lsfs::Statement* body
     );
 
     lsfs::UnknownStatement* createUnknownStatement (std::string message);

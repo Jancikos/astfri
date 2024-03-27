@@ -30,10 +30,9 @@ int simpliestAddition2 (int a, int b)
         repCount = repMultiplier + 1;
     }
 
-    // TODO - otestovat for loop
-    // for (int i = 0; i < 10; i++) {
-    //     repCount = repMultiplier + 1;
-    // }
+    for (int i = 0; i < 10; i = i + 1) {
+        repCount = repMultiplier + 1;
+    }
 
     return simpliestAddition2(a, b);
 }

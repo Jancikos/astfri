@@ -20,11 +20,23 @@ void CodeVisitor::printEndl(bool semicolon)
     {
         this->outStream << ";";
     }
+
+    if (this->inilinePrinting)
+    {
+        this->outStream << " ";
+        return;
+    }
+
     this->outStream << std::endl;
 }
 
 void CodeVisitor::printIndent()
 {
+    if (this->inilinePrinting)
+    {
+        return;
+    }
+
     for (int i = 0; i < this->level; i++)
     {
         this->outStream << "    ";
@@ -127,6 +139,29 @@ void CodeVisitor::Visit(lsfs::WhileLoopStatement const& stmt)
     this->outStream << "while (";
     stmt.condition->accept(*this);
     this->outStream << ")\n";
+    stmt.body->accept(*this);
+}
+
+void CodeVisitor::Visit(lsfs::ForLoopStatement const& stmt)
+{
+    this->printIndent();
+    this->outStream << "for (";
+    
+    // init
+    this->inilinePrinting = true;
+    stmt.init->accept(*this);
+    this->inilinePrinting = false;
+
+    //  condition
+    stmt.condition->accept(*this);
+    this->outStream << "; ";
+
+    // step
+    stmt.step->accept(*this);
+    this->outStream << ")";
+    this->printEndl(false);
+    
+    // body
     stmt.body->accept(*this);
 }
 

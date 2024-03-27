@@ -117,13 +117,13 @@ struct ForLoopStatement :
     LoopStatement,
     utils::OutputVisitable<ForLoopStatement>
 {
-    ExpressionStatement* init;
-    ExpressionStatement* step;
+    Statement* init;
+    Expression* step;
 
     ForLoopStatement(
-        ExpressionStatement* init,
+        Statement* init,
         Expression* condition,
-        ExpressionStatement* step,
+        Expression* step,
         CompoundStatement* body
     );
 };
