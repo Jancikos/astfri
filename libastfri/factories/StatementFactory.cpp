@@ -27,6 +27,24 @@ StatementFactory::~StatementFactory()
     translationUnits.clear();
 }
 
+lsfs::CompoundStatement* StatementFactory::tryGetCompoundStatement(
+    lsfs::Statement* Statement
+)
+{
+    if (Statement == nullptr)
+    {
+        return nullptr;
+    }
+
+    auto* compoundStatement = dynamic_cast<lsfs::CompoundStatement*>(Statement);
+    if (compoundStatement == nullptr)
+    {
+        return createCompoundStatement({Statement});
+    }
+
+    return compoundStatement;
+}
+
 lsfs::TranslationUnit* StatementFactory::createTranslationUnit(
     std::vector<lsfs::FunctionDefinition*> functions
 )
@@ -118,10 +136,15 @@ lsfs::IfStatement* StatementFactory::createIfConditionalStatement(
     lsfs::Statement* elseStatement
 )
 {
-    auto* thenBody = createCompoundStatement({thenStatement});
-    auto* elseBody = createCompoundStatement({elseStatement});
+    // try parse statements to compound statements
+    auto* thenCompoundStatement = tryGetCompoundStatement(thenStatement);
+    auto* elseCompoundStatement = tryGetCompoundStatement(elseStatement);
 
-    return createIfConditionalStatement(condition, thenBody, elseBody);
+    return createIfConditionalStatement(
+        condition,
+        thenCompoundStatement,
+        elseCompoundStatement
+    );
 }
 
 lsfs::WhileLoopStatement* StatementFactory::createWhileLoopStatement(
@@ -140,7 +163,7 @@ lsfs::WhileLoopStatement* StatementFactory::createWhileLoopStatement(
     lsfs::Statement* statement
 )
 {
-    auto* body = createCompoundStatement({statement});
+    auto* body = tryGetCompoundStatement(statement);
 
     return createWhileLoopStatement(condition, body);
 }

@@ -21,7 +21,7 @@ private:
 
     StatementFactory() = default;
     ~StatementFactory();
-
+    lsfs::CompoundStatement* tryGetCompoundStatement (lsfs::Statement* Statement);
 public:
     StatementFactory(StatementFactory const&) = delete;
     void operator= (StatementFactory const&)  = delete;

@@ -89,9 +89,9 @@ bool ClangVisitor::VisitCompoundStmt(clang::CompoundStmt* Stmt)
     auto& statementFac      = lsff::StatementFactory::getInstance();
     auto* compoundStatement = statementFac.createCompoundStatement({});
 
-    for (auto stmt : Stmt->body())
+    for (auto nestedStmt : Stmt->body())
     {
-        compoundStatement->statements.push_back(getStatement(stmt));
+        compoundStatement->statements.push_back(getStatement(nestedStmt));
     }
 
     visitedStatement = compoundStatement;
@@ -116,7 +116,11 @@ bool ClangVisitor::VisitIfStmt(clang::IfStmt* Stmt)
 
     auto* thenStmt     = getStatement(Stmt->getThen());
 
-    auto* elseStmt     = getStatement(Stmt->getElse());
+    lsfs::Statement* elseStmt     = nullptr;
+    if (Stmt->getElse() != nullptr)
+    {
+        elseStmt = getStatement(Stmt->getElse());
+    }
 
     auto* condition    = getExpression(Stmt->getCond());
 
