@@ -31,6 +31,7 @@ public:
     // expr
     virtual void Visit(structures::IntLiteral const& expr) override;
     virtual void Visit(structures::BinaryExpression const& expr) override;
+    virtual void Visit(structures::UnaryExpression const& expr) override;
     virtual void Visit(structures::VarRefExpression const& expr) override;
     virtual void Visit(structures::FunctionCallExpression const& expr) override;
     virtual void Visit(structures::UnknownExpression const& expr) override;

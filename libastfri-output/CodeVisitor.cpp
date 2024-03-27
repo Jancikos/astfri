@@ -178,6 +178,12 @@ void CodeVisitor::Visit(lsfs::BinaryExpression const& expr)
     expr.right->accept(*this);
 }
 
+void CodeVisitor::Visit(lsfs::UnaryExpression const& expr)
+{
+    this->outStream << utils::Helper::convertUnaryOperator(expr.op);
+    expr.arg->accept(*this);
+}
+
 void CodeVisitor::Visit(lsfs::VarRefExpression const& expr)
 {
     this->outStream << expr.variable->name;

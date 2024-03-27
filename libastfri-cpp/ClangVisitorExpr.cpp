@@ -64,6 +64,19 @@ bool ClangVisitor::VisitBinaryOperator(clang::BinaryOperator* Expr)
     return false;
 }
 
+bool ClangVisitor::VisitUnaryOperator(clang::UnaryOperator* Expr)
+{
+    auto& exprFac = lsff::ExpressionFactory::getInstance();
+
+    auto* subExpr = getExpression(Expr->getSubExpr());
+
+    visitedExpression = exprFac.createUnaryExpression(
+        Tools::convertUnaryOperator(Expr->getOpcode()),
+        subExpr
+    );
+    return false;
+}
+
 bool ClangVisitor::VisitIntegerLiteral(clang::IntegerLiteral* Expr)
 {
     auto& literalFac = lsff::LiteralFactory::getInstance();

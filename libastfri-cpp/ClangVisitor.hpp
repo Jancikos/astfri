@@ -45,6 +45,7 @@ public:
     lsfs::Expression* getExpression (clang::Expr* Expr);
     bool VisitExpr (clang::Expr* Expr);
     bool VisitBinaryOperator (clang::BinaryOperator* Expr);
+    bool VisitUnaryOperator (clang::UnaryOperator* Expr);
     bool VisitIntegerLiteral (clang::IntegerLiteral* Expr);
     bool VisitDeclRefExpr (clang::DeclRefExpr* Expr);
     bool VisitCallExpr (clang::CallExpr* Expr);
@@ -57,7 +58,6 @@ private:
     lsfs::Expression* visitedExpression;
 
     void clearVisited ();
-
     // temaplate methods
 
     template<typename T>
