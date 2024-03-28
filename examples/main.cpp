@@ -4,6 +4,7 @@
 #include <libastfri-cpp/ClangTools.hpp>
 
 #include <libastfri-output/CodeVisitor.hpp>
+#include <libastfri-output/StreamWriter.hpp>
 
 #include <iostream>
 
@@ -11,10 +12,11 @@ int main (int argc, char** argv)
 {
     if (argc < 2)
     {
-        std::cerr << "Usage needs 1 parameter: path to .cpp file" << std::endl;
+        std::cerr << "Usage needs least 1 parameter: path to .cpp file"
+                  << std::endl;
         return 1;
     }
-
+    // nacitavenie cpp zdrojakov
     auto* visitedTranslationUnit
         = libastfri::factories::StatementFactory::getInstance()
               .createTranslationUnit({});
@@ -26,9 +28,10 @@ int main (int argc, char** argv)
 
     // vypis z CodeVisitora
     std::cout << "CodeVisitor output: " << std::endl;
-    libastfri::output::CodeVisitor codeVisitor(std::cout);
+    libastfri::output::StreamWriter writer(std::cout);
+    libastfri::output::CodeVisitor codeVisitor(writer);
 
-    codeVisitor.Visit(*visitedTranslationUnit);
+    codeVisitor.Output(*visitedTranslationUnit);
 
     return 0;
 }

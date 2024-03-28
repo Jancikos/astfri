@@ -5,54 +5,25 @@
 
 #include <libastfri-output/CodeVisitor.hpp>
 
-#include "libastfri/utils/Helper.hpp"
+#include <libastfri/utils/Helper.hpp>
 
 namespace lsfs = libastfri::structures;
 
 namespace libastfri::output
 {
-CodeVisitor::CodeVisitor(std::ostream& outStream) : outStream(outStream)
+CodeVisitor::CodeVisitor(libastfri::utils::IOutputWriter& writer)
+    : writer(writer)
 {
 }
 
-void CodeVisitor::printEndl(bool semicolon)
+void CodeVisitor::Output(structures::TranslationUnit const& translationUnit)
 {
-    if (semicolon)
-    {
-        this->outStream << ";";
-    }
-
-    if (this->inilinePrinting)
-    {
-        this->outStream << " ";
-        return;
-    }
-
-    this->outStream << std::endl;
+    this->Visit(translationUnit);
 }
 
-void CodeVisitor::printIndent()
+utils::IOutputWriter& CodeVisitor::getWriter()
 {
-    if (this->inilinePrinting)
-    {
-        return;
-    }
-
-    for (int i = 0; i < this->level; i++)
-    {
-        this->outStream << "    ";
-    }
-}
-
-void CodeVisitor::printOnNewLine(std::string const& str, bool endLine)
-{
-    this->printIndent();
-    this->outStream << str;
-
-    if (endLine)
-    {
-        this->printEndl();
-    }
+    return this->writer;
 }
 
 // smtmt
@@ -67,100 +38,100 @@ void CodeVisitor::Visit(lsfs::TranslationUnit const& translationUnit)
 
 void CodeVisitor::Visit(lsfs::CompoundStatement const& stmt)
 {
-    this->printOnNewLine("{", false);
-    this->printEndl(false);
-    this->level++;
+    this->writer.printOnNewLine("{", false);
+    this->writer.printEndl(false);
+    this->writer.indentIncress();
     for (auto statement : stmt.statements)
     {
         statement->accept(*this);
     }
-    this->level--;
-    this->printOnNewLine("}", false);
-    this->printEndl(false);
+    this->writer.indentDecress();
+    this->writer.printOnNewLine("}", false);
+    this->writer.printEndl(false);
 }
 
 void CodeVisitor::Visit(lsfs::DeclarationStatement const& stmt)
 {
-    this->printIndent();
+    this->writer.printIndent();
     stmt.declaration->accept(*this);
-    this->printEndl();
+    this->writer.printEndl();
 }
 
 void CodeVisitor::Visit(lsfs::DeclarationAndAssigmentStatement const& stmt)
 {
-    this->printIndent();
+    this->writer.printIndent();
     stmt.declaration->accept(*this);
-    this->outStream << " = ";
+    this->writer.print(" = ");
     stmt.expression->accept(*this);
-    this->printEndl();
+    this->writer.printEndl();
 }
 
 void CodeVisitor::Visit(lsfs::ReturnStatement const& stmt)
 {
-    this->printIndent();
-    this->outStream << "return ";
+    this->writer.printIndent();
+    this->writer.print("return ");
     stmt.value->accept(*this);
-    this->printEndl();
+    this->writer.printEndl();
 }
 
 void CodeVisitor::Visit(lsfs::ExpressionStatement const& stmt)
 {
-    this->printIndent();
+    this->writer.printIndent();
     stmt.expression->accept(*this);
-    this->printEndl();
+    this->writer.printEndl();
 }
 
 void CodeVisitor::Visit(lsfs::UnknownStatement const& stmt)
 {
-    this->printIndent();
-    this->outStream << "UNKNOW STATEMNT (" << stmt.message << ")";
-    this->printEndl();
+    this->writer.printIndent();
+    this->writer.print("UNKNOW STATEMNT (" + stmt.message + ")");
+    this->writer.printEndl();
 }
 
 void CodeVisitor::Visit(lsfs::IfStatement const& stmt)
 {
-    this->printIndent();
-    this->outStream << "if (";
+    this->writer.printIndent();
+    this->writer.print("if (");
     stmt.condition->accept(*this);
-    this->outStream << ")";
-    this->printEndl(false);
+    this->writer.print(")");
+    this->writer.printEndl(false);
     stmt.thenBody->accept(*this);
     if (stmt.elseBody != nullptr)
     {
-        this->printIndent();
-        this->outStream << "else";
-        this->printEndl(false);
+        this->writer.printIndent();
+        this->writer.print("else");
+        this->writer.printEndl(false);
         stmt.elseBody->accept(*this);
     }
 }
 
 void CodeVisitor::Visit(lsfs::WhileLoopStatement const& stmt)
 {
-    this->printIndent();
-    this->outStream << "while (";
+    this->writer.printIndent();
+    this->writer.print("while (");
     stmt.condition->accept(*this);
-    this->outStream << ")\n";
+    this->writer.print(")\n");
     stmt.body->accept(*this);
 }
 
 void CodeVisitor::Visit(lsfs::ForLoopStatement const& stmt)
 {
-    this->printIndent();
-    this->outStream << "for (";
+    this->writer.printIndent();
+    this->writer.print("for (");
 
     // init
-    this->inilinePrinting = true;
+    this->writer.startInlinePrinting();
     stmt.init->accept(*this);
-    this->inilinePrinting = false;
+    this->writer.endInlinePrinting();
 
     //  condition
     stmt.condition->accept(*this);
-    this->outStream << "; ";
+    this->writer.print("; ");
 
     // step
     stmt.step->accept(*this);
-    this->outStream << ")";
-    this->printEndl(false);
+    this->writer.print(")");
+    this->writer.printEndl(false);
 
     // body
     stmt.body->accept(*this);
@@ -172,16 +143,16 @@ void CodeVisitor::Visit(lsfs::FunctionDefinition const& functionDef)
     // function signature
     functionDef.returnType->accept(*this);
 
-    this->outStream << " " << functionDef.name << "(";
+    this->writer.print(" " + functionDef.name + "(");
     for (int i = 0; i < functionDef.parameters.size(); i++)
     {
         functionDef.parameters[i]->accept(*this);
         if (i < functionDef.parameters.size() - 1)
         {
-            this->outStream << ", ";
+            this->writer.print(", ");
         }
     }
-    this->outStream << ")\n";
+    this->writer.print(")\n");
 
     // function body
     functionDef.body->accept(*this);
@@ -190,64 +161,64 @@ void CodeVisitor::Visit(lsfs::FunctionDefinition const& functionDef)
 void CodeVisitor::Visit(lsfs::ParameterDefinition const& decl)
 {
     decl.type->accept(*this);
-    this->outStream << " " << decl.name;
+    this->writer.print(" " + decl.name);
 }
 
 void CodeVisitor::Visit(lsfs::VariableDefintion const& decl)
 {
     decl.type->accept(*this);
-    this->outStream << " " << decl.name;
+    this->writer.print(" " + decl.name);
 }
 
 // expr
 
 void CodeVisitor::Visit(lsfs::IntLiteral const& expr)
 {
-    this->outStream << expr.value;
+    this->writer.print(std::to_string(expr.value));
 }
 
 void CodeVisitor::Visit(lsfs::BinaryExpression const& expr)
 {
     expr.left->accept(*this);
-    this->outStream << " " << utils::Helper::convertBinaryOperator(expr.op)
-                    << " ";
+    this->writer.print(" " + utils::Helper::convertBinaryOperator(expr.op)
+                    + " ");
     expr.right->accept(*this);
 }
 
 void CodeVisitor::Visit(lsfs::UnaryExpression const& expr)
 {
-    this->outStream << utils::Helper::convertUnaryOperator(expr.op);
+    this->writer.print(utils::Helper::convertUnaryOperator(expr.op));
     expr.arg->accept(*this);
 }
 
 void CodeVisitor::Visit(lsfs::VarRefExpression const& expr)
 {
-    this->outStream << expr.variable->name;
+    this->writer.print(expr.variable->name);
 }
 
 void CodeVisitor::Visit(lsfs::FunctionCallExpression const& expr)
 {
-    this->outStream << expr.functionName << "(";
+    this->writer.print(expr.functionName + "(");
     for (int i = 0; i < expr.arguments.size(); i++)
     {
         expr.arguments[i]->accept(*this);
         if (i < expr.arguments.size() - 1)
         {
-            this->outStream << ", ";
+            this->writer.print(", ");
         }
     }
-    this->outStream << ")";
+    this->writer.print(")");
 }
 
 void CodeVisitor::Visit(lsfs::UnknownExpression const& expr)
 {
-    this->outStream << "UNKNOW EXPR (" << expr.message << ")";
+    this->writer.print("UNKNOW EXPR (" + expr.message + ")");
 }
 
 // type
 void CodeVisitor::Visit(lsfs::IntType const& type)
 {
-    this->outStream << type.name;
+    this->writer.print(type.name);
 }
 
 } // namespace libastfri::output

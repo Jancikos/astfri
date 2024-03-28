@@ -47,10 +47,16 @@ struct UserType;
 
 namespace libastfri::utils
 {
+
+class IOutputWriter;
+
 // sem definovat len hlavicky, prehliadku nechat na implementacii
 class IOutputVisitor
 {
 public:
+    // utils
+    virtual IOutputWriter& getWriter() = 0;
+
     // stmt
     virtual void Visit (structures::TranslationUnit const& stmt)      = 0;
     virtual void Visit (structures::CompoundStatement const& stmt)    = 0;

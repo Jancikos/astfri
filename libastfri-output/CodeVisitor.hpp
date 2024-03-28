@@ -1,17 +1,17 @@
 #pragma once
 
 #include <libastfri/utils/OutputVisitor.hpp>
-
-#include <ostream>
+#include <libastfri/utils/OutputWriter.hpp>
 
 namespace libastfri::output
 {
 class CodeVisitor : public libastfri::utils::OutputVisitorAdapter
 {
 public:
-    CodeVisitor(std::ostream& outStream);
+    CodeVisitor(libastfri::utils::IOutputWriter& writer);
 
-    // ovverridenut len tie funkcie ktore naozaj teraz chcem
+    void Output(structures::TranslationUnit const& translationUnit);
+    utils::IOutputWriter& getWriter() override;
 
     // stmt
     virtual void Visit (structures::TranslationUnit const& translationUnit
@@ -48,12 +48,7 @@ public:
     ~CodeVisitor() override = default;
 
 protected:
-    std::ostream& outStream;
-    int level = 0;
-    // ci ma byt statement na novom riadku
-    bool inilinePrinting = false;
-    void printIndent ();
-    void printOnNewLine (std::string const& str, bool endLine = true);
-    void printEndl (bool semicolon = true);
+    libastfri::utils::IOutputWriter& writer;
+    
 };
 } // namespace libastfri::output
