@@ -21,6 +21,11 @@ void StreamWriter::indentDecress()
 
 void StreamWriter::printIndent()
 {
+    if (this->inlinePrinting)
+    {
+        return;
+    }
+    
     for (int i = 0; i < this->indentLevel; i++)
     {
         this->outStream << "    ";

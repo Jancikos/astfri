@@ -4,6 +4,7 @@
 #include <libastfri-cpp/ClangTools.hpp>
 
 #include <libastfri-output/CodeVisitor.hpp>
+#include <libastfri-output/PseudocodeVisitor.hpp>
 #include <libastfri-output/StreamWriter.hpp>
 
 #include <iostream>
@@ -27,11 +28,16 @@ int main (int argc, char** argv)
     );
 
     // vypis z CodeVisitora
-    std::cout << "CodeVisitor output: " << std::endl;
     libastfri::output::StreamWriter writer(std::cout);
+ 
     libastfri::output::CodeVisitor codeVisitor(writer);
+    libastfri::output::PseudocodeVisitor pseudocodeVisitor(writer);
 
+    std::cout << "CodeVisitor output: " << std::endl;
     codeVisitor.Output(*visitedTranslationUnit);
+
+    std::cout << std::endl << "PseudocodeVisitor output: " << std::endl;
+    pseudocodeVisitor.Output(*visitedTranslationUnit);
 
     return 0;
 }
