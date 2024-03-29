@@ -3,31 +3,43 @@
 #include <libastfri/structures/Statement.hpp>
 #include <libastfri/structures/Type.hpp>
 
-#include <libastfri-output/CodeVisitor.hpp>
-
 #include <libastfri/utils/Helper.hpp>
 
-namespace lsfs = libastfri::structures;
+#include <libastfri-output/visitors/PseudocodeVisitor.hpp>
 
-namespace libastfri::output
+namespace lsfs = libastfri::structures;
+namespace lsfu = libastfri::utils;
+
+namespace libastfrioutput::visitors
 {
-CodeVisitor::CodeVisitor(libastfri::utils::IOutputWriter& writer)
-    : writer(writer)
+PseudocodeVisitor::PseudocodeVisitor(lsfu::IOutputWriter& writer) :
+    writer(writer)
 {
 }
 
-void CodeVisitor::Output(structures::TranslationUnit const& translationUnit)
+void PseudocodeVisitor::Output(lsfs::TranslationUnit const& translationUnit)
 {
     this->Visit(translationUnit);
 }
 
-utils::IOutputWriter& CodeVisitor::getWriter()
+lsfu::IOutputWriter& PseudocodeVisitor::getWriter()
 {
     return this->writer;
 }
 
+std::string PseudocodeVisitor::convertBinaryOperator(lsfs::BinaryOperators op)
+{
+    switch (op)
+    {
+    case lsfs::BinaryOperators::Assign:
+        return "<=";
+    default:
+        return lsfu::Helper::convertBinaryOperator(op);
+    }
+}
+
 // smtmt
-void CodeVisitor::Visit(lsfs::TranslationUnit const& translationUnit)
+void PseudocodeVisitor::Visit(lsfs::TranslationUnit const& translationUnit)
 {
     // declarations
     for (auto functionDef : translationUnit.functions)
@@ -36,7 +48,7 @@ void CodeVisitor::Visit(lsfs::TranslationUnit const& translationUnit)
     }
 }
 
-void CodeVisitor::Visit(lsfs::CompoundStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::CompoundStatement const& stmt)
 {
     this->writer.printOnNewLine("{", false);
     this->writer.printEndl(false);
@@ -50,79 +62,81 @@ void CodeVisitor::Visit(lsfs::CompoundStatement const& stmt)
     this->writer.printEndl(false);
 }
 
-void CodeVisitor::Visit(lsfs::DeclarationStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::DeclarationStatement const& stmt)
 {
     this->writer.printIndent();
     stmt.declaration->accept(*this);
-    this->writer.printEndl();
+    this->writer.printEndl(false);
 }
 
-void CodeVisitor::Visit(lsfs::DeclarationAndAssigmentStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::DeclarationAndAssigmentStatement const& stmt
+)
 {
     this->writer.printIndent();
     stmt.declaration->accept(*this);
-    this->writer.print(" = ");
+    this->writer.print(" <= ");
     stmt.expression->accept(*this);
-    this->writer.printEndl();
+    this->writer.printEndl(false);
 }
 
-void CodeVisitor::Visit(lsfs::ReturnStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::ReturnStatement const& stmt)
 {
     this->writer.printIndent();
-    this->writer.print("return ");
+    this->writer.print("Vráť ");
     stmt.value->accept(*this);
-    this->writer.printEndl();
+    this->writer.printEndl(false);
 }
 
-void CodeVisitor::Visit(lsfs::ExpressionStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::ExpressionStatement const& stmt)
 {
     this->writer.printIndent();
     stmt.expression->accept(*this);
-    this->writer.printEndl();
+    this->writer.printEndl(false);
 }
 
-void CodeVisitor::Visit(lsfs::UnknownStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::UnknownStatement const& stmt)
 {
     this->writer.printIndent();
     this->writer.print("UNKNOW STATEMNT (" + stmt.message + ")");
-    this->writer.printEndl();
+    this->writer.printEndl(false);
 }
 
-void CodeVisitor::Visit(lsfs::IfStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::IfStatement const& stmt)
 {
     this->writer.printIndent();
-    this->writer.print("if (");
+    this->writer.print("Ak (");
     stmt.condition->accept(*this);
-    this->writer.print(")");
+    this->writer.print(") potom");
     this->writer.printEndl(false);
     stmt.thenBody->accept(*this);
     if (stmt.elseBody != nullptr)
     {
         this->writer.printIndent();
-        this->writer.print("else");
+        this->writer.print("Inak");
         this->writer.printEndl(false);
         stmt.elseBody->accept(*this);
     }
 }
 
-void CodeVisitor::Visit(lsfs::WhileLoopStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::WhileLoopStatement const& stmt)
 {
     this->writer.printIndent();
-    this->writer.print("while (");
+    this->writer.print("Pokiaľ (");
     stmt.condition->accept(*this);
     this->writer.print(")\n");
     stmt.body->accept(*this);
 }
 
-void CodeVisitor::Visit(lsfs::ForLoopStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::ForLoopStatement const& stmt)
 {
     this->writer.printIndent();
-    this->writer.print("for (");
+    this->writer.print("Pokiaľ (");
 
     // init
     this->writer.startInlinePrinting();
     stmt.init->accept(*this);
     this->writer.endInlinePrinting();
+    this->writer.print("; ");
 
     //  condition
     stmt.condition->accept(*this);
@@ -138,12 +152,10 @@ void CodeVisitor::Visit(lsfs::ForLoopStatement const& stmt)
 }
 
 // decl
-void CodeVisitor::Visit(lsfs::FunctionDefinition const& functionDef)
+void PseudocodeVisitor::Visit(lsfs::FunctionDefinition const& functionDef)
 {
     // function signature
-    functionDef.returnType->accept(*this);
-
-    this->writer.print(" " + functionDef.name + "(");
+    this->writer.print("operáca " + functionDef.name + "(");
     for (int i = 0; i < functionDef.parameters.size(); i++)
     {
         functionDef.parameters[i]->accept(*this);
@@ -152,51 +164,55 @@ void CodeVisitor::Visit(lsfs::FunctionDefinition const& functionDef)
             this->writer.print(", ");
         }
     }
-    this->writer.print(")\n");
+
+    // retur type
+    this->writer.print(") : ");
+    functionDef.returnType->accept(*this);
+
+    this->writer.printEndl(false);
 
     // function body
     functionDef.body->accept(*this);
 }
 
-void CodeVisitor::Visit(lsfs::ParameterDefinition const& decl)
+void PseudocodeVisitor::Visit(lsfs::ParameterDefinition const& decl)
 {
+    this->writer.print(decl.name + ": ");
     decl.type->accept(*this);
-    this->writer.print(" " + decl.name);
 }
 
-void CodeVisitor::Visit(lsfs::VariableDefintion const& decl)
+void PseudocodeVisitor::Visit(lsfs::VariableDefintion const& decl)
 {
+    this->writer.print("definuj premennú " + decl.name + ": ");
     decl.type->accept(*this);
-    this->writer.print(" " + decl.name);
 }
 
 // expr
 
-void CodeVisitor::Visit(lsfs::IntLiteral const& expr)
+void PseudocodeVisitor::Visit(lsfs::IntLiteral const& expr)
 {
     this->writer.print(std::to_string(expr.value));
 }
 
-void CodeVisitor::Visit(lsfs::BinaryExpression const& expr)
+void PseudocodeVisitor::Visit(lsfs::BinaryExpression const& expr)
 {
     expr.left->accept(*this);
-    this->writer.print(" " + utils::Helper::convertBinaryOperator(expr.op)
-                    + " ");
+    this->writer.print(" " + this->convertBinaryOperator(expr.op) + " ");
     expr.right->accept(*this);
 }
 
-void CodeVisitor::Visit(lsfs::UnaryExpression const& expr)
+void PseudocodeVisitor::Visit(lsfs::UnaryExpression const& expr)
 {
-    this->writer.print(utils::Helper::convertUnaryOperator(expr.op));
+    this->writer.print(lsfu::Helper::convertUnaryOperator(expr.op));
     expr.arg->accept(*this);
 }
 
-void CodeVisitor::Visit(lsfs::VarRefExpression const& expr)
+void PseudocodeVisitor::Visit(lsfs::VarRefExpression const& expr)
 {
     this->writer.print(expr.variable->name);
 }
 
-void CodeVisitor::Visit(lsfs::FunctionCallExpression const& expr)
+void PseudocodeVisitor::Visit(lsfs::FunctionCallExpression const& expr)
 {
     this->writer.print(expr.functionName + "(");
     for (int i = 0; i < expr.arguments.size(); i++)
@@ -210,15 +226,15 @@ void CodeVisitor::Visit(lsfs::FunctionCallExpression const& expr)
     this->writer.print(")");
 }
 
-void CodeVisitor::Visit(lsfs::UnknownExpression const& expr)
+void PseudocodeVisitor::Visit(lsfs::UnknownExpression const& expr)
 {
     this->writer.print("UNKNOW EXPR (" + expr.message + ")");
 }
 
 // type
-void CodeVisitor::Visit(lsfs::IntType const& type)
+void PseudocodeVisitor::Visit(lsfs::IntType const& type)
 {
     this->writer.print(type.name);
 }
 
-} // namespace libastfri::output
+} // namespace libastfrioutput::visitors

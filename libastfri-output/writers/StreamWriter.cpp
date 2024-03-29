@@ -1,6 +1,6 @@
-#include <libastfri-output/StreamWriter.hpp>
+#include <libastfri-output/writers/StreamWriter.hpp>
 
-namespace libastfri::output
+namespace libastfrioutput::writers
 {
 StreamWriter::StreamWriter(std::ostream& outStream) :
     outStream(outStream),

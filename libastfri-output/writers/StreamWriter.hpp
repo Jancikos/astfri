@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-namespace libastfri::output
+namespace libastfrioutput::writers
 {
     class StreamWriter : public libastfri::utils::IOutputWriter
     {
