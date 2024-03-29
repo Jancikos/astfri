@@ -3,6 +3,12 @@
 #include <libastfri/utils/OutputVisitor.hpp>
 #include <libastfri/utils/OutputWriter.hpp>
 
+namespace libastfri::structures
+{
+    enum class BinaryOperators;
+}
+
+
 namespace libastfri::output
 {
 class PseudocodeVisitor : public libastfri::utils::OutputVisitorAdapter
@@ -12,6 +18,7 @@ class PseudocodeVisitor : public libastfri::utils::OutputVisitorAdapter
 
         void Output(structures::TranslationUnit const& translationUnit);
         utils::IOutputWriter& getWriter() override;
+        std::string convertBinaryOperator(structures::BinaryOperators op);
 
         // stmt
         virtual void Visit (structures::TranslationUnit const& translationUnit) override;

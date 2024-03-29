@@ -28,6 +28,19 @@ utils::IOutputWriter& PseudocodeVisitor::getWriter()
     return this->writer;
 }
 
+std::string PseudocodeVisitor::convertBinaryOperator(
+    structures::BinaryOperators op
+)
+{
+    switch (op)
+    {
+    case structures::BinaryOperators::Assign:
+        return "<=";
+    default:
+        return utils::Helper::convertBinaryOperator(op);
+    }
+}
+
 // smtmt
 void PseudocodeVisitor::Visit(lsfs::TranslationUnit const& translationUnit)
 {
@@ -154,11 +167,11 @@ void PseudocodeVisitor::Visit(lsfs::FunctionDefinition const& functionDef)
             this->writer.print(", ");
         }
     }
-    
+
     // retur type
     this->writer.print(") : ");
     functionDef.returnType->accept(*this);
-    
+
     this->writer.printEndl(false);
 
     // function body
@@ -167,13 +180,13 @@ void PseudocodeVisitor::Visit(lsfs::FunctionDefinition const& functionDef)
 
 void PseudocodeVisitor::Visit(lsfs::ParameterDefinition const& decl)
 {
-    this->writer.print(decl.name + " : ");
+    this->writer.print(decl.name + ": ");
     decl.type->accept(*this);
 }
 
 void PseudocodeVisitor::Visit(lsfs::VariableDefintion const& decl)
 {
-    this->writer.print("definuj premennú " + decl.name + " : ");
+    this->writer.print("definuj premennú " + decl.name + ": ");
     decl.type->accept(*this);
 }
 
@@ -188,7 +201,7 @@ void PseudocodeVisitor::Visit(lsfs::BinaryExpression const& expr)
 {
     expr.left->accept(*this);
     this->writer.print(
-        " " + utils::Helper::convertBinaryOperator(expr.op) + " "
+        " " + this->convertBinaryOperator(expr.op) + " "
     );
     expr.right->accept(*this);
 }
