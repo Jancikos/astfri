@@ -21,7 +21,6 @@ struct FloatLiteral;
 struct CharLiteral;
 struct StringLiteral;
 struct BoolLiteral;
-struct ConstLiteral;
 struct BinaryExpression;
 struct UnaryExpression;
 struct ParamRefExpression;
@@ -77,7 +76,6 @@ public:
     virtual void Visit (structures::CharLiteral const& expr)            = 0;
     virtual void Visit (structures::StringLiteral const& expr)          = 0;
     virtual void Visit (structures::BoolLiteral const& expr)            = 0;
-    virtual void Visit (structures::ConstLiteral const& expr)           = 0;
     virtual void Visit (structures::BinaryExpression const& expr)       = 0;
     virtual void Visit (structures::UnaryExpression const& expr)        = 0;
     virtual void Visit (structures::ParamRefExpression const& expr)     = 0;
@@ -172,10 +170,6 @@ public:
     }
 
     virtual void Visit (structures::BoolLiteral const& expr) override
-    {
-    }
-
-    virtual void Visit (structures::ConstLiteral const& expr) override
     {
     }
 

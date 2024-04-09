@@ -23,10 +23,6 @@ BoolLiteral::BoolLiteral(bool value) : value(value)
 {
 }
 
-ConstLiteral::ConstLiteral(std::string name) : name(std::move(name))
-{
-}
-
 BinaryExpression::BinaryExpression(
     Expression* left,
     BinaryOperators op,

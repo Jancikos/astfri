@@ -55,14 +55,6 @@ struct BoolLiteral : Literal, utils::OutputVisitable<BoolLiteral>
     BoolLiteral(bool value);
 };
 
-// TODO - prehodnotit
-struct ConstLiteral : Literal, utils::OutputVisitable<ConstLiteral>
-{
-    std::string name;
-
-    ConstLiteral(std::string name);
-};
-
 //// operatory pouzivane v vyrazoch
 enum class BinaryOperators
 {

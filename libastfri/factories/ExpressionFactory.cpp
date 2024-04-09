@@ -50,11 +50,6 @@ lsfs::BoolLiteral* LiteralFactory::getBoolLiteral(bool literal)
     return getLiteralFromMap(literal, this->boolLiterals);
 }
 
-lsfs::ConstLiteral* LiteralFactory::getConstLiteral(std::string literal)
-{
-    return getLiteralFromMap(std::move(literal), this->constLiterals);
-}
-
 //// ExpressionFactory
 ExpressionFactory& ExpressionFactory::getInstance()
 {

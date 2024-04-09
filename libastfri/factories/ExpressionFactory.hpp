@@ -35,7 +35,6 @@ private:
     UsedMap<char, lsfs::CharLiteral> charLiterals;
     UsedMap<std::string, lsfs::StringLiteral> stringLiterals;
     UsedMap<bool, lsfs::BoolLiteral> boolLiterals;
-    UsedMap<std::string, lsfs::ConstLiteral> constLiterals;
 
     LiteralFactory()  = default;
     ~LiteralFactory() = default;
@@ -46,7 +45,6 @@ public:
     lsfs::CharLiteral* getCharLiteral (char literal);
     lsfs::StringLiteral* getStringLiteral (std::string literal);
     lsfs::BoolLiteral* getBoolLiteral (bool literal);
-    lsfs::ConstLiteral* getConstLiteral (std::string literal);
 
     LiteralFactory(LiteralFactory const&)  = delete;
     void operator= (LiteralFactory const&) = delete;
