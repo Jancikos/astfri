@@ -9,9 +9,9 @@ struct DeclarationAndAssigmentStatement;
 struct ReturnStatement;
 struct ExpressionStatement;
 struct IfStatement;
-struct WhileLoopStatement;
-struct DoWhileLoopStatement;
-struct ForLoopStatement;
+struct WhileStatement;
+struct DoWhileStatement;
+struct ForStatement;
 struct UnknownStatement;
 
 // expr
@@ -67,9 +67,9 @@ public:
     virtual void Visit (structures::ReturnStatement const& stmt)      = 0;
     virtual void Visit (structures::ExpressionStatement const& stmt)  = 0;
     virtual void Visit (structures::IfStatement const& stmt)          = 0;
-    virtual void Visit (structures::WhileLoopStatement const& stmt)   = 0;
-    virtual void Visit (structures::DoWhileLoopStatement const& stmt) = 0;
-    virtual void Visit (structures::ForLoopStatement const& stmt)     = 0;
+    virtual void Visit (structures::WhileStatement const& stmt)   = 0;
+    virtual void Visit (structures::DoWhileStatement const& stmt) = 0;
+    virtual void Visit (structures::ForStatement const& stmt)     = 0;
     virtual void Visit (structures::UnknownStatement const& stmt)     = 0;
 
     // expr
@@ -138,15 +138,15 @@ public:
     {
     }
 
-    virtual void Visit (structures::WhileLoopStatement const& stmt) override
+    virtual void Visit (structures::WhileStatement const& stmt) override
     {
     }
 
-    virtual void Visit (structures::DoWhileLoopStatement const& stmt) override
+    virtual void Visit (structures::DoWhileStatement const& stmt) override
     {
     }
 
-    virtual void Visit (structures::ForLoopStatement const& stmt) override
+    virtual void Visit (structures::ForStatement const& stmt) override
     {
     }
 

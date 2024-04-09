@@ -140,55 +140,55 @@ lsfs::IfStatement* StatementFactory::createIfConditionalStatement(
     );
 }
 
-lsfs::WhileLoopStatement* StatementFactory::createWhileLoopStatement(
+lsfs::WhileStatement* StatementFactory::createWhileStatement(
     lsfs::Expression* condition,
     lsfs::CompoundStatement* body
 )
 {
-    auto* whileLoopStatement = new lsfs::WhileLoopStatement(condition, body);
+    auto* whileLoopStatement = new lsfs::WhileStatement(condition, body);
     statements.emplace_back(whileLoopStatement);
 
     return whileLoopStatement;
 }
 
-lsfs::WhileLoopStatement* StatementFactory::createWhileLoopStatement(
+lsfs::WhileStatement* StatementFactory::createWhileStatement(
     lsfs::Expression* condition,
     lsfs::Statement* statement
 )
 {
     auto* body = tryGetCompoundStatement(statement);
 
-    return createWhileLoopStatement(condition, body);
+    return createWhileStatement(condition, body);
 }
 
-lsfs::DoWhileLoopStatement* StatementFactory::createDoWhileLoopStatement(
+lsfs::DoWhileStatement* StatementFactory::createDoWhileStatement(
     lsfs::Expression* condition,
     lsfs::CompoundStatement* body
 )
 {
-    auto* doWhileLoopStatement
-        = new lsfs::DoWhileLoopStatement(condition, body);
-    statements.emplace_back(doWhileLoopStatement);
+    auto* doWhileStatement
+        = new lsfs::DoWhileStatement(condition, body);
+    statements.emplace_back(doWhileStatement);
 
-    return doWhileLoopStatement;
+    return doWhileStatement;
 }
 
-lsfs::ForLoopStatement* StatementFactory::createForLoopStatement(
+lsfs::ForStatement* StatementFactory::createForStatement(
     lsfs::Statement* init,
     lsfs::Expression* condition,
     lsfs::Expression* step,
     lsfs::Statement* body
 )
 {
-    lsfs::ForLoopStatement* forLoopStatement = new lsfs::ForLoopStatement(
+    lsfs::ForStatement* forStatement = new lsfs::ForStatement(
         init,
         condition,
         step,
         tryGetCompoundStatement(body)
     );
-    statements.emplace_back(forLoopStatement);
+    statements.emplace_back(forStatement);
 
-    return forLoopStatement;
+    return forStatement;
 }
 
 lsfs::UnknownStatement* StatementFactory::createUnknownStatement(

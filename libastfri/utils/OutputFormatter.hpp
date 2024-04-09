@@ -27,12 +27,10 @@ enum class OutputToken
 class IOutputFormatter
 {
 public:
-    virtual IOutputWriter& getWriter () = 0;
+    virtual IOutputWriter& getWriter ()                            = 0;
 
-    virtual void print (std::string const& str) = 0;
-    virtual void print (
-        std::string const& str,
-        OutputToken token) = 0;
+    virtual void print (std::string const& str)                    = 0;
+    virtual void print (std::string const& str, OutputToken token) = 0;
     virtual void printIndented (
         std::string const& str,
         OutputToken token = OutputToken::None
@@ -80,6 +78,7 @@ public:
     {
         writer.print(str);
     }
+
     virtual void print (std::string const& str, OutputToken token) override
     {
         switch (token)
@@ -127,7 +126,10 @@ public:
         }
     }
 
-    virtual void printIndented (std::string const& str, OutputToken token = OutputToken::None) override
+    virtual void printIndented (
+        std::string const& str,
+        OutputToken token = OutputToken::None
+    ) override
     {
         printIndent();
         print(str, token);

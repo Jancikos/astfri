@@ -60,7 +60,7 @@ LoopStatement::LoopStatement(Expression* condition, CompoundStatement* body) :
 {
 }
 
-WhileLoopStatement::WhileLoopStatement(
+WhileStatement::WhileStatement(
     Expression* condition,
     CompoundStatement* body
 ) :
@@ -68,7 +68,7 @@ WhileLoopStatement::WhileLoopStatement(
 {
 }
 
-DoWhileLoopStatement::DoWhileLoopStatement(
+DoWhileStatement::DoWhileStatement(
     Expression* condition,
     CompoundStatement* body
 ) :
@@ -76,7 +76,7 @@ DoWhileLoopStatement::DoWhileLoopStatement(
 {
 }
 
-ForLoopStatement::ForLoopStatement(
+ForStatement::ForStatement(
     Statement* init,
     Expression* condition,
     Expression* step,

@@ -142,7 +142,7 @@ bool ClangVisitor::VisitWhileStmt(clang::WhileStmt* Stmt)
 
     auto* condition    = getExpression(Stmt->getCond());
 
-    visitedStatement   = statementFac.createWhileLoopStatement(condition, body);
+    visitedStatement   = statementFac.createWhileStatement(condition, body);
     return false;
 }
 
@@ -158,7 +158,7 @@ bool ClangVisitor::VisitForStmt(clang::ForStmt* Stmt)
     auto* inc          = getExpression(Stmt->getInc());
 
     visitedStatement
-        = statementFac.createForLoopStatement(init, condition, inc, body);
+        = statementFac.createForStatement(init, condition, inc, body);
     return false;
 }
 

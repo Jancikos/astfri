@@ -109,7 +109,7 @@ void CodeVisitor::Visit(lsfs::IfStatement const& stmt)
     }
 }
 
-void CodeVisitor::Visit(lsfs::WhileLoopStatement const& stmt)
+void CodeVisitor::Visit(lsfs::WhileStatement const& stmt)
 {
     this->getFormatter().printIndent();
     this->getFormatter().printKeyword("while");
@@ -120,7 +120,7 @@ void CodeVisitor::Visit(lsfs::WhileLoopStatement const& stmt)
     stmt.body->accept(*this);
 }
 
-void CodeVisitor::Visit(lsfs::ForLoopStatement const& stmt)
+void CodeVisitor::Visit(lsfs::ForStatement const& stmt)
 {
     this->getFormatter().printIndent();
     this->getFormatter().printKeyword("for");

@@ -93,7 +93,7 @@ int main ()
              variableRepCount,
              literalFac.getIntLiteral(0)
          ),
-         statementFac.createWhileLoopStatement(
+         statementFac.createWhileStatement(
              expressionFac.createBinaryExpression(
                  BinaryOperators::Less,
                  expressionFac.createBinaryExpression(

@@ -32,8 +32,8 @@ public:
     virtual void Visit (lsfs::ExpressionStatement const& stmt) override;
     virtual void Visit (lsfs::UnknownStatement const& stmt) override;
     virtual void Visit (lsfs::IfStatement const& stmt) override;
-    virtual void Visit (lsfs::WhileLoopStatement const& stmt) override;
-    virtual void Visit (lsfs::ForLoopStatement const& stmt) override;
+    virtual void Visit (lsfs::WhileStatement const& stmt) override;
+    virtual void Visit (lsfs::ForStatement const& stmt) override;
 
     // decl
     virtual void Visit (lsfs::FunctionDefinition const& functionDef) override;

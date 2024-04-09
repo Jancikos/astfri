@@ -61,20 +61,20 @@ public:
         lsfs::Statement* ifFalse = nullptr
     );
 
-    lsfs::WhileLoopStatement* createWhileLoopStatement (
+    lsfs::WhileStatement* createWhileStatement (
         lsfs::Expression* condition,
         lsfs::CompoundStatement* body
     );
-    lsfs::WhileLoopStatement* createWhileLoopStatement (
+    lsfs::WhileStatement* createWhileStatement (
         lsfs::Expression* condition,
         lsfs::Statement* statement
     );
 
-    lsfs::DoWhileLoopStatement* createDoWhileLoopStatement (
+    lsfs::DoWhileStatement* createDoWhileStatement (
         lsfs::Expression* condition,
         lsfs::CompoundStatement* body
     );
-    lsfs::ForLoopStatement* createForLoopStatement (
+    lsfs::ForStatement* createForStatement (
         lsfs::Statement* init,
         lsfs::Expression* condition,
         lsfs::Expression* step,

@@ -100,28 +100,28 @@ struct LoopStatement : Statement
     LoopStatement(Expression* condition, CompoundStatement* body);
 };
 
-struct WhileLoopStatement :
+struct WhileStatement :
     LoopStatement,
-    utils::OutputVisitable<WhileLoopStatement>
+    utils::OutputVisitable<WhileStatement>
 {
-    WhileLoopStatement(Expression* condition, CompoundStatement* body);
+    WhileStatement(Expression* condition, CompoundStatement* body);
 };
 
-struct DoWhileLoopStatement :
+struct DoWhileStatement :
     LoopStatement,
-    utils::OutputVisitable<DoWhileLoopStatement>
+    utils::OutputVisitable<DoWhileStatement>
 {
-    DoWhileLoopStatement(Expression* condition, CompoundStatement* body);
+    DoWhileStatement(Expression* condition, CompoundStatement* body);
 };
 
-struct ForLoopStatement :
+struct ForStatement :
     LoopStatement,
-    utils::OutputVisitable<ForLoopStatement>
+    utils::OutputVisitable<ForStatement>
 {
     Statement* init;
     Expression* step;
 
-    ForLoopStatement(
+    ForStatement(
         Statement* init,
         Expression* condition,
         Expression* step,

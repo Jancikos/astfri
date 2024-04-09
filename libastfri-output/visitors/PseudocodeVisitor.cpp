@@ -120,7 +120,7 @@ void PseudocodeVisitor::Visit(lsfs::IfStatement const& stmt)
     }
 }
 
-void PseudocodeVisitor::Visit(lsfs::WhileLoopStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::WhileStatement const& stmt)
 {
     this->getFormatter().printIndent();
     this->getFormatter().printKeyword("Pokiaľ");
@@ -131,7 +131,7 @@ void PseudocodeVisitor::Visit(lsfs::WhileLoopStatement const& stmt)
     stmt.body->accept(*this);
 }
 
-void PseudocodeVisitor::Visit(lsfs::ForLoopStatement const& stmt)
+void PseudocodeVisitor::Visit(lsfs::ForStatement const& stmt)
 {
     this->getFormatter().printIndent();
     this->getFormatter().printKeyword("Pre");
