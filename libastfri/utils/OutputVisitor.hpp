@@ -56,7 +56,6 @@ class IOutputVisitor
 public:
     // utils
     virtual IOutputFormatter& getFormatter () = 0;
-    
 
     // stmt
     virtual void Visit (structures::TranslationUnit const& stmt)      = 0;

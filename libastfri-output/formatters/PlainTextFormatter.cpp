@@ -4,43 +4,21 @@ namespace libastfrioutput::formatters
 {
 PlainTextFormatter::PlainTextFormatter(libastfri::utils::IOutputWriter& writer
 ) :
-    libastfri::utils::OutputFormatterAdapter(writer),
-    indentLevel(0),
-    inlinePrinting(false)
+    libastfri::utils::OutputFormatterAdapter(writer)
 {
-}
-
-void PlainTextFormatter::indentIncress()
-{
-    this->indentLevel++;
-}
-
-void PlainTextFormatter::indentDecress()
-{
-    this->indentLevel--;
 }
 
 void PlainTextFormatter::printIndent()
 {
-    if (this->inlinePrinting)
+    if (this->isInlinePrinting())
     {
         return;
     }
 
-    for (int i = 0; i < this->indentLevel; i++)
+    for (int i = 0; i < this->getIndentLevel(); i++)
     {
         this->getWriter().print("    ");
     }
-}
-
-void PlainTextFormatter::startInlinePrinting()
-{
-    this->inlinePrinting = true;
-}
-
-void PlainTextFormatter::endInlinePrinting()
-{
-    this->inlinePrinting = false;
 }
 
 void PlainTextFormatter::printEndl(bool semicolon)
@@ -50,7 +28,7 @@ void PlainTextFormatter::printEndl(bool semicolon)
         this->getWriter().print(";");
     }
 
-    if (this->inlinePrinting)
+    if (this->isInlinePrinting())
     {
         this->getWriter().print(" ");
         return;
