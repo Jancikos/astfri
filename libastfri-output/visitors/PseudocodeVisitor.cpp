@@ -155,7 +155,7 @@ void PseudocodeVisitor::Visit(lsfs::ForLoopStatement const& stmt)
 void PseudocodeVisitor::Visit(lsfs::FunctionDefinition const& functionDef)
 {
     // function signature
-    this->writer.print("operáca " + functionDef.name + "(");
+    this->writer.print("operácia " + functionDef.name + "(");
     for (int i = 0; i < functionDef.parameters.size(); i++)
     {
         functionDef.parameters[i]->accept(*this);
