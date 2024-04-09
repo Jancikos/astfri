@@ -1,5 +1,4 @@
 #pragma once
-
 namespace libastfri::structures
 {
 // stmt
@@ -47,14 +46,17 @@ struct UserType;
 namespace libastfri::utils
 {
 
+class IOutputFormatter;
 class IOutputWriter;
+
 
 // sem definovat len hlavicky, prehliadku nechat na implementacii
 class IOutputVisitor
 {
 public:
     // utils
-    virtual IOutputWriter& getWriter() = 0;
+    virtual IOutputFormatter& getFormatter () = 0;
+    
 
     // stmt
     virtual void Visit (structures::TranslationUnit const& stmt)      = 0;
@@ -241,7 +243,6 @@ public:
 
     virtual void Visit (structures::UserType const& type) override
     {
-        Visit(type);
     }
 };
 

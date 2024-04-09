@@ -1,5 +1,5 @@
 file(
-    GLOB SOURCES ./writers/*.cpp ./visitors/*.cpp
+    GLOB SOURCES ./writers/*.cpp ./formatters/*.cpp ./visitors/*.cpp
 )
 
 add_library(

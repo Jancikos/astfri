@@ -1,7 +1,7 @@
 #pragma once
 
+#include <libastfri/utils/OutputFormatter.hpp>
 #include <libastfri/utils/OutputVisitor.hpp>
-#include <libastfri/utils/OutputWriter.hpp>
 
 namespace libastfri::structures
 {
@@ -16,10 +16,10 @@ namespace libastfrioutput::visitors
 class PseudocodeVisitor : public lsfu::OutputVisitorAdapter
 {
 public:
-    PseudocodeVisitor(lsfu::IOutputWriter& writer);
+    PseudocodeVisitor(lsfu::IOutputFormatter& formatter);
 
     void Output (lsfs::TranslationUnit const& translationUnit);
-    lsfu::IOutputWriter& getWriter () override;
+    lsfu::IOutputFormatter& getFormatter () override;
     std::string convertBinaryOperator (lsfs::BinaryOperators op);
 
     // stmt
@@ -54,6 +54,6 @@ public:
     ~PseudocodeVisitor() override = default;
 
 protected:
-    lsfu::IOutputWriter& writer;
+    lsfu::IOutputFormatter& formatter;
 };
 } // namespace libastfrioutput::visitors

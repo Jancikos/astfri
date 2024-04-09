@@ -1,7 +1,7 @@
 #pragma once
 
 #include <libastfri/utils/OutputVisitor.hpp>
-#include <libastfri/utils/OutputWriter.hpp>
+#include <libastfri/utils/OutputFormatter.hpp>
 
 namespace lsfs = libastfri::structures;
 namespace lsfu = libastfri::utils;
@@ -12,10 +12,10 @@ namespace libastfrioutput::visitors
 class CodeVisitor : public lsfu::OutputVisitorAdapter
 {
 public:
-    CodeVisitor(libastfri::utils::IOutputWriter& writer);
+    CodeVisitor(libastfri::utils::IOutputFormatter& formatter);
 
     void Output (lsfs::TranslationUnit const& translationUnit);
-    lsfu::IOutputWriter& getWriter () override;
+    lsfu::IOutputFormatter& getFormatter () override;
 
     // stmt
     virtual void Visit (lsfs::TranslationUnit const& translationUnit) override;
@@ -49,6 +49,6 @@ public:
     ~CodeVisitor() override = default;
 
 protected:
-    lsfu::IOutputWriter& writer;
+    lsfu::IOutputFormatter& formatter;
 };
 } // namespace libastfrioutput::visitors
