@@ -52,12 +52,12 @@ void PseudocodeVisitor::Visit(lsfs::CompoundStatement const& stmt)
 {
     this->getFormatter().printIndented("{");
     this->getFormatter().printEndl(false);
-    this->getFormatter().indentIncress();
+    this->getFormatter().indentIncrease();
     for (auto statement : stmt.statements)
     {
         statement->accept(*this);
     }
-    this->getFormatter().indentDecress();
+    this->getFormatter().indentDecrease();
     this->getFormatter().printIndented("}");
     this->getFormatter().printEndl(false);
 }

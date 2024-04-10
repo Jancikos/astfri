@@ -29,8 +29,8 @@ class IOutputFormatter
 public:
     virtual IOutputWriter& getWriter ()                            = 0;
 
-    virtual void indentIncress ()                                  = 0;
-    virtual void indentDecress ()                                  = 0;
+    virtual void indentIncrease ()                                  = 0;
+    virtual void indentDecrease ()                                  = 0;
     virtual int getIndentLevel ()                                  = 0;
     virtual void printIndent ()                                    = 0;
 
@@ -69,8 +69,8 @@ public:
 
     virtual IOutputWriter& getWriter () override;
 
-    virtual void indentIncress () override;
-    virtual void indentDecress () override;
+    virtual void indentIncrease () override;
+    virtual void indentDecrease () override;
     virtual int getIndentLevel () override;
 
     virtual void startInlinePrinting () override;

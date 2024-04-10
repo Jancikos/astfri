@@ -6,7 +6,7 @@ StreamWriter::StreamWriter(std::ostream& outStream) : outStream(outStream)
 {
 }
 
-void StreamWriter::print(std::string const& str)
+void StreamWriter::write(std::string const& str)
 {
     this->outStream << str;
 }

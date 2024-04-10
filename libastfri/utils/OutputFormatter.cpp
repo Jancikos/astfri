@@ -16,12 +16,12 @@ IOutputWriter& lsfu::OutputFormatterAdapter::getWriter()
     return writer;
 }
 
-void lsfu::OutputFormatterAdapter::indentIncress()
+void lsfu::OutputFormatterAdapter::indentIncrease()
 {
     indentLevel++;
 }
 
-void lsfu::OutputFormatterAdapter::indentDecress()
+void lsfu::OutputFormatterAdapter::indentDecrease()
 {
     indentLevel--;
 }
@@ -48,7 +48,7 @@ bool lsfu::OutputFormatterAdapter::isInlinePrinting()
 
 void lsfu::OutputFormatterAdapter::print(std::string const& str)
 {
-    writer.print(str);
+    writer.write(str);
 }
 
 void lsfu::OutputFormatterAdapter::print(

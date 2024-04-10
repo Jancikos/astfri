@@ -17,7 +17,7 @@ void PlainTextFormatter::printIndent()
 
     for (int i = 0; i < this->getIndentLevel(); i++)
     {
-        this->getWriter().print("    ");
+        this->getWriter().write("    ");
     }
 }
 
@@ -25,16 +25,16 @@ void PlainTextFormatter::printEndl(bool semicolon)
 {
     if (semicolon)
     {
-        this->getWriter().print(";");
+        this->getWriter().write(";");
     }
 
     if (this->isInlinePrinting())
     {
-        this->getWriter().print(" ");
+        this->getWriter().write(" ");
         return;
     }
 
-    this->getWriter().print("\n");
+    this->getWriter().write("\n");
 }
 
 } // namespace libastfrioutput::formatters
