@@ -108,6 +108,7 @@ void ClangTools::BeginClangTreeVisit(
     lsfs::TranslationUnit& visitedTranslationUnit
 )
 {
+    // nacitanie vstupneho suboru
     auto ifst = std::ifstream(pathToCode);
     auto ist  = std::stringstream();
     ist << ifst.rdbuf();

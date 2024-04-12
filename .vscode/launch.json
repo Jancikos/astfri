@@ -7,7 +7,8 @@
             "request": "launch",
             "program": "${workspaceFolder}/build/examples/astfri-cpp-example",
             "args": [
-                "./examples/input/addtion.cpp"
+                // "./examples/input/addtion.cpp"
+                "./examples/input/math.cpp"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

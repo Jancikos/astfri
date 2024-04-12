@@ -97,7 +97,7 @@ void PseudocodeVisitor::Visit(lsfs::ExpressionStatement const& stmt)
 void PseudocodeVisitor::Visit(lsfs::UnknownStatement const& stmt)
 {
     this->getFormatter().printIndent();
-    this->getFormatter().printError("UNKNOW STATEMNT (" + stmt.message + ")");
+    this->getFormatter().printError("UNKNOW STATEMENT (" + stmt.message + ")");
     this->getFormatter().printEndl(false);
 }
 
