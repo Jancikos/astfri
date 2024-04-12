@@ -3,8 +3,9 @@
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 
-#include <cassert>
 #include <libastfri-cpp/ClangVisitor.hpp>
+
+#include <cassert>
 
 namespace lsff = libastfri::factories;
 
@@ -46,7 +47,6 @@ lsfs::Declaration* ClangVisitor::getDeclaration(clang::Decl* Decl)
 
 bool ClangVisitor::VisitTranslationUnitDecl(clang::TranslationUnitDecl* Decl)
 {
-
     for (auto* decl : Decl->decls())
     {
         if (auto* funDecl = llvm::dyn_cast<clang::FunctionDecl>(decl))
@@ -56,7 +56,6 @@ bool ClangVisitor::VisitTranslationUnitDecl(clang::TranslationUnitDecl* Decl)
             );
         }
     }
-
     return false;
 }
 
