@@ -3,23 +3,23 @@
 namespace libastfri::structures
 {
 
-IntLiteral::IntLiteral(int value) : value(value)
+IntLiteral::IntLiteral(int value) : Literal(value)
 {
 }
 
-FloatLiteral::FloatLiteral(float value) : value(value)
+FloatLiteral::FloatLiteral(float value) : Literal(value)
 {
 }
 
-CharLiteral::CharLiteral(char value) : value(value)
+CharLiteral::CharLiteral(char value) : Literal(value)
 {
 }
 
-StringLiteral::StringLiteral(std::string value) : value(std::move(value))
+StringLiteral::StringLiteral(std::string value) : Literal(std::move(value))
 {
 }
 
-BoolLiteral::BoolLiteral(bool value) : value(value)
+BoolLiteral::BoolLiteral(bool value) : Literal(value)
 {
 }
 

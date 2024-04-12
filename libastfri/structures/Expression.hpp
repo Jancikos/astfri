@@ -16,42 +16,38 @@ struct Expression : virtual utils::IOutputVisitable
 };
 
 //// konstaty (literals) pouzivane v vyrazoch su vlastne tiez vyrazy
+template<typename T>
 struct Literal : Expression
 {
+    T value;
+
+    Literal(T value) : value(value)
+    {
+    }
 };
 
-struct IntLiteral : Literal, utils::OutputVisitable<IntLiteral>
+struct IntLiteral : Literal<int>, utils::OutputVisitable<IntLiteral>
 {
-    int value;
-
     IntLiteral(int value);
 };
 
-struct FloatLiteral : Literal, utils::OutputVisitable<FloatLiteral>
+struct FloatLiteral : Literal<float>, utils::OutputVisitable<FloatLiteral>
 {
-    float value;
-
     FloatLiteral(float value);
 };
 
-struct CharLiteral : Literal, utils::OutputVisitable<CharLiteral>
+struct CharLiteral : Literal<char>, utils::OutputVisitable<CharLiteral>
 {
-    char value;
-
     CharLiteral(char value);
 };
 
-struct StringLiteral : Literal, utils::OutputVisitable<StringLiteral>
+struct StringLiteral : Literal<std::string>, utils::OutputVisitable<StringLiteral>
 {
-    std::string value;
-
     StringLiteral(std::string value);
 };
 
-struct BoolLiteral : Literal, utils::OutputVisitable<BoolLiteral>
+struct BoolLiteral : Literal<bool>, utils::OutputVisitable<BoolLiteral>
 {
-    bool value;
-
     BoolLiteral(bool value);
 };
 
