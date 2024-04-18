@@ -6,6 +6,10 @@ add_library(
     astfri-output STATIC ${SOURCES}
 )
 
+target_compile_options(
+    astfri-output PUBLIC -Wall -Wextra
+)
+
 target_link_libraries(
     astfri-output PUBLIC astfri-core
 )
