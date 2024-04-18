@@ -4,4 +4,8 @@ add_library(
     astfri-core STATIC ${SOURCES}
 )
 
+target_compile_options(
+    astfri-core PUBLIC -Wall -Wextra
+)
+
 target_include_directories(astfri-core PUBLIC ${PROJECT_SOURCE_DIR})
