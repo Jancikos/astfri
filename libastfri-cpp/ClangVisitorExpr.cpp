@@ -3,8 +3,9 @@
 #include <libastfri/factories/StatementFactory.hpp>
 #include <libastfri/factories/TypeFactory.hpp>
 
-#include <cassert>
 #include <libastfri-cpp/ClangVisitor.hpp>
+
+#include <cassert>
 
 namespace lsff = libastfri::factories;
 
@@ -45,7 +46,7 @@ lsfs::Expression* ClangVisitor::getExpression(clang::Expr* Expr)
     }
 }
 
-bool ClangVisitor::VisitExpr(clang::Expr* Expr)
+bool ClangVisitor::VisitExpr(clang::Expr*)
 {
     return true;
 }
@@ -103,9 +104,7 @@ bool ClangVisitor::VisitDeclRefExpr(clang::DeclRefExpr* Expr)
 
 bool ClangVisitor::VisitCallExpr(clang::CallExpr* Expr)
 {
-    auto& declFac = lsff::DeclarationFactory::getInstance();
-    auto& refFac  = lsff::ReferenceFactory::getInstance();
-    auto& exprFac = lsff::ExpressionFactory::getInstance();
+    auto& refFac = lsff::ReferenceFactory::getInstance();
 
     std::vector<lsfs::Expression*> args;
     for (auto arg : Expr->arguments())
@@ -117,12 +116,10 @@ bool ClangVisitor::VisitCallExpr(clang::CallExpr* Expr)
         Expr->getCalleeDecl()->getAsFunction()
     );
 
-    auto* functionDef =
-
-        visitedExpression = refFac.createFunctionCallExpression(
-            functionDecl->getNameInfo().getAsString(),
-            args
-        );
+    visitedExpression = refFac.createFunctionCallExpression(
+        functionDecl->getNameInfo().getAsString(),
+        args
+    );
     return false;
 }
 

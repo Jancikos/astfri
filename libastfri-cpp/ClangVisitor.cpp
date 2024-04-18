@@ -5,8 +5,8 @@ namespace libastfri::cpp
 ClangVisitor::ClangVisitor(lsfs::TranslationUnit& visitedTranslationUnit) :
     visitedTranslationUnit(&visitedTranslationUnit),
     visitedDeclaration(nullptr),
-    visitedExpression(nullptr),
-    visitedStatement(nullptr)
+    visitedStatement(nullptr),
+    visitedExpression(nullptr)
 {
 }
 

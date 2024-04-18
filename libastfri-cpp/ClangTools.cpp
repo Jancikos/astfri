@@ -5,11 +5,12 @@
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Expression.hpp>
 
+#include <libastfri-cpp/ClangManagement.hpp>
+#include <libastfri-cpp/ClangTools.hpp>
+
 #include <clang/AST/Expr.h>
 #include <clang/AST/Stmt.h>
 #include <fstream>
-#include <libastfri-cpp/ClangManagement.hpp>
-#include <libastfri-cpp/ClangTools.hpp>
 #include <memory>
 #include <sstream>
 
@@ -83,9 +84,9 @@ lsfs::BinaryOperators ClangTools::convertBinaryOperator(
         //     return lsfs::BinaryOperators::AND;
         //   case clang::BinaryOperator::Opcode::BO_Or:
         //     return lsfs::BinaryOperators::OR;
+    default:
+        throw std::runtime_error("Unknown binary operator (ClangTools::convertBinaryOperator)");
     }
-
-    throw std::runtime_error("Unknown binary operator");
 }
 
 lsfs::UnaryOperators ClangTools::convertUnaryOperator(
@@ -98,9 +99,9 @@ lsfs::UnaryOperators ClangTools::convertUnaryOperator(
         return lsfs::UnaryOperators::Negative;
     case clang::UnaryOperator::Opcode::UO_Not:
         return lsfs::UnaryOperators::Not;
+    default:
+        throw std::runtime_error("Unknown unary operator (ClangTools::convertUnaryOperator)");
     }
-
-    throw std::runtime_error("Unknown unary operator");
 }
 
 void ClangTools::BeginClangTreeVisit(

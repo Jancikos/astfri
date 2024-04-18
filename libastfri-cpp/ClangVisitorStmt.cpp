@@ -79,7 +79,7 @@ lsfs::Statement* ClangVisitor::getStatement(clang::Stmt* Stmt)
     }
 }
 
-bool ClangVisitor::VisitStmt(clang::Stmt* Stmt)
+bool ClangVisitor::VisitStmt(clang::Stmt*)
 {
     return true;
 }
@@ -113,7 +113,6 @@ bool ClangVisitor::VisitReturnStmt(clang::ReturnStmt* Stmt)
 bool ClangVisitor::VisitIfStmt(clang::IfStmt* Stmt)
 {
     auto& statementFac        = lsff::StatementFactory::getInstance();
-    auto& declFac             = lsff::DeclarationFactory::getInstance();
 
     auto* thenStmt            = getStatement(Stmt->getThen());
 
@@ -136,7 +135,6 @@ bool ClangVisitor::VisitIfStmt(clang::IfStmt* Stmt)
 bool ClangVisitor::VisitWhileStmt(clang::WhileStmt* Stmt)
 {
     auto& statementFac = lsff::StatementFactory::getInstance();
-    auto& declFac      = lsff::DeclarationFactory::getInstance();
 
     auto* body         = getStatement(Stmt->getBody());
 
@@ -149,7 +147,6 @@ bool ClangVisitor::VisitWhileStmt(clang::WhileStmt* Stmt)
 bool ClangVisitor::VisitForStmt(clang::ForStmt* Stmt)
 {
     auto& statementFac = lsff::StatementFactory::getInstance();
-    auto& declFac      = lsff::DeclarationFactory::getInstance();
 
     auto* body         = getStatement(Stmt->getBody());
 

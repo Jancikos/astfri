@@ -108,139 +108,139 @@ public:
     OutputVisitorAdapter() = default;
 
     // stmt
-    virtual void Visit (structures::TranslationUnit const& stmt) override
+    virtual void Visit (structures::TranslationUnit const&) override
     {
     }
 
-    virtual void Visit (structures::CompoundStatement const& stmt) override
+    virtual void Visit (structures::CompoundStatement const&) override
     {
     }
 
-    virtual void Visit (structures::DeclarationStatement const& stmt) override
+    virtual void Visit (structures::DeclarationStatement const&) override
     {
     }
 
-    virtual void Visit (structures::DeclarationAndAssigmentStatement const& stmt
+    virtual void Visit (structures::DeclarationAndAssigmentStatement const&
     ) override
     {
     }
 
-    virtual void Visit (structures::ReturnStatement const& stmt) override
+    virtual void Visit (structures::ReturnStatement const&) override
     {
     }
 
-    virtual void Visit (structures::ExpressionStatement const& stmt) override
+    virtual void Visit (structures::ExpressionStatement const&) override
     {
     }
 
-    virtual void Visit (structures::IfStatement const& stmt) override
+    virtual void Visit (structures::IfStatement const&) override
     {
     }
 
-    virtual void Visit (structures::WhileStatement const& stmt) override
+    virtual void Visit (structures::WhileStatement const&) override
     {
     }
 
-    virtual void Visit (structures::DoWhileStatement const& stmt) override
+    virtual void Visit (structures::DoWhileStatement const&) override
     {
     }
 
-    virtual void Visit (structures::ForStatement const& stmt) override
+    virtual void Visit (structures::ForStatement const&) override
     {
     }
 
-    virtual void Visit (structures::UnknownStatement const& stmt) override
+    virtual void Visit (structures::UnknownStatement const&) override
     {
     }
 
     // expr
-    virtual void Visit (structures::IntLiteral const& expr) override
+    virtual void Visit (structures::IntLiteral const&) override
     {
     }
 
-    virtual void Visit (structures::FloatLiteral const& expr) override
+    virtual void Visit (structures::FloatLiteral const&) override
     {
     }
 
-    virtual void Visit (structures::CharLiteral const& expr) override
+    virtual void Visit (structures::CharLiteral const&) override
     {
     }
 
-    virtual void Visit (structures::StringLiteral const& expr) override
+    virtual void Visit (structures::StringLiteral const&) override
     {
     }
 
-    virtual void Visit (structures::BoolLiteral const& expr) override
+    virtual void Visit (structures::BoolLiteral const&) override
     {
     }
 
-    virtual void Visit (structures::BinaryExpression const& expr) override
+    virtual void Visit (structures::BinaryExpression const&) override
     {
     }
 
-    virtual void Visit (structures::UnaryExpression const& expr) override
+    virtual void Visit (structures::UnaryExpression const&) override
     {
     }
 
-    virtual void Visit (structures::ParamRefExpression const& expr) override
+    virtual void Visit (structures::ParamRefExpression const&) override
     {
     }
 
-    virtual void Visit (structures::VarRefExpression const& expr) override
+    virtual void Visit (structures::VarRefExpression const&) override
     {
     }
 
-    virtual void Visit (structures::FunctionCallExpression const& expr) override
+    virtual void Visit (structures::FunctionCallExpression const&) override
     {
     }
 
-    virtual void Visit (structures::UnknownExpression const& expr) override
+    virtual void Visit (structures::UnknownExpression const&) override
     {
     }
 
     // decl
-    virtual void Visit (structures::VariableDefintion const& decl) override
+    virtual void Visit (structures::VariableDefintion const&) override
     {
     }
 
-    virtual void Visit (structures::ParameterDefinition const& decl) override
+    virtual void Visit (structures::ParameterDefinition const&) override
     {
     }
 
-    virtual void Visit (structures::FunctionDefinition const& decl) override
+    virtual void Visit (structures::FunctionDefinition const&) override
     {
     }
 
-    virtual void Visit (structures::UknownDeclaration const& decl) override
+    virtual void Visit (structures::UknownDeclaration const&) override
     {
     }
 
     // type
-    virtual void Visit (structures::Type const& type) override
+    virtual void Visit (structures::Type const&) override
     {
     }
 
-    virtual void Visit (structures::IntType const& type) override
+    virtual void Visit (structures::IntType const&) override
     {
     }
 
-    virtual void Visit (structures::FloatType const& type) override
+    virtual void Visit (structures::FloatType const&) override
     {
     }
 
-    virtual void Visit (structures::CharType const& type) override
+    virtual void Visit (structures::CharType const&) override
     {
     }
 
-    virtual void Visit (structures::BoolType const& type) override
+    virtual void Visit (structures::BoolType const&) override
     {
     }
 
-    virtual void Visit (structures::VoidType const& type) override
+    virtual void Visit (structures::VoidType const&) override
     {
     }
 
-    virtual void Visit (structures::UserType const& type) override
+    virtual void Visit (structures::UserType const&) override
     {
     }
 };

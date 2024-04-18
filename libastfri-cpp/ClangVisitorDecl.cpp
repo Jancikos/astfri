@@ -66,8 +66,6 @@ bool ClangVisitor::VisitFunctionDecl(clang::FunctionDecl* Decl)
     Decl->dump();
 
     auto& declFac      = lsff::DeclarationFactory::getInstance();
-    auto& literalFac   = lsff::LiteralFactory::getInstance();
-    auto& statementFac = lsff::StatementFactory::getInstance();
 
     // title
     std::string title = Decl->getNameInfo().getAsString();
@@ -95,7 +93,6 @@ bool ClangVisitor::VisitFunctionDecl(clang::FunctionDecl* Decl)
 bool ClangVisitor::VisitVarDecl(clang::VarDecl* Decl)
 {
     auto& declFac      = lsff::DeclarationFactory::getInstance();
-    auto& statementFac = lsff::StatementFactory::getInstance();
 
     visitedDeclaration = declFac.createVariable(
         Decl->getNameAsString(),
