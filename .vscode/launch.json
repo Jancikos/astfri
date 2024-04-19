@@ -2,12 +2,37 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
+            "name": "Launch manual structure",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/examples/astfri-cpp-example",
+            "program": "${workspaceFolder}/build/examples/astfri-example-manual",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Test",
+                    "text": "python import sys;sys.path.insert(0, '/usr/share/gcc/python/');from libstdcxx.v6.printers import register_libstdcxx_printers;register_libstdcxx_printers(None)",
+                    "ignoreFailures": false
+                },
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build"
+        },
+        {
+            "name": "Launch cpp frontend",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/examples/astfri-example-cpp",
             "args": [
-                // "./examples/input/addtion.cpp"
                 "./examples/input/math.cpp"
             ],
             "stopAtEntry": false,
@@ -28,7 +53,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "build"
+            "preLaunchTask": "build cpp frontend"
         }
     ]
 }

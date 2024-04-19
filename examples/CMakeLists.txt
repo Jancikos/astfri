@@ -1,12 +1,27 @@
+
+if (ASTFRI_BUILD_CPP_FRONTEND)
+    add_executable(
+        astfri-example-cpp cpp_frontend.cpp
+    )
+
+    target_compile_options(
+        astfri-example-cpp PRIVATE
+    )
+
+    target_link_libraries(
+        astfri-example-cpp PRIVATE astfri-cpp astfri-output
+    )
+endif()
+
 add_executable(
-    astfri-cpp-example main.cpp
+    astfri-example-manual manual_structure.cpp
 )
 
-
 target_compile_options(
-    astfri-cpp-example PRIVATE
+    astfri-example-manual PRIVATE
 )
 
 target_link_libraries(
-    astfri-cpp-example PRIVATE astfri-cpp astfri-output
+    astfri-example-manual PRIVATE astfri-output
 )
+

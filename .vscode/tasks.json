@@ -11,7 +11,20 @@
                 "kind": "build",
                 "isDefault": true
             }
-        }
+        },
+        {
+            "label": "build cpp frontend",
+            "type": "cppbuild",
+            "command": "bash",
+            "args": [
+                "${workspaceFolder}/scripts/build.sh",
+                "-DASTFRI_BUILD_CPP_FRONTEND=ON"
+            ],
+            "group": {
+                "kind": "build"
+            }
+        },
+        
     ],
     "version": "2.0.0"
 }

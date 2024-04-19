@@ -1,3 +1,4 @@
+#include <iostream>
 #include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
@@ -6,24 +7,24 @@
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Statement.hpp>
 
-using namespace libastfri::structures;
-using namespace libastfri::factories;
+namespace lsfs = libastfri::structures;
+namespace lsff = libastfri::factories;
 
 /**
- * @brief example, kde vyuzivam manualne vytvorene struktury z libastfri pre
+ * @brief example, kde manualne vyuzivam vytvorene struktury z libastfri pre
  * reprezentovanie kodu funcki na konci suboru
  */
 int main ()
 {
-    auto& typeFac        = TypeFactory::getInstance();
-    auto& literalFac     = LiteralFactory::getInstance();
-    auto& statementFac   = StatementFactory::getInstance();
-    auto& expressionFac  = ExpressionFactory::getInstance();
-    auto& referenceFac   = ReferenceFactory::getInstance();
-    auto& declarationFac = DeclarationFactory::getInstance();
+    auto& typeFac        = lsff::TypeFactory::getInstance();
+    auto& literalFac     = lsff::LiteralFactory::getInstance();
+    auto& statementFac   = lsff::StatementFactory::getInstance();
+    auto& expressionFac  = lsff::ExpressionFactory::getInstance();
+    auto& referenceFac   = lsff::ReferenceFactory::getInstance();
+    auto& declarationFac = lsff::DeclarationFactory::getInstance();
 
     // int simpleAddition(int a, int b)
-    std::vector<ParameterDefinition*> paramsSimpleAddition;
+    std::vector<lsfs::ParameterDefinition*> paramsSimpleAddition;
     paramsSimpleAddition.push_back(
         declarationFac.createParameter("a", typeFac.getIntType())
     );
@@ -34,7 +35,7 @@ int main ()
     auto bodySimpleAddition = statementFac.createCompoundStatement(
         {statementFac.createReturnStatement(
             expressionFac.createBinaryExpression(
-                BinaryOperators::Add,
+                lsfs::BinaryOperators::Add,
                 referenceFac.createParamRefExpression(paramsSimpleAddition[0]),
                 referenceFac.createParamRefExpression(paramsSimpleAddition[1])
             )
@@ -49,8 +50,8 @@ int main ()
         retTypeSimpleAddition
     );
 
-    // int brutalAddition(int a, int b)
-    std::vector<ParameterDefinition*> params;
+    // int weirdAddition(int a, int b)
+    std::vector<lsfs::ParameterDefinition*> params;
     params.push_back(declarationFac.createParameter("a", typeFac.getIntType()));
     params.push_back(declarationFac.createParameter("b", typeFac.getIntType()));
     auto variableC = declarationFac.createVariable("c", typeFac.getIntType());
@@ -63,7 +64,7 @@ int main ()
         {statementFac.createDeclarationAndAssigmentStatement(
              variableC,
              expressionFac.createBinaryExpression(
-                 BinaryOperators::Add,
+                 lsfs::BinaryOperators::Add,
                  referenceFac.createParamRefExpression(params[0]),
                  referenceFac.createParamRefExpression(params[1])
              )
@@ -74,14 +75,14 @@ int main ()
          ),
          statementFac.createIfConditionalStatement(
              expressionFac.createBinaryExpression(
-                 BinaryOperators::Less,
+                 lsfs::BinaryOperators::Less,
                  referenceFac.createVarRefExpression(variableC),
                  literalFac.getIntLiteral(0)
              ),
              statementFac.createCompoundStatement(
                  {statementFac.createExpressionStatement(
                      expressionFac.createBinaryExpression(
-                         BinaryOperators::Assign,
+                         lsfs::BinaryOperators::Assign,
                          referenceFac
                              .createVarRefExpression(variableRepMultiplier),
                          literalFac.getIntLiteral(-1)
@@ -95,9 +96,9 @@ int main ()
          ),
          statementFac.createWhileStatement(
              expressionFac.createBinaryExpression(
-                 BinaryOperators::Less,
+                 lsfs::BinaryOperators::Less,
                  expressionFac.createBinaryExpression(
-                     BinaryOperators::Add,
+                     lsfs::BinaryOperators::Add,
                      referenceFac.createVarRefExpression(variableC),
                      referenceFac.createVarRefExpression(variableRepCount)
                  ),
@@ -106,10 +107,10 @@ int main ()
              statementFac.createCompoundStatement(
                  {statementFac.createExpressionStatement(
                      expressionFac.createBinaryExpression(
-                         BinaryOperators::Assign,
+                         lsfs::BinaryOperators::Assign,
                          referenceFac.createVarRefExpression(variableRepCount),
                          expressionFac.createBinaryExpression(
-                             BinaryOperators::Add,
+                             lsfs::BinaryOperators::Add,
                              referenceFac
                                  .createVarRefExpression(variableRepCount),
                              referenceFac
@@ -137,9 +138,9 @@ int main ()
 
     auto retType = typeFac.getIntType();
 
-    auto functionBrutalAddition
-        = declarationFac
-              .createFunction("brutalAddition", params, body, retType);
+    auto* weirdAddition = declarationFac.createFunction("weirdAddition", params, body, retType);
+
+    std::cout << "Nacitanie funkcie: " << weirdAddition->name << ", " << functionSimpleAddition->name << std::endl;
 
     return 0;
 }
@@ -149,7 +150,7 @@ int simpleAddition (int a, int b)
     return a + b;
 }
 
-int brutalAddition (int a, int b)
+int weirdAddition (int a, int b)
 {
     int c             = a + b;
     int repMultiplier = 1;
