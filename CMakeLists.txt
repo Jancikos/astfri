@@ -4,7 +4,7 @@ cmake_minimum_required(
 
 project(
     libast
-    VERSION     0.0.1
+    VERSION     1.0.0
     DESCRIPTION "Library for universal code representation."
     LANGUAGES   CXX
 )

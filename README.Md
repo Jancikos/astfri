@@ -1,4 +1,4 @@
-# astfri
+# astfri v1.0.0
 
 Táto knižnica je napísaná v jazyku C++ a obsahuje štruktúry pre univerzálnu reprezentáciu zdrojového kódu a nástroje pre vstupnú a výstupnú manipuláciu s týmito štruktúrami.
 
