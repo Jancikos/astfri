@@ -24,7 +24,16 @@
                 "kind": "build"
             }
         },
-        
+        {
+            "label": "delete build directory",
+            "type": "shell",
+            "command": "rm",
+            "args": [
+                "-rf",
+                "${workspaceFolder}/build"
+            ],
+            "problemMatcher": []
+        }
     ],
     "version": "2.0.0"
 }
