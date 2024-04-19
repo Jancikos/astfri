@@ -5,7 +5,7 @@ add_library(
 )
 
 target_compile_options(
-    astfri-core PUBLIC -Wall -Wextra
+    astfri-core PUBLIC -Wall -Wextra -Wpedantic
 )
 
 target_include_directories(astfri-core PUBLIC ${PROJECT_SOURCE_DIR})

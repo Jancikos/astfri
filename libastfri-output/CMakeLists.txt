@@ -7,7 +7,7 @@ add_library(
 )
 
 target_compile_options(
-    astfri-output PUBLIC -Wall -Wextra
+    astfri-output PUBLIC
 )
 
 target_link_libraries(

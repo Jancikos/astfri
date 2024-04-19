@@ -23,7 +23,7 @@ add_library(
 )
 
 target_compile_options(
-    astfri-cpp PUBLIC "-fno-rtti" "-Wall" "-Wextra"
+    astfri-cpp PUBLIC "-fno-rtti"
 )
 
 target_link_libraries(

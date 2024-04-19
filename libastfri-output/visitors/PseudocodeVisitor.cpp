@@ -165,7 +165,7 @@ void PseudocodeVisitor::Visit(lsfs::FunctionDefinition const& functionDef)
     this->getFormatter().print(" ");
     this->getFormatter().printIdentifier(functionDef.name);
     this->getFormatter().print("(");
-    for (unsigned long i = 0; i < functionDef.parameters.size(); i++)
+    for (size_t i = 0; i < functionDef.parameters.size(); i++)
     {
         functionDef.parameters[i]->accept(*this);
         if (i < functionDef.parameters.size() - 1)
@@ -241,7 +241,7 @@ void PseudocodeVisitor::Visit(lsfs::FunctionCallExpression const& expr)
     // this->getFormatter().print(expr.functionName + "(");
     this->getFormatter().printIdentifier(expr.functionName);
     this->getFormatter().print("(");
-    for (unsigned long i = 0; i < expr.arguments.size(); i++)
+    for (size_t i = 0; i < expr.arguments.size(); i++)
     {
         expr.arguments[i]->accept(*this);
         if (i < expr.arguments.size() - 1)

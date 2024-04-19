@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Statement.hpp>
@@ -152,7 +153,7 @@ void CodeVisitor::Visit(lsfs::FunctionDefinition const& functionDef)
 
     this->getFormatter().printIdentifier(" " + functionDef.name);
     this->getFormatter().print("(");
-    for (int i = 0; i < functionDef.parameters.size(); i++)
+    for (size_t i = 0; i < functionDef.parameters.size(); i++)
     {
         functionDef.parameters[i]->accept(*this);
         if (i < functionDef.parameters.size() - 1)
@@ -211,7 +212,7 @@ void CodeVisitor::Visit(lsfs::FunctionCallExpression const& expr)
 {
     this->getFormatter().printIdentifier(expr.functionName);
     this->getFormatter().print("(");
-    for (int i = 0; i < expr.arguments.size(); i++)
+    for (size_t i = 0; i < expr.arguments.size(); i++)
     {
         expr.arguments[i]->accept(*this);
         if (i < expr.arguments.size() - 1)

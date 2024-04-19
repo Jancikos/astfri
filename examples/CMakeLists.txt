@@ -4,7 +4,7 @@ add_executable(
 
 
 target_compile_options(
-    astfri-cpp-example PRIVATE -Wall -Wextra
+    astfri-cpp-example PRIVATE
 )
 
 target_link_libraries(
