@@ -1,7 +1,7 @@
 #pragma once
 
-#include <libastfri/utils/OutputVisitor.hpp>
 #include <libastfri/utils/OutputFormatter.hpp>
+#include <libastfri/utils/OutputVisitor.hpp>
 
 namespace lsfs = libastfri::structures;
 namespace lsfu = libastfri::utils;

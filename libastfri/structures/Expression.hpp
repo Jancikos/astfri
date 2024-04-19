@@ -1,6 +1,7 @@
 #pragma once
 
 #include <libastfri/structures/Declaration.hpp>
+
 #include <libastfri/utils/OutputVisitor.hpp>
 
 #include <string>
@@ -41,7 +42,9 @@ struct CharLiteral : Literal<char>, utils::OutputVisitable<CharLiteral>
     CharLiteral(char value);
 };
 
-struct StringLiteral : Literal<std::string>, utils::OutputVisitable<StringLiteral>
+struct StringLiteral :
+    Literal<std::string>,
+    utils::OutputVisitable<StringLiteral>
 {
     StringLiteral(std::string value);
 };

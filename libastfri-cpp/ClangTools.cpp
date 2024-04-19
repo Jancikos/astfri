@@ -85,7 +85,9 @@ lsfs::BinaryOperators ClangTools::convertBinaryOperator(
         //   case clang::BinaryOperator::Opcode::BO_Or:
         //     return lsfs::BinaryOperators::OR;
     default:
-        throw std::runtime_error("Unknown binary operator (ClangTools::convertBinaryOperator)");
+        throw std::runtime_error(
+            "Unknown binary operator (ClangTools::convertBinaryOperator)"
+        );
     }
 }
 
@@ -100,7 +102,9 @@ lsfs::UnaryOperators ClangTools::convertUnaryOperator(
     case clang::UnaryOperator::Opcode::UO_Not:
         return lsfs::UnaryOperators::Not;
     default:
-        throw std::runtime_error("Unknown unary operator (ClangTools::convertUnaryOperator)");
+        throw std::runtime_error(
+            "Unknown unary operator (ClangTools::convertUnaryOperator)"
+        );
     }
 }
 

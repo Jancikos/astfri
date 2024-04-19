@@ -166,8 +166,7 @@ lsfs::DoWhileStatement* StatementFactory::createDoWhileStatement(
     lsfs::CompoundStatement* body
 )
 {
-    auto* doWhileStatement
-        = new lsfs::DoWhileStatement(condition, body);
+    auto* doWhileStatement = new lsfs::DoWhileStatement(condition, body);
     statements.emplace_back(doWhileStatement);
 
     return doWhileStatement;

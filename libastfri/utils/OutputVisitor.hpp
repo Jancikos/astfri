@@ -1,4 +1,5 @@
 #pragma once
+
 namespace libastfri::structures
 {
 // stmt
@@ -49,7 +50,6 @@ namespace libastfri::utils
 class IOutputFormatter;
 class IOutputWriter;
 
-
 // sem definovat len hlavicky, prehliadku nechat na implementacii
 class IOutputVisitor
 {
@@ -66,9 +66,9 @@ public:
     virtual void Visit (structures::ReturnStatement const& stmt)      = 0;
     virtual void Visit (structures::ExpressionStatement const& stmt)  = 0;
     virtual void Visit (structures::IfStatement const& stmt)          = 0;
-    virtual void Visit (structures::WhileStatement const& stmt)   = 0;
-    virtual void Visit (structures::DoWhileStatement const& stmt) = 0;
-    virtual void Visit (structures::ForStatement const& stmt)     = 0;
+    virtual void Visit (structures::WhileStatement const& stmt)       = 0;
+    virtual void Visit (structures::DoWhileStatement const& stmt)     = 0;
+    virtual void Visit (structures::ForStatement const& stmt)         = 0;
     virtual void Visit (structures::UnknownStatement const& stmt)     = 0;
 
     // expr
@@ -120,8 +120,8 @@ public:
     {
     }
 
-    virtual void Visit (structures::DeclarationAndAssigmentStatement const&
-    ) override
+    virtual void Visit (structures::DeclarationAndAssigmentStatement const&)
+        override
     {
     }
 

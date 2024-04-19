@@ -1,4 +1,3 @@
-#include <cstddef>
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Statement.hpp>
@@ -7,6 +6,8 @@
 #include <libastfri/utils/Helper.hpp>
 
 #include <libastfri-output/visitors/PseudocodeVisitor.hpp>
+
+#include <cstddef>
 
 namespace lsfs = libastfri::structures;
 namespace lsfu = libastfri::utils;

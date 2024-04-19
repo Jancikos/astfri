@@ -65,7 +65,7 @@ bool ClangVisitor::VisitFunctionDecl(clang::FunctionDecl* Decl)
     // being visited.
     // Decl->dump();
 
-    auto& declFac      = lsff::DeclarationFactory::getInstance();
+    auto& declFac = lsff::DeclarationFactory::getInstance();
 
     // title
     std::string title = Decl->getNameInfo().getAsString();

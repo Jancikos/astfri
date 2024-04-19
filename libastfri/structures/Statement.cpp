@@ -60,10 +60,7 @@ LoopStatement::LoopStatement(Expression* condition, CompoundStatement* body) :
 {
 }
 
-WhileStatement::WhileStatement(
-    Expression* condition,
-    CompoundStatement* body
-) :
+WhileStatement::WhileStatement(Expression* condition, CompoundStatement* body) :
     LoopStatement(condition, body)
 {
 }

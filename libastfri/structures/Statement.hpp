@@ -2,6 +2,7 @@
 
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Expression.hpp>
+
 #include <libastfri/utils/OutputVisitor.hpp>
 
 #include <string>
@@ -100,9 +101,7 @@ struct LoopStatement : Statement
     LoopStatement(Expression* condition, CompoundStatement* body);
 };
 
-struct WhileStatement :
-    LoopStatement,
-    utils::OutputVisitable<WhileStatement>
+struct WhileStatement : LoopStatement, utils::OutputVisitable<WhileStatement>
 {
     WhileStatement(Expression* condition, CompoundStatement* body);
 };
@@ -114,9 +113,7 @@ struct DoWhileStatement :
     DoWhileStatement(Expression* condition, CompoundStatement* body);
 };
 
-struct ForStatement :
-    LoopStatement,
-    utils::OutputVisitable<ForStatement>
+struct ForStatement : LoopStatement, utils::OutputVisitable<ForStatement>
 {
     Statement* init;
     Expression* step;

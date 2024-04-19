@@ -5,6 +5,7 @@
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Statement.hpp>
 #include <libastfri/structures/Type.hpp>
+
 #include <libastfri/utils/Helper.hpp>
 
 namespace lsfs = libastfri::structures;

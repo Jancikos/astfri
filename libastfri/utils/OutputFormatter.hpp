@@ -29,8 +29,8 @@ class IOutputFormatter
 public:
     virtual IOutputWriter& getWriter ()                            = 0;
 
-    virtual void indentIncrease ()                                  = 0;
-    virtual void indentDecrease ()                                  = 0;
+    virtual void indentIncrease ()                                 = 0;
+    virtual void indentDecrease ()                                 = 0;
     virtual int getIndentLevel ()                                  = 0;
     virtual void printIndent ()                                    = 0;
 
@@ -76,7 +76,7 @@ public:
     virtual void startInlinePrinting () override;
     virtual void endInlinePrinting () override;
     virtual bool isInlinePrinting () override;
-    
+
     virtual void print (std::string const& str) override;
     virtual void print (std::string const& str, OutputToken token) override;
     virtual void printIndented (

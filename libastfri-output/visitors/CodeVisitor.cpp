@@ -1,4 +1,3 @@
-#include <cstddef>
 #include <libastfri/structures/Declaration.hpp>
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Statement.hpp>
@@ -7,6 +6,8 @@
 #include <libastfri/utils/Helper.hpp>
 
 #include <libastfri-output/visitors/CodeVisitor.hpp>
+
+#include <cstddef>
 
 namespace lsfs = libastfri::structures;
 namespace lsfu = libastfri::utils;
@@ -199,7 +200,9 @@ void CodeVisitor::Visit(lsfs::BinaryExpression const& expr)
 
 void CodeVisitor::Visit(lsfs::UnaryExpression const& expr)
 {
-    this->getFormatter().printOperator(lsfu::Helper::convertUnaryOperator(expr.op));
+    this->getFormatter().printOperator(
+        lsfu::Helper::convertUnaryOperator(expr.op)
+    );
     expr.arg->accept(*this);
 }
 
