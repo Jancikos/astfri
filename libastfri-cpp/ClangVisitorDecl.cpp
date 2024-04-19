@@ -63,7 +63,7 @@ bool ClangVisitor::VisitFunctionDecl(clang::FunctionDecl* Decl)
 {
     // For debugging, dumping the AST nodes will show which nodes are already
     // being visited.
-    Decl->dump();
+    // Decl->dump();
 
     auto& declFac      = lsff::DeclarationFactory::getInstance();
 

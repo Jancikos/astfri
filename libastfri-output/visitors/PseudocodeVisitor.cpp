@@ -236,6 +236,11 @@ void PseudocodeVisitor::Visit(lsfs::VarRefExpression const& expr)
     this->getFormatter().printIdentifier(expr.variable->name);
 }
 
+void PseudocodeVisitor::Visit(lsfs::ParamRefExpression const& expr)
+{
+    this->getFormatter().printIdentifier(expr.parameter->name);
+}
+
 void PseudocodeVisitor::Visit(lsfs::FunctionCallExpression const& expr)
 {
     // this->getFormatter().print(expr.functionName + "(");

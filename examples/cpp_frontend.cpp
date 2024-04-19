@@ -1,9 +1,9 @@
-#include <libastfri-output/formatters/PlainTextFormatter.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
 
 #include <libastfri-cpp/ClangManagement.hpp>
 #include <libastfri-cpp/ClangTools.hpp>
 
+#include <libastfri-output/formatters/PlainTextFormatter.hpp>
 #include <libastfri-output/visitors/CodeVisitor.hpp>
 #include <libastfri-output/visitors/PseudocodeVisitor.hpp>
 #include <libastfri-output/writers/StreamWriter.hpp>
@@ -30,10 +30,14 @@ int main (int argc, char** argv)
 
     // vypis z CodeVisitora
     libastfrioutput::writers::StreamWriter writer(std::cout);
-    libastfrioutput::formatters::PlainTextFormatter textStdOutputFormatter(writer);
+    libastfrioutput::formatters::PlainTextFormatter textStdOutputFormatter(
+        writer
+    );
 
     libastfrioutput::visitors::CodeVisitor codeVisitor(textStdOutputFormatter);
-    libastfrioutput::visitors::PseudocodeVisitor pseudocodeVisitor(textStdOutputFormatter);
+    libastfrioutput::visitors::PseudocodeVisitor pseudocodeVisitor(
+        textStdOutputFormatter
+    );
 
     std::cout << "CodeVisitor output: " << std::endl;
     codeVisitor.Output(*visitedTranslationUnit);

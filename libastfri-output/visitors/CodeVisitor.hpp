@@ -40,6 +40,7 @@ public:
     virtual void Visit (lsfs::BinaryExpression const& expr) override;
     virtual void Visit (lsfs::UnaryExpression const& expr) override;
     virtual void Visit (lsfs::VarRefExpression const& expr) override;
+    virtual void Visit (lsfs::ParamRefExpression const& expr) override;
     virtual void Visit (lsfs::FunctionCallExpression const& expr) override;
     virtual void Visit (lsfs::UnknownExpression const& expr) override;
 

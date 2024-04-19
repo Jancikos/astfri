@@ -208,6 +208,11 @@ void CodeVisitor::Visit(lsfs::VarRefExpression const& expr)
     this->getFormatter().printIdentifier(expr.variable->name);
 }
 
+void CodeVisitor::Visit(lsfs::ParamRefExpression const& expr)
+{
+    this->getFormatter().printIdentifier(expr.parameter->name);
+}
+
 void CodeVisitor::Visit(lsfs::FunctionCallExpression const& expr)
 {
     this->getFormatter().printIdentifier(expr.functionName);

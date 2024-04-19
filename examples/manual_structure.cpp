@@ -1,4 +1,3 @@
-#include <iostream>
 #include <libastfri/factories/DeclarationFactory.hpp>
 #include <libastfri/factories/ExpressionFactory.hpp>
 #include <libastfri/factories/StatementFactory.hpp>
@@ -7,6 +6,12 @@
 #include <libastfri/structures/Expression.hpp>
 #include <libastfri/structures/Statement.hpp>
 
+#include <libastfri-output/formatters/PlainTextFormatter.hpp>
+#include <libastfri-output/visitors/CodeVisitor.hpp>
+#include <libastfri-output/visitors/PseudocodeVisitor.hpp>
+#include <libastfri-output/writers/StreamWriter.hpp>
+
+#include <iostream>
 namespace lsfs = libastfri::structures;
 namespace lsff = libastfri::factories;
 
@@ -120,13 +125,6 @@ int main ()
                  )}
              )
          ),
-         statementFac.createExpressionStatement(
-             referenceFac.createFunctionCallExpression(
-                 functionSimpleAddition->name,
-                 {referenceFac.createParamRefExpression(params[0]),
-                  referenceFac.createParamRefExpression(params[1])}
-             )
-         ),
          statementFac.createReturnStatement(
              referenceFac.createFunctionCallExpression(
                  functionSimpleAddition->name,
@@ -138,9 +136,29 @@ int main ()
 
     auto retType = typeFac.getIntType();
 
-    auto* weirdAddition = declarationFac.createFunction("weirdAddition", params, body, retType);
+    auto* weirdAddition
+        = declarationFac.createFunction("weirdAddition", params, body, retType);
 
-    std::cout << "Nacitanie funkcie: " << weirdAddition->name << ", " << functionSimpleAddition->name << std::endl;
+    auto translationUnit = statementFac.createTranslationUnit(
+        {functionSimpleAddition, weirdAddition}
+    );
+
+    // vypis
+    libastfrioutput::writers::StreamWriter writer(std::cout);
+    libastfrioutput::formatters::PlainTextFormatter textStdOutputFormatter(
+        writer
+    );
+
+    libastfrioutput::visitors::CodeVisitor codeVisitor(textStdOutputFormatter);
+    libastfrioutput::visitors::PseudocodeVisitor pseudocodeVisitor(
+        textStdOutputFormatter
+    );
+
+    std::cout << "CodeVisitor output: " << std::endl;
+    codeVisitor.Output(*translationUnit);
+
+    std::cout << std::endl << "PseudocodeVisitor output: " << std::endl;
+    pseudocodeVisitor.Output(*translationUnit);
 
     return 0;
 }
